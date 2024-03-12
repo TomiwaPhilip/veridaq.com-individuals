@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { connectToDB } from "@/lib/model/database";
+import User from "@/lib/utils/user";
 
 const handler = NextAuth({
     providers: [
@@ -10,31 +12,33 @@ const handler = NextAuth({
       ],
     session: { strategy: "jwt" },
     callbacks: {
-        async session({ session }) {
-          // store the user id from MongoDB to session
-          const sessionUser = await User.findOne({ email: session.user.email });
-          session.user.id = sessionUser._id.toString();
-    
-          return session;
-        },
         async signIn({ account, profile, user, credentials }) {
           try {
             await connectToDB();
     
             // check if user already exists
-            const userExists = await User.findOne({ email: profile.email });
+            const userExists = await User.findOne({ email: user.email });
     
             // if not, create a new document and save user in MongoDB
             if (!userExists) {
+
+              // Split the name by spaces to extract first name and last name
+              const nameParts = user.name.split(" ");
+              const firstName = nameParts[0];
+              const lastName = nameParts.slice(1).join(" ");
+
               await User.create({
-                email: profile.email,
-                username: profile.name.replace(" ", "").toLowerCase(),
-                image: profile.picture,
+                email: user.email,
+                firstname: firstName,
+                lastname: lastName,
+                image: user.image,
               });
+
+
             }
     
             return true
-          } catch (error) {
+          } catch (error: any) {
             console.log("Error checking if user exists: ", error.message);
             return false
           }
@@ -44,8 +48,7 @@ const handler = NextAuth({
         signIn: '/auth/signin',
         signOut: '/auth/signout',
         error: '/auth/error', // Error code passed in query string as ?error=
-        verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+        newUser: '/auth/onboarding' // New users will be directed here on first sign in (leave the property out if not of interest)
       }
 })
 
