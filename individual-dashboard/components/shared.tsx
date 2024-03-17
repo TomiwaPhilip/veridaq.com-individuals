@@ -82,3 +82,26 @@ export function Header() {
     </header>
   );
 }
+
+// Cards for the home page
+export function Card({
+  heading,
+  paragraph,
+  bgColor,
+  outlineColor,
+}: {
+  heading: string;
+  paragraph: string;
+  bgColor: string;
+  outlineColor: string;
+}) {
+  return (
+    <div
+      className="card"
+      style={{ backgroundColor: bgColor, borderColor: outlineColor }}
+    >
+      <p>{heading}</p>
+      <p>{paragraph}</p>
+    </div>
+  );
+}
