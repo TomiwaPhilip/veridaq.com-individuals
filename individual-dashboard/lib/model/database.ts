@@ -7,8 +7,6 @@ export default async function connectToDB() {
     throw new Error("MONGODB_URI is missing");
   }
 
-  console.log("MongoDB URI:", MONGODB_URI); // Log the MongoDB URI
-
   try {
     if (mongoose.connection.readyState === 1) {
       console.log("MongoDB is already connected.");
