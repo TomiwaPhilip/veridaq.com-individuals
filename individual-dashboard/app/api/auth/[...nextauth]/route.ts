@@ -20,12 +20,6 @@ const handler = NextAuth({
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ account, profile, user, credentials }) {
-      // const acceptUser = true;
-      // if (acceptUser) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
       try {
         await connectToDB();
 
