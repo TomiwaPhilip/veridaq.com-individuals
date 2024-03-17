@@ -1,26 +1,28 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-let isConnected = false; // track the connection
+export default async function connectToDB() {
+  const MONGODB_URI = process.env.MONGODB_URI;
 
-export const connectToDB = async () => {
-  mongoose.set('strictQuery', true);
-
-  if(isConnected) {
-    console.log('MongoDB is already connected');
-    return;
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is missing");
   }
 
+  console.log("MongoDB URI:", MONGODB_URI); // Log the MongoDB URI
+
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "share_prompt",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    if (mongoose.connection.readyState === 1) {
+      console.log("MongoDB is already connected.");
+      return;
+    }
 
-    isConnected = true;
+    console.log("Connecting to MongoDB...");
+    await mongoose.connect(MONGODB_URI, {
+      dbName: "VeridaqData",
+    });
 
-    console.log('MongoDB connected')
+    console.log("MongoDB connected successfully.");
   } catch (error) {
-    console.log(error);
+    console.error("MongoDB connection error:", error);
+    throw error;
   }
 }
