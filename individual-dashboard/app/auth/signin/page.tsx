@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { getSession } from 'next-auth/react';
+import { Session } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
 
 import {
   Button,
@@ -21,32 +24,17 @@ import {
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
 
-const passwordSchema = z
-  .string()
-  .min(7, { message: "Password must be at least 7 characters." })
-  .refine(
-    (password) => {
-      const hasUppercase = /[A-Z]/.test(password);
-      const hasLowercase = /[a-z]/.test(password);
-      const hasDigit = /\d/.test(password);
-      return hasUppercase && hasLowercase && hasDigit;
-    },
-    {
-      message:
-        "Password must contain at least one uppercase letter, one lowercase letter, and one digit.",
-    },
-  );
-
 const formSchema = z.object({
   email: z.string().min(8, {
     message: "Email must be at least 8 characters.",
   }),
-  password: passwordSchema,
 });
 
-export default function SignIn() {
+export default function SignIn({session}:{session: Session | null}) {
   const [isClient, setIsClient] = useState(false);
   const [isSignIn, setIsSignIn] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -54,7 +42,12 @@ export default function SignIn() {
     setIsSignIn(pathname === "/sign-in");
   }, []);
 
-  const router = useRouter();
+  // Check for session and redirect if exists
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [session]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (isSignIn) {
@@ -70,7 +63,6 @@ export default function SignIn() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
@@ -80,7 +72,7 @@ export default function SignIn() {
 
   return (
     <main className="text-white">
-      <div className="pt-5 pb-5">
+      <div className="pt-10 pb-5">
         <p className="text-center text-2xl font-bold">
           {isSignIn ? "Sign in" : "Sign up"} to continue to Veridaq.com
         </p>
@@ -111,26 +103,6 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-medium text-[20px]">
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="EXAMple123"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <div className="text-center">
                 <Button type="submit" name={isSignIn ? "Sign In" : "Sign Up"} />
               </div>
@@ -145,3 +117,10 @@ export default function SignIn() {
     </main>
   );
 }
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const session = await getSession(context);
+    return {
+      props: { session },
+    };
+  }

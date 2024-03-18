@@ -1,11 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
+  overflow-x: hidden;
+}
+
+bgColor {
+  background-color: #38313a;
 }
 
 *:has(.gradient-border),
@@ -24,10 +29,14 @@ body {
 }
 .gradient-border:hover::before,
 .gradient-border1::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -3px -3px -3px -3px;
   z-index: -1;
   background-image: linear-gradient(180deg, #6b4b9f 0%, #e60b8e 100%);
   border-radius: inherit;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #6b4b9f 0%, #e60b8e 50%);
 }

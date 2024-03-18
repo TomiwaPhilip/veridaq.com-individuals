@@ -1,12 +1,15 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import LinkedInProvider from "next-auth/providers/linkedin";
 import connectToDB from "@/lib/model/database";
 import User from "@/lib/utils/user";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const linkedinClientId = process.env.LINKEDIN_CLIENT_ID;
+const linkedinClientSecret = process.env.LINKEDIN_CLIENT_SECRET;
 
-if (!googleClientId || !googleClientSecret) {
+if (!googleClientId || !googleClientSecret || !linkedinClientId || !linkedinClientSecret) {
   throw new Error("Google client ID or client secret is missing");
 }
 
@@ -16,6 +19,10 @@ const handler = NextAuth({
       clientId: googleClientId,
       clientSecret: googleClientSecret,
     }),
+    LinkedInProvider({
+      clientId: linkedinClientId,
+      clientSecret: linkedinClientSecret
+    })
   ],
   session: { strategy: "jwt" },
   callbacks: {
@@ -49,12 +56,12 @@ const handler = NextAuth({
       }
     },
   },
-  // pages: {
-  //   signIn: "/auth/signin",
-  //   signOut: "/auth/signout",
-  //   error: "/auth/error", // Error code passed in query string as ?error=
-  //   newUser: "/auth/onboarding", // New users will be directed here on first sign in (leave the property out if not of interest)
-  // },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error", // Error code passed in query string as ?error=
+    // newUser: "/auth/onboarding", // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
 });
 
 export { handler as GET, handler as POST };
