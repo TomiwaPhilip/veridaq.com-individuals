@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import "../globals.css";
+import { Providers } from "@/components/shared/providers";
 
 import { Rightsvgs } from "@/components/shared/shared";
 
@@ -16,10 +17,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="bg-[#38313a]">
-        <main className="">
-          {children}
-          <Rightsvgs />
-        </main>
+        <Providers>
+          <main className="">
+            {children}
+            <Rightsvgs />
+          </main>
+        </Providers>
       </body>
     </html>
   );

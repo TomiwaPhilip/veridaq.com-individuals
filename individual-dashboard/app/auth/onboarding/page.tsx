@@ -1,25 +1,29 @@
-"use client"
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState, ChangeEvent } from 'react';
-import Image from 'next/image';
-import { NextApiRequest } from 'next';
-
+import { useRouter } from "next/navigation";
+import { useState, ChangeEvent } from "react";
+import Image from "next/image";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form/form";
 import { Input } from "@/components/form/input";
 
-import{ Button } from "@/components/buttons/button";
-import { OnboardingValidation } from "@/lib/validations/onboarding"
-import { updateUser } from '@/lib/actions/onboarding.action';
-import { isBase64Image } from '@/lib/utils';
+import { Button } from "@/components/buttons/button";
+import { OnboardingValidation } from "@/lib/validations/onboarding";
+import { updateUser } from "@/lib/actions/onboarding.action";
+import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/utils/useUploadthing";
 
 export default function Onboarding() {
-
   const router = useRouter();
   const { startUpload } = useUploadThing("media");
   const [files, setFiles] = useState<File[]>([]);
@@ -48,22 +52,22 @@ export default function Onboarding() {
         data.image = imgRes[0].url;
       }
     }
-
+    console.log(data);
     await updateUser({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        middleName: data.middleName,
-        streetAddress: data.streetAddress,
-        city: data.city,
-        country: data.country,
-        image: data.image,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      middleName: data.middleName,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      country: data.country,
+      image: data.image,
     });
-      router.push('/');
+    router.push("/auth/verify");
   };
 
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
-    fieldChange: (value: string) => void
+    fieldChange: (value: string) => void,
   ) => {
     e.preventDefault();
 
@@ -84,148 +88,161 @@ export default function Onboarding() {
     }
   };
 
-//   if (!isClient) {
-//     return null; // Return null while waiting for client-side rendering
-//   }
+  //   if (!isClient) {
+  //     return null; // Return null while waiting for client-side rendering
+  //   }
 
   return (
     <main className="text-white">
       <div className="pt-5 pb-5">
-        <p className="text-center text-2xl font-bold">Complete your profile to continue</p>
+        <p className="text-center text-2xl font-bold">
+          Complete your profile to continue
+        </p>
         <div className="pt-[5rem] px-[10rem]">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <div className="flex gap-[6.5rem] space-10 items-center justify-center">
-                        <FormField
-                            control={form.control}
-                            name="firstName"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">First Name</FormLabel>
-                                <FormControl>
-                                <Input placeholder="John" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        First Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="John" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Password
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
+                  control={form.control}
+                  name="middleName"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Other Names
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Floyd" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="streetAddress"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Street Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="No. 123, ABC Street" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        City
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="London" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Country
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="United Kingdom" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="account-form_image-label">
+                        {field.value ? (
+                          <Image
+                            src={field.value}
+                            alt="image"
+                            width={96}
+                            height={96}
+                            priority
+                            className="rounded-full object-contain"
+                          />
+                        ) : (
+                          <Image
+                            src="/assets/icons/avatar.svg"
+                            alt="image"
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
+                        )}
+                      </FormLabel>
+                      <FormControl className="flex-1 text-base-semibold text-gray-200">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          placeholder="Add profile photo"
+                          className="account-form_image-input"
+                          onChange={(e) => handleImage(e, field.onChange)}
                         />
-                        <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">Password</FormLabel>
-                                <FormControl>
-                                <Input placeholder="Doe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex gap-[6.5rem] space-10 items-center justify-center">
-                        <FormField
-                            control={form.control}
-                            name="middleName"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">Other Names</FormLabel>
-                                <FormControl>
-                                <Input placeholder="Floyd" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="streetAddress"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">Street Address</FormLabel>
-                                <FormControl>
-                                <Input placeholder="No. 123, ABC Street" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex gap-[6.5rem] space-10 items-center justify-center">
-                        <FormField
-                            control={form.control}
-                            name="city"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">City</FormLabel>
-                                <FormControl>
-                                <Input placeholder="London" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex gap-[6.5rem] space-10 items-center justify-center">
-                        <FormField
-                            control={form.control}
-                            name="country"
-                            render={({ field }) => (
-                            <FormItem className='w-full'>
-                                <FormLabel className="font-medium text-[20px]">Country</FormLabel>
-                                <FormControl>
-                                <Input placeholder="United Kingdom" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='image'
-                            render={({ field }) => (
-                                <FormItem className='flex items-center gap-4'>
-                                <FormLabel className='account-form_image-label'>
-                                    {field.value ? (
-                                    <Image
-                                        src={field.value}
-                                        alt='image'
-                                        width={96}
-                                        height={96}
-                                        priority
-                                        className='rounded-full object-contain'
-                                    />
-                                    ) : (
-                                    <Image
-                                        src='/assets/icons/avatar.svg'
-                                        alt='image'
-                                        width={24}
-                                        height={24}
-                                        className='object-contain'
-                                    />
-                                    )}
-                                </FormLabel>
-                                <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                                    <Input
-                                    type='file'
-                                    accept='image/*'
-                                    placeholder='Add profile photo'
-                                    className='account-form_image-input'
-                                    onChange={(e) => handleImage(e, field.onChange)}
-                                    />
-                                </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                    </div>  
-                <div className="text-center">
-                    <Button type="submit" name="Save and Continue" />
-                </div>
-                </form>
-            </Form>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="text-center">
+                <Button type="submit" name="Save and Continue" />
+              </div>
+            </form>
+          </Form>
         </div>
-          
-        </div>
+      </div>
     </main>
   );
 }

@@ -1,29 +1,20 @@
-import { getSession } from 'next-auth/react';
-import { NextApiRequest } from 'next';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
-
-const getEmail = async ({ req }: { req?: NextApiRequest } = {}): Promise<string | null> => {
-    if (req) {
-      // If req is provided, use it to get the session
-      const session = await getSession({ req });
-      return session?.user?.email || null;
-    } else {
-      // If req is not provided, fetch the session without req
-      const session = await getSession();
-      return session?.user?.email || null;
-    }
-};
-
-
 
 export const ourFileRouter = {
   media: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async (req) => {
       try {
-        // Get the current user's session
-        const email = await getEmail();
+        const session = await getServerSession(authOptions);
+
+        if (!session || !session.user) {
+          throw new Error("Unauthorized");
+        }
+
+        const email = session.user.email;
 
         // If the session doesn't exist or user email is missing, throw an error
         if (email) {

@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getSession } from 'next-auth/react';
-import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
 import {
   Button,
@@ -29,7 +28,6 @@ const formSchema = z.object({
     message: "Email must be at least 8 characters.",
   }),
 });
-
 
 export default function SignIn() {
   const [isClient, setIsClient] = useState(false);
@@ -110,5 +108,3 @@ export default function SignIn() {
     </main>
   );
 }
-
-

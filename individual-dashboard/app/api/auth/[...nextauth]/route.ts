@@ -1,32 +1,23 @@
-import NextAuth from "next-auth";
-import type { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import LinkedInProvider from "next-auth/providers/linkedin";
-
 
 import connectToDB from "@/lib/model/database";
 import User from "@/lib/utils/user";
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const linkedinClientId = process.env.LINKEDIN_CLIENT_ID;
-const linkedinClientSecret = process.env.LINKEDIN_CLIENT_SECRET;
-
-if (!googleClientId || !googleClientSecret || !linkedinClientId || !linkedinClientSecret) {
-  throw new Error("Google client ID or client secret is missing");
-}
-
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
+  // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId: googleClientId,
-      clientSecret: googleClientSecret,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     LinkedInProvider({
-      clientId: linkedinClientId,
-      clientSecret: linkedinClientSecret
-    })
+      clientId: process.env.LINKEDIN_CLIENT_ID as string,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET as string,
+    }),
   ],
+  secret: process.env.NEXTAUTH_SECRET as string,
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ account, profile, user, credentials }) {
@@ -51,6 +42,7 @@ const handler = NextAuth({
             image: user.image,
           });
         }
+
         console.log("I'm returning true");
         return true;
       } catch (error: any) {
@@ -63,8 +55,10 @@ const handler = NextAuth({
     signIn: "/auth/signin",
     signOut: "/auth/signout",
     error: "/auth/error", // Error code passed in query string as ?error=
-    // newUser: "/auth/onboarding", // New users will be directed here on first sign in (leave the property out if not of interest)
+    newUser: "/auth/onboarding", // New users will be directed here on first sign in (leave the property out if not of interest)
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
