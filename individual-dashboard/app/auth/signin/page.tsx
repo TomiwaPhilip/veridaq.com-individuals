@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { getSession } from 'next-auth/react';
-import { Session } from 'next-auth';
-import { GetServerSidePropsContext } from 'next';
+import { Session } from "next-auth";
 
 import {
   Button,
@@ -23,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
+import { SessionState } from "http2";
 
 const formSchema = z.object({
   email: z.string().min(8, {
@@ -30,10 +30,10 @@ const formSchema = z.object({
   }),
 });
 
-export default function SignIn({session}:{session: Session | null}) {
+
+export default function SignIn() {
   const [isClient, setIsClient] = useState(false);
   const [isSignIn, setIsSignIn] = useState(false);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -41,13 +41,6 @@ export default function SignIn({session}:{session: Session | null}) {
     const { pathname } = window.location;
     setIsSignIn(pathname === "/sign-in");
   }, []);
-
-  // Check for session and redirect if exists
-  useEffect(() => {
-    if (session) {
-      router.push("/");
-    }
-  }, [session]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (isSignIn) {
@@ -118,9 +111,4 @@ export default function SignIn({session}:{session: Session | null}) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const session = await getSession(context);
-    return {
-      props: { session },
-    };
-  }
+

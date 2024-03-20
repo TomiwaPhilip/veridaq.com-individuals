@@ -14,7 +14,7 @@ export default function Home() {
           className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
         />
         <Image
-          src="/search.svg"
+          src="/assets/icons/search.svg"
           width={25}
           height={25}
           className="object-contain"

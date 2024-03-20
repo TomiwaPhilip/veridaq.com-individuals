@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from "next-auth/providers/google";
 import LinkedInProvider from "next-auth/providers/linkedin";
+
+
 import connectToDB from "@/lib/model/database";
 import User from "@/lib/utils/user";
 

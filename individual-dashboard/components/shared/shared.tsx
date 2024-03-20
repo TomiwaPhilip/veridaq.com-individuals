@@ -1,7 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 // This is the Nav
 
@@ -80,7 +81,7 @@ export function Nav() {
             >
               <Image
                 alt="settings"
-                src="/settings.svg"
+                src="/assets/icons/settings.svg"
                 width={20}
                 height={20}
               />
@@ -93,10 +94,8 @@ export function Nav() {
   );
 }
 
-const router = useRouter()
-
 const handleSignOut = async () => {
-  await signOut({ redirect: false, callbackUrl: '/sign-in' });
+  await signOut({ redirect: true, callbackUrl: '/auth/sign-in' });
 };
 
 export function Header() {
