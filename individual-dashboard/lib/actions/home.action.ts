@@ -13,7 +13,7 @@ export async function getUser(email: string): Promise<User | null> {
     connectToDB();
     const user = await User.findOne({ email });
     if (!user) {
-      return null;
+      throw new Error("User not found");
     }
     return { onboarded: user.onboarded, verified: user.verified };
   } catch (error: any) {
