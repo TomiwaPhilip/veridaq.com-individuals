@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import "../globals.css";
 import { Providers } from "@/components/shared/providers";
 
-import { Rightsvgs } from "@/components/shared/shared";
-
 export const metadata: Metadata = {
   title: "Auth",
   description: "Sign in to your Individual Dashboard",
@@ -20,7 +18,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Providers>
           <main className="">
             {children}
-            <Rightsvgs />
           </main>
         </Providers>
       </body>
