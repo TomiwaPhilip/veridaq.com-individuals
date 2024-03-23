@@ -20,7 +20,7 @@ import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/utils/useUploadthing";
 
   
-import { Button } from "@/components/buttons/button";
+import { NoOutlineButtonBig } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
 
 export default function Onboard(){
@@ -91,11 +91,11 @@ export default function Onboard(){
 
     return (
         <div className="text-white">
-      <div className="pt-5 pb-5">
+      <div className="mt-[30px] pb-5">
         <p className="text-center text-2xl font-bold">
           Complete your profile to continue
         </p>
-        <div className="pt-[5rem] px-[10rem]">
+        <div className="pt-[3rem] px-[10rem]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="flex gap-[6.5rem] space-10 items-center justify-center">
@@ -178,9 +178,7 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
-                <FormField
+                  <FormField
                   control={form.control}
                   name="country"
                   render={({ field }) => (
@@ -195,6 +193,8 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
+              </div>
+              <div className="flex gap-[6.5rem] space-10">
                 <FormField
                   control={form.control}
                   name="image"
@@ -212,10 +212,10 @@ export default function Onboard(){
                           />
                         ) : (
                           <Image
-                            src="/assets/icons/avatar.svg"
+                            src="/assets/icons/avatar.png"
                             alt="image"
-                            width={24}
-                            height={24}
+                            width={96}
+                            height={96}
                             className="object-contain"
                           />
                         )}
@@ -224,7 +224,7 @@ export default function Onboard(){
                         <Input
                           type="file"
                           accept="image/*"
-                          placeholder="Add profile photo"
+                          placeholder="Upload Profile Photo"
                           className="account-form_image-input"
                           onChange={(e) => handleImage(e, field.onChange)}
                         />
@@ -234,7 +234,7 @@ export default function Onboard(){
                 />
               </div>
               <div className="text-center">
-                <Button type="submit" name="Save and Continue" />
+                <NoOutlineButtonBig type="submit" name="Save and Continue" />
               </div>
             </form>
           </Form>

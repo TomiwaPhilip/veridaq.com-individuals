@@ -18,6 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Providers>
           <main className="">
             {children}
+            <img src="/assets/icons/blur.png" alt="blob" className="blob-bottom-right" />
           </main>
         </Providers>
       </body>
