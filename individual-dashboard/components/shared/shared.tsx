@@ -286,22 +286,23 @@ export function MessageView({ name, timestamp, message, imgSrc }: { name: string
 
 
 
-export function MessageCard({message, timeStamp, bgColor}:{message: string, timeStamp: string, bgColor: string}) {
+export function MessageCard({ message, timeStamp, bgColor }: { message: string; timeStamp: string; bgColor: string }) {
   return (
-    <div className="" style={{backgroundColor: bgColor}}>
-      <div className="text-left text-[12px] font-medium pb-2">
+    <div className="bg-[#443B46] rounded-xl p-3 w-[70%]">
+      <div className="text-left text-sm font-medium pb-1 text-white">
         <p>{message}</p>
       </div>
-      <div className="text-right text-[12px] font-regular">
+      <div className="text-right text-xs text-gray-500">
         <p>{timeStamp}</p>
       </div>
     </div>
-  )
+  );
 }
+
 
 export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string }) {
   return (
-    <div className="fixed top-0 left-0 w-full bg-white z-10 shadow-md p-4 flex items-center">
+    <div className="absolute top-0 left-0 w-full mt-4 ml-4 mr-2 rounded-lg veridaq-gradient text-white z-10 shadow-md p-2 flex flex-grow items-center">
       <div className="mr-4">
         <Image
           src={imgSrc}
@@ -315,3 +316,4 @@ export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string })
     </div>
   );
 }
+
