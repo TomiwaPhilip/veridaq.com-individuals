@@ -2,8 +2,8 @@ import { MessageCard, MessageLabel } from "./shared"
 
 export default function ChatBox(){
     return (
-        <div className="flex-grow bg-[#443B46] normal-border rounded-lg" style={{overflow: "scroll", overflowX: "hidden"}}>
-            <div className="fixed">
+        <div className="bg-[#CBC0CD] flex-grow h-full w-[50%] normal-border rounded-lg" style={{overflow: "scroll", overflowX: "hidden"}}>
+            <div className="">
                 <MessageLabel
                     imgSrc="/assets/images/user.png"
                     name="Tomiwa Philip"

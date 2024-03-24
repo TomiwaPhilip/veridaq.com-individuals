@@ -288,7 +288,7 @@ export function MessageView({name, timestamp, message, imgSrc}:{name: string, ti
 
 export function MessageCard({message, timeStamp, bgColor}:{message: string, timeStamp: string, bgColor: string}) {
   return (
-    <div className="card rounded-lg flex flex-col p-3" style={{backgroundColor: bgColor}}>
+    <div className="" style={{backgroundColor: bgColor}}>
       <div className="text-left text-[12px] font-medium pb-2">
         <p>{message}</p>
       </div>
@@ -301,7 +301,7 @@ export function MessageCard({message, timeStamp, bgColor}:{message: string, time
 
 export function MessageLabel({imgSrc, name}:{imgSrc: string, name: string}){
   return (
-    <div className="flex flex-grow fixed items-left gap-5">
+    <div className="">
       <div className="">
         <Image 
           src={imgSrc}
