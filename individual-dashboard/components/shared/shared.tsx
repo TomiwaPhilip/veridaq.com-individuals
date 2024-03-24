@@ -107,27 +107,27 @@ export function Header() {
   return (
     <header className="flex items-center gap-4">
       {pathname === "/" && (
-        <p className="text-xl font-semibold text-gradient mr-auto">
+        <p className="text-[32px] font-semibold text-gradient mr-auto">
           Welcome to Veridaq, Tomiwa!
         </p>
       )}
       {pathname === "/veridaq-request" && (
-        <p className="text-xl font-semibold text-gradient mr-auto">
+        <p className="text-[32px] font-semibold text-gradient mr-auto">
           Request the Veridaq you need, here.
         </p>
       )}
       {pathname === "/veridaq-box" && (
-        <p className="text-xl font-semibold text-gradient mr-auto">
+        <p className="text-[32px] font-semibold text-gradient mr-auto">
           Receive mails or Issue Veridaq, here.
         </p>
       )}
       {pathname === "/veridaq-store" && (
-        <p className="text-xl font-semibold text-gradient mr-auto">
+        <p className="text-[32px] font-semibold text-gradient mr-auto">
           Download and share your Veridaq, here.
         </p>
       )}
       {pathname === "/settings" && (
-        <p className="text-xl font-semibold text-gradient mr-auto">
+        <p className="text-[32px] font-semibold text-gradient mr-auto">
           Configure your Veridaq Account, here.
         </p>
       )}
