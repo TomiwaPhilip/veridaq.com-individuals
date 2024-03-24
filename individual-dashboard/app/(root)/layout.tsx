@@ -20,7 +20,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Providers>    
         <main className="">
           <Nav />
-          <div className="p-8 bg-[#E1D7E2] absolute right-0 left-[230px]">
+          <div className="p-8 absolute right-0 left-[230px]">
             <Header/>
             {children}
           </div>

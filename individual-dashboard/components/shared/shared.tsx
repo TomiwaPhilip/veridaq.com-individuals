@@ -260,7 +260,7 @@ export function Wallet(){
 
 export function MessageView({name, timestamp, message, imgSrc}:{name: string, timestamp: string, message: string, imgSrc: string}){
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-grow">
       <div className=" ">
         <Image
           src={imgSrc}
@@ -301,7 +301,7 @@ export function MessageCard({message, timeStamp, bgColor}:{message: string, time
 
 export function MessageLabel({imgSrc, name}:{imgSrc: string, name: string}){
   return (
-    <div className="flex items-left gap-5">
+    <div className="flex flex-grow fixed items-left gap-5">
       <div className="">
         <Image 
           src={imgSrc}

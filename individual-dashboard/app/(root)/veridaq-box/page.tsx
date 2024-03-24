@@ -1,5 +1,7 @@
-import React from "react";
+import Box from "@/components/pages/Box"
 
 export default function Page(){
-    return <h1>This is the Veridaq Box page</h1>
+    return (
+        <Box />
+    )
 }
