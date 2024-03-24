@@ -6,7 +6,7 @@ export default function Box() {
         <main className="mt-[30px]">
             <div className="">
                 <p className="font-semibold text-[28px] text-[#38313A]">Veridaq Mails</p>
-                <div className="rounded-lg bg-[#C3B8D8] flex h-screen gap-3 p-4">
+                <div className="rounded-lg bg-[#C3B8D8] flex h-screen gap-3 p-10 mt-8">
                     <MessageBox />
                     <ChatBox />
                 </div>

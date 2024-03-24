@@ -258,33 +258,33 @@ export function Wallet(){
   );
 }
 
-export function MessageView({name, timestamp, message, imgSrc}:{name: string, timestamp: string, message: string, imgSrc: string}){
+export function MessageView({ name, timestamp, message, imgSrc }: { name: string, timestamp: string, message: string, imgSrc: string }) {
   return (
-    <div className="flex flex-grow">
-      <div className=" ">
-        <Image
-          src={imgSrc}
-          alt="user"
-          width={100}
-          height={100}
-        />
+    <div className="flex items-start py-2 border-b border-gray-300">
+      <div className="pr-4 flex-shrink-0">
+        <div className="relative w-10 h-10">
+          <Image
+            src={imgSrc}
+            alt="user"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-full"
+          />
+        </div>
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center">
-          <div className="">
-            <p className="text-[16px] fomt-semibold">{name}</p>
-          </div>
-          <div className="">
-            <p className="text-[12px] font-medium">{timestamp}</p>
-          </div>
+      <div className="flex flex-col flex-grow">
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-sm font-semibold">{name}</p>
+          <p className="text-xs text-gray-500 ml-auto">{timestamp}</p>
         </div>
-        <div className="text-[12px] font-semibold">
-          <p>{message}</p>
-        </div>
+        <div className="text-sm">{message}</div>
       </div>
     </div>
   );
-} 
+}
+
+
+
 
 export function MessageCard({message, timeStamp, bgColor}:{message: string, timeStamp: string, bgColor: string}) {
   return (
@@ -299,20 +299,19 @@ export function MessageCard({message, timeStamp, bgColor}:{message: string, time
   )
 }
 
-export function MessageLabel({imgSrc, name}:{imgSrc: string, name: string}){
+export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string }) {
   return (
-    <div className="">
-      <div className="">
-        <Image 
+    <div className="fixed top-0 left-0 w-full bg-white z-10 shadow-md p-4 flex items-center">
+      <div className="mr-4">
+        <Image
           src={imgSrc}
           alt="user_icon"
           width={50}
           height={50}
+          className="rounded-full"
         />
       </div>
-      <div className="font-bold text-[20px]">
-        <p>{name}</p>
-      </div>
+      <div className="font-bold text-lg">{name}</div>
     </div>
-  )
+  );
 }
