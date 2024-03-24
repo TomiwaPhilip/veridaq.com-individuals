@@ -8,3 +8,7 @@ export default withAuth({
     error: "/auth/error",
   },
 });
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+}

@@ -3,6 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 // This is the Nav
 
@@ -98,12 +101,36 @@ const handleSignOut = async () => {
   await signOut({ redirect: true, callbackUrl: '/auth/sign-in' });
 };
 
+
 export function Header() {
+  const pathname = usePathname()
   return (
     <header className="flex items-center gap-4">
-      <p className="text-xl font-semibold text-gradient mr-auto">
-        Download and share your Veridaq, here.
-      </p>
+      {pathname === "/" && (
+        <p className="text-xl font-semibold text-gradient mr-auto">
+          Welcome to Veridaq, Tomiwa!
+        </p>
+      )}
+      {pathname === "/veridaq-request" && (
+        <p className="text-xl font-semibold text-gradient mr-auto">
+          Request the Veridaq you need, here.
+        </p>
+      )}
+      {pathname === "/veridaq-box" && (
+        <p className="text-xl font-semibold text-gradient mr-auto">
+          Receive mails or Issue Veridaq, here.
+        </p>
+      )}
+      {pathname === "/veridaq-store" && (
+        <p className="text-xl font-semibold text-gradient mr-auto">
+          Download and share your Veridaq, here.
+        </p>
+      )}
+      {pathname === "/settings" && (
+        <p className="text-xl font-semibold text-gradient mr-auto">
+          Configure your Veridaq Account, here.
+        </p>
+      )}
       <Image
         alt="notifications"
         src="/assets/icons/bell.svg"
@@ -121,6 +148,7 @@ export function Header() {
     </header>
   );
 }
+
 
 // Cards for the home page
 export function Card({

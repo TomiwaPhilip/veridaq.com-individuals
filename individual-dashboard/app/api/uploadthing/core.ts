@@ -16,9 +16,11 @@ export const ourFileRouter = {
 
         const email = session.user.email;
 
+        console.log(email);
+
         // If the session doesn't exist or user email is missing, throw an error
-        if (email) {
-          throw new Error("Unauthorized");
+        if (!email) {
+          throw new Error("Unauthorized request");
         }
 
         // Pass the user email to onUploadComplete

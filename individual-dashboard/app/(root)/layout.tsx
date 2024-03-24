@@ -21,7 +21,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <main className="grid grid-rows-[auto] grid-cols-[auto_1fr]">
           <Nav />
           <div className="p-4 bg-[#E1D7E2]">
-            <Header />
+            
+            <Header/>
             {children}
           </div>
         </main>
