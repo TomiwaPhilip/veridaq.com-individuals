@@ -18,9 +18,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body>
         <Providers>    
-        <main className="grid grid-rows-[auto] grid-cols-[auto_1fr]">
+        <main className="">
           <Nav />
-          <div className="p-4 bg-[#E1D7E2]">
+          <div className="p-8 bg-[#E1D7E2] absolute right-0 left-[230px]">
             <Header/>
             {children}
           </div>

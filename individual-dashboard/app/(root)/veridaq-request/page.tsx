@@ -1,5 +1,7 @@
-import React from "react";
+import RequestVeridaq from "@/components/pages/Request"
 
 export default function Page(){
-    return <h1>This is the Veridaq Request page</h1>
+    return (
+        <RequestVeridaq />
+    )
 }

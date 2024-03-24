@@ -20,8 +20,23 @@ bgColor {
 .text-gradient {
   background: linear-gradient(to right, #6b4b9f, #e60b8e); 
   -webkit-text-fill-color: transparent; 
+  background-clip: text;
   -webkit-background-clip: text;
 }
+
+.normal-gradient-border{
+  position: relative;
+  background-color: inherit;
+}
+.normal-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -3px -3px -3px -3px;
+  z-index: -1;
+  background-image: linear-gradient(180deg, #6b4b9f 0%, #e60b8e 100%);
+  border-radius: inherit;
+}
+
 .gradient-border,
 .gradient-border1 {
   position: relative;

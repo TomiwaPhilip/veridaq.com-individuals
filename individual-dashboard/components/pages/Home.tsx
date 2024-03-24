@@ -1,26 +1,27 @@
 import Image from 'next/image';
+import { Wallet, Card } from '../shared/shared';
+import {cardData} from "@/constants/cards"
 
 export default function HomePage() {
     return (
-        <div className="bg-[#E1D7E2]">
-        <label
-          htmlFor="search"
-          className="flex items-center gap-4 gradient-border1 w-max p-2 ml-auto rounded-md mt-8"
-        >
-          <input
-            type="text"
-            id="search"
-            placeholder="search"
-            className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
+      <main className="bg-[#E1D7E2] mt-[70px]">
+        <div className="flex items-center justify-center gap-6"> 
+          <div className="mr-auto w-[40%]"> 
+            <p className="font-bold text-[28px] text-[#38313A]"> Let's help you get started today! </p>
+          </div>
+          <Wallet />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 justify-center mt-[40px]">
+          {cardData.map((card, index) => (
+          <Card
+            key={index} // Ensure each Card component has a unique key
+            heading={card.heading}
+            paragraph={card.paragraph}
+            bgColor={card.bgColor}
+            outlineColor={card.outlineColor}
           />
-          <Image
-            src="/assets/icons/search.svg"
-            width={25}
-            height={25}
-            className="object-contain"
-            alt="search"
-          />
-        </label>
-      </div>
+          ))}
+        </div>
+      </main>
     )
 }
