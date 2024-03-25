@@ -1,5 +1,7 @@
-import React from "react";
+import Store from "@/components/pages/Store"
 
 export default function Page(){
-    return <h1>This is the Veridaq Store page</h1>
+    return (
+        <Store />
+    );
 }

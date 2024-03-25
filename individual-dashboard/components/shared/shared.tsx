@@ -197,7 +197,36 @@ export function Card2({
   );
 }
 
-export default function SearchBar() {
+export function Card3({
+  heading,
+  bgColor,
+  outlineColor,
+  textColor,
+}: {
+  heading: string;
+  bgColor: string;
+  outlineColor: string;
+  textColor: string;
+}) {
+  return (
+    <div
+      className="card rounded-lg text-[#38313A] text-center"
+      style={{ backgroundColor: bgColor, borderColor: outlineColor, borderStyle: "solid", borderWidth: "3px", color: textColor }}
+    >
+      <p className="font-bold text-[20px] mt-4 px-1 py-[30px] text-wrap">{heading}</p>
+      <div className="py-2 flex justify-center text-center" style={{backgroundColor: outlineColor}}>
+        <Image
+          src={"/assets/icons/icon-command.png"}
+          alt="options"
+          width={40}
+          height={40}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function SearchBar() {
   return (
       <div className="bg-[#E1D7E2]">
       <label

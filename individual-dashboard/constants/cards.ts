@@ -62,3 +62,37 @@ export const cardData2 = [
     outlineColor: "#F69DD1",
   },
 ];
+
+
+export const cardData3 = [
+  {
+    heading: "Work Reference Veridaq",
+    textColor: "#38313A",
+    bgColor: "#F4DBE4",
+    outlineColor: "#897A8B",
+  },
+  {
+    heading: "Studentship Status Veridaq",
+    textColor: "#38313A",
+    bgColor: "#F26BBA",
+    outlineColor: "#A593C5",
+  },
+  {
+    heading: "Membership Reference Veridaq",
+    textColor: "#FFFFFF",    
+    bgColor: "#38313A",
+    outlineColor: "#C3B8D8",
+  },
+  {
+    heading: "Document Verification Veridaq",
+    textColor: "#38313A",
+    bgColor: "#AF8BA4",
+    outlineColor: "#F4DBE4",
+  },
+  {
+    heading: "Individual Reference/Recommendation Veridaq",
+    textColor: "#38313A",
+    bgColor: "#D6B9C3",
+    outlineColor: "#F69DD1",
+  },
+];
