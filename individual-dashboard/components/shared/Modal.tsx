@@ -22,7 +22,7 @@ const ModalWithStepper: React.FC<ModalWithStepperProps> = ({ id, onClose }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white p-8 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
-        <StepperForm id={id} currentStep={currentStep} onNextStep={handleNextStep} onPrevStep={handlePrevStep} />
+        <StepperForm id={id} onNextStep={handleNextStep} />
       </div>
     </div>
   );
