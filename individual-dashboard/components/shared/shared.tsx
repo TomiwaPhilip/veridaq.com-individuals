@@ -181,21 +181,32 @@ export function Card2({
   bgColor,
   outlineColor,
   textColor,
+  id,
+  onClick,
 }: {
   heading: string;
   bgColor: string;
   outlineColor: string;
   textColor: string;
+  id: string;
+  onClick: (id: string) => void;
 }) {
+  const handleClick = () => {
+    onClick(id); // Pass the id to the onClick handler
+  };
+
   return (
     <div
-      className="card rounded-lg py-[50px] px-5 text-[#38313A] flex items-center justify-center text-center"
+      className="card rounded-lg py-[50px] px-5 text-[#38313A] flex items-center justify-center text-center hover:cursor-pointer"
       style={{ backgroundColor: bgColor, borderColor: outlineColor, borderStyle: "solid", borderWidth: "3px", color: textColor }}
+      id={id}
+      onClick={handleClick} // Use the new handleClick function
     >
       <p className="font-bold text-[20px] mt-4">{heading}</p>
     </div>
   );
 }
+
 
 export function Card3({
   heading,
