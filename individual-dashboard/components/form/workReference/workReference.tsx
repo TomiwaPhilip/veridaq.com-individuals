@@ -1,18 +1,22 @@
+"use client";
+
 import React, { useState } from 'react';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "@/components/form/form";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form/form";
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-import { updateUser } from "@/lib/actions/onboarding.action"
+
+import { createWorkReferenceRequest } from "@/lib/actions/request.action"
 import { WorkReferenceValidation } from '@/lib/validations/workreference';
+import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
 interface WorkReferenceProps {
   onFormSubmit: () => void;
@@ -20,56 +24,63 @@ interface WorkReferenceProps {
 
 const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
   const [step, setStep] = useState(1);
+  const [requestResult, setRequestResult] = useState<boolean | null>(null);
 
-  const handleNextStep: () => void = () => {
+  const handleNextStep = () => {
     setStep(step + 1);
   };
 
-  const handlePrevStep: () => void = () => {
+  const handlePrevStep = () => {
     setStep(step - 1);
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (step === 4) {
-      // If it's the last step, submit the form
-      onFormSubmit();
-    } else {
-      // Otherwise, move to the next step
-      handleNextStep();
-    }
   };
 
   const form = useForm<z.infer<typeof WorkReferenceValidation>>({
     resolver: zodResolver(WorkReferenceValidation),
     defaultValues: {
-        orgId: "",
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        employeeType: "",
-        subType: "",
-        staffId: "",
-        designation: "",
-        workStartDate: new Date,
-        workEndDate: new Date,
-        department: "",
-        notableAchievement: "",
-        function: "",
-        personalitySummary: "",
+      orgId: "",
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      employeeType: "",
+      subType: "",
+      staffId: "",
+      designation: "",
+      workStartDate: new Date,
+      workEndDate: new Date,
+      department: "",
+      notableAchievement: "",
+      jobFunction: "",
+      personalitySummary: "",
     },
   });
 
   const onSubmit = async (data: z.infer<typeof WorkReferenceValidation>) => {
-    await updateUser({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      middleName: data.middleName,
-      streetAddress: data.streetAddress,
-      city: data.city,
-      country: data.country,
-      image: data.image,
-    });
+    console.log("I want to submit")
+    try {
+      const create = await createWorkReferenceRequest({
+        orgId: data.orgId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middleName: data.middleName,
+        employeeType: data.employeeType,
+        subType: data.subType,
+        staffId: data.staffId,
+        designation: data.designation,
+        workStartDate: data.workStartDate,
+        workEndDate: data.workEndDate,
+        department: data.department,
+        notableAchievement: data.notableAchievement,
+        jobFunction: data.jobFunction,
+        personalitySummary: data.personalitySummary,
+      });
+      setRequestResult(create);
+      if (create) {
+        handleNextStep();
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setRequestResult(false);
+    }
   };
 
   return (
@@ -289,7 +300,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
                     />
                     <FormField
                     control={form.control}
-                    name="function"
+                    name="jobFunction"
                     render={({ field }) => (
                         <FormItem className="w-full">
                         <FormLabel className="font-medium text-[16px]">
@@ -323,22 +334,23 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
                      <button type="button" className='mr-auto md:mr-0' onClick={handlePrevStep}>Previous</button>
                     </div>
                     <div className="text-right right">
-                      <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleNextStep}>Continue</button>
+                      <button type="submit" className='bg-[#38313A] px-7 py-5 rounded-md text-white'>Submit</button>
                     </div>
                 </div>
                 </div>
                 <p className='p-2'>{`Step ${step}`}</p>               
             </div>
             )}
-            {step === 4 && (
-                <div>
-                <h2>Step 4</h2>
-                <button type="button" onClick={handlePrevStep}>Previous</button>
-                <button type="submit">Submit</button>
-                </div>
-            )}
             </form>
         </Form>
+            {step === 4 && (
+                <div>
+                {/* Render success or error component based on request result */}
+                {requestResult === true && <SuccessMessage />}
+                {requestResult === false && <ErrorMessage />}
+                <button type="button" onClick={handlePrevStep}>Previous</button>
+                </div>
+            )}
     </main>
   );
 };

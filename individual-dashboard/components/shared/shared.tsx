@@ -357,3 +357,30 @@ export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string })
   );
 }
 
+export function SuccessMessage(){
+  return(
+    <div className="">
+      <Image
+        src={"/assets/images/checkmark.png"}
+        alt="checkmark"
+        width={400}
+        height={400}
+      />
+      <p className="text-[24px] font-semibold">Your Veridaq Request is Successful!</p>
+    </div>
+  )
+}
+
+export function ErrorMessage(){
+  return(
+    <div className="">
+      <Image
+        src={"/assets/images/checkmark.png"}
+        alt="checkmark"
+        width={400}
+        height={400}
+      />
+      <p className="text-[24px] font-semibold">Your Veridaq Request is UnSuccessful! Please try again later</p>
+    </div>
+  )
+}

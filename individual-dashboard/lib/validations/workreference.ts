@@ -37,7 +37,7 @@ export const WorkReferenceValidation = z.object({
     message: "Department must be at least 1 character.",
   }),
   notableAchievement: z.string().optional(), // Allow empty string
-  function: z.string().min(1, {
+  jobFunction: z.string().min(1, {
     message: "Function must be at least 1 character.",
   }),
   personalitySummary: z.string().optional(), // Allow empty string
