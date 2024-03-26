@@ -3,19 +3,16 @@ import WorkReference from '../form/workReference/workReference';
 
 interface StepperFormProps {
   id: string;
-  onNextStep: () => void;
 }
 
-const StepperForm: React.FC<StepperFormProps> = ({ id, onNextStep }) => {
+const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
   let content;
   let title;
 
   switch (id) {
     case '1':
       content = (
-        <WorkReference
-          onFormSubmit={onNextStep} // Submit the form when the last step is reached
-        />
+        <WorkReference />
       );
       title = "Request Work Reference Veridaq"; // Change the title based on the id
       break;

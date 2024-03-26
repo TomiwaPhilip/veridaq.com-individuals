@@ -18,11 +18,8 @@ import { createWorkReferenceRequest } from "@/lib/actions/request.action"
 import { WorkReferenceValidation } from '@/lib/validations/workreference';
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-interface WorkReferenceProps {
-  onFormSubmit: () => void;
-}
 
-const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
+const WorkReference: React.FC = () => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
 
@@ -45,8 +42,8 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
       subType: "",
       staffId: "",
       designation: "",
-      workStartDate: new Date,
-      workEndDate: new Date,
+      workStartDate: "",
+      workEndDate: "",
       department: "",
       notableAchievement: "",
       jobFunction: "",
@@ -341,8 +338,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
                 <p className='p-2'>{`Step ${step}`}</p>               
             </div>
             )}
-            </form>
-        </Form>
+
             {step === 4 && (
                 <div>
                 {/* Render success or error component based on request result */}
@@ -351,6 +347,8 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ onFormSubmit }) => {
                 <button type="button" onClick={handlePrevStep}>Previous</button>
                 </div>
             )}
+                        </form>
+        </Form>
     </main>
   );
 };
