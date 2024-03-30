@@ -31,11 +31,11 @@ const WorkReferenceSchema = new Schema({
     required: [true, 'Designation is required'],
   },
   workStartDate: {
-    type: String,
+    type: Date,
     required: [true, 'Work Start Date is required'],
   },
   workEndDate: {
-    type: String,
+    type: Date,
     default: null,
   },
   department: {

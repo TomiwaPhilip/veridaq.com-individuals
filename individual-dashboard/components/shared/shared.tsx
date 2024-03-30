@@ -359,14 +359,14 @@ export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string })
 
 export function SuccessMessage(){
   return(
-    <div className="">
+    <div className="flex flex-col items-center justify-center">
       <Image
         src={"/assets/images/checkmark.png"}
         alt="checkmark"
         width={400}
         height={400}
       />
-      <p className="text-[24px] font-semibold">Your Veridaq Request is Successful!</p>
+      <p className="text-[24px] font-semibold text-lg p-3 text-center">Your Veridaq Request is Successful!</p>
     </div>
   )
 }

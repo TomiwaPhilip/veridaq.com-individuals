@@ -23,22 +23,10 @@ export const WorkReferenceValidation = z.object({
   designation: z.string().min(1, {
     message: "Designation must be at least 1 character.",
   }),
-  workStartDate: z.string().min(1, {
-    message: "Start date must be at least 1 character.",
-  }),
-  workEndDate: z.string().min(1, {
-    message: "End date must be at least 1 character.",
-  }),
-  // workStartDate: z.date().min(new Date(), {
-  //   message: "Work Start Date must be a valid date in the future.",
-  // }),
-  // workEndDate: z.date().nullable().refine((endDate: Date | null) => {
-  //   if (endDate === null) return true; // Allow null for no end date
-  //   if (!(endDate instanceof Date)) return false;
-  // }, {
-  //   message: "Work End Date must be after Work Start Date or leave empty.",
-  //   path: ["workEndDate"],
-  // }),  
+  workStartDate: z.date().max(new Date(), {
+    message: "Work Start Date must be a valid date in the past.",
+}),
+  workEndDate: z.date().optional(),
   department: z.string().min(1, {
     message: "Department must be at least 1 character.",
   }),

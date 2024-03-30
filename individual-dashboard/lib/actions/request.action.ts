@@ -15,8 +15,8 @@ interface Params {
   subType: string;
   staffId: string;
   designation: string;
-  workStartDate: string;
-  workEndDate: string | null; // Nullable workEndDate field
+  workStartDate: Date;
+  workEndDate: Date | undefined; // Nullable workEndDate field
   department: string;
   notableAchievement?: string; // Optional notableAchievement field
   jobFunction: string; // Renamed from 'function' to 'jobFunction'

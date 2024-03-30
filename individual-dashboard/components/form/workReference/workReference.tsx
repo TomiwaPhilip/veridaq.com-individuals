@@ -9,6 +9,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/form/form";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from "@/components/ui/popover";
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -42,14 +52,14 @@ const WorkReference: React.FC = () => {
       subType: "",
       staffId: "",
       designation: "",
-      workStartDate: "",
-      workEndDate: "",
       department: "",
       notableAchievement: "",
       jobFunction: "",
       personalitySummary: "",
     },
   });
+
+  console.log(form.formState.errors)
 
   const onSubmit = async (data: z.infer<typeof WorkReferenceValidation>) => {
     console.log("I want to submit")
@@ -235,37 +245,89 @@ const WorkReference: React.FC = () => {
               <div>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
-                    <FormField
+                  <FormField
                     control={form.control}
-                    name="firstName"
+                    name="workStartDate"
                     render={({ field }) => (
-                        <FormItem className="flex-1">
-                        <FormLabel className="font-medium text-[16px]">
-                            Work Start Date
-                        </FormLabel>
-                        <FormControl>
-                            <Input placeholder="John" {...field} />
-                        </FormControl>
+                        <FormItem className="flex flex-col">
+                        <FormLabel className="font-medium text-[16px]">Work Start Date</FormLabel>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                            <FormControl>
+                                <Button
+                                variant={"outline"}
+                                className={cn(
+                                    "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
+                                    !field.value && "text-muted-foreground"
+                                )}
+                                >
+                                {field.value ? (
+                                    format(field.value, "PPP")
+                                ) : (
+                                    <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                            </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                date > new Date() || date < new Date("1900-01-01")
+                                }
+                                initialFocus
+                            />
+                            </PopoverContent>
+                        </Popover>
                         <FormMessage />
                         </FormItem>
                     )}
                     />
-                    <FormField
+                <FormField
                     control={form.control}
-                    name="lastName"
+                    name="workEndDate"
                     render={({ field }) => (
-                        <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
-                            Work End Date
-                        </FormLabel>
-                        <FormControl>
-                            <Input placeholder="Doe" {...field} />
-                        </FormControl>
+                        <FormItem className="flex flex-col">
+                        <FormLabel className="font-medium text-[16px]">Work End Date</FormLabel>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                            <FormControl>
+                                <Button
+                                variant={"outline"}
+                                className={cn(
+                                    "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
+                                    !field.value && "text-muted-foreground"
+                                )}
+                                >
+                                {field.value ? (
+                                    format(field.value, "PPP")
+                                ) : (
+                                    <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                            </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                date > new Date() || date < new Date("1900-01-01")
+                                }
+                                initialFocus
+                            />
+                            </PopoverContent>
+                        </Popover>
                         <FormMessage />
                         </FormItem>
                     )}
                     />
-                    <FormField
+                <FormField
                     control={form.control}
                     name="department"
                     render={({ field }) => (
@@ -274,13 +336,13 @@ const WorkReference: React.FC = () => {
                             Department
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="Nursing" {...field} />
+                            <Input placeholder="Department" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
                     )}
                     />
-                    <FormField
+                <FormField
                     control={form.control}
                     name="notableAchievement"
                     render={({ field }) => (
@@ -344,10 +406,10 @@ const WorkReference: React.FC = () => {
                 {/* Render success or error component based on request result */}
                 {requestResult === true && <SuccessMessage />}
                 {requestResult === false && <ErrorMessage />}
-                <button type="button" onClick={handlePrevStep}>Previous</button>
                 </div>
             )}
-                        </form>
+            
+            </form>
         </Form>
     </main>
   );
