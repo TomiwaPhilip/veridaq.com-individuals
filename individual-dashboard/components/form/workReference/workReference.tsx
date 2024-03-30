@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { date, z } from "zod";
+import { z } from "zod";
 
 import { createWorkReferenceRequest } from "@/lib/actions/request.action"
 import { WorkReferenceValidation } from '@/lib/validations/workreference';
@@ -38,6 +38,7 @@ import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
 const WorkReference: React.FC = () => {
   const [step, setStep] = useState(1);
+  const [formType, setFormType] = useState("withOrg")
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
 
   const handleNextStep = () => {
@@ -47,6 +48,10 @@ const WorkReference: React.FC = () => {
   const handlePrevStep = () => {
     setStep(step - 1);
   };
+
+  const handleFormType = () => {
+    setFormType("withOutOrg");
+  }
 
   const form = useForm<z.infer<typeof WorkReferenceValidation>>({
     resolver: zodResolver(WorkReferenceValidation),
@@ -99,6 +104,7 @@ const WorkReference: React.FC = () => {
 
   return (
     <main>
+        {formType === "withOrg" && (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
             {step === 1 && (
@@ -121,6 +127,7 @@ const WorkReference: React.FC = () => {
                     />
                     <div className="mt-10">
                       <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleNextStep}>Continue</button>
+                      <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleFormType}>My Organization is not here</button>
                     </div>
                     </div>
                     <p className='p-2'>{`Step ${step}`}</p>                
@@ -420,10 +427,13 @@ const WorkReference: React.FC = () => {
                 {requestResult === true && <SuccessMessage />}
                 {requestResult === false && <ErrorMessage />}
                 </div>
-            )}
-            
+            )} 
             </form>
         </Form>
+        )}
+        {formType === "withOutOrg" && (
+            <p>I am an entirely new comp!</p>
+        )}
     </main>
   );
 };
