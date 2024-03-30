@@ -112,6 +112,11 @@ const WorkReferenceAdminSchema = new Schema({
     required: [true, 'Contact Person Phone number is required'],
     minlength: 1,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User collection
+    required: true, // Assuming a WorkReference must be associated with a User
+  },
 });
 
 // Create and export the Mongoose model based on the schema

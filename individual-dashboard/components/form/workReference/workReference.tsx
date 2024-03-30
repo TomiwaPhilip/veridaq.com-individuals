@@ -31,7 +31,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createWorkReferenceRequest } from "@/lib/actions/request.action"
+import { createWorkReferenceRequest, createWorkReferenceRequestForAdmin } from "@/lib/actions/request.action"
 import { WorkReferenceValidation, WorkReferenceValidation2 } from '@/lib/validations/workreference';
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
@@ -106,6 +106,20 @@ const WorkReference: React.FC = () => {
       setRequestResult(false);
     }
   };
+
+  const onSubmit2 = async (data: z.infer<typeof WorkReferenceValidation2>) => {
+    console.log("I want to submit")
+    try {
+      const create = await createWorkReferenceRequestForAdmin(data);
+      setRequestResult(create);
+      if (create) {
+        handleNextStep();
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setRequestResult(false);
+    }
+  };  
 
   return (
     <main>
@@ -221,8 +235,8 @@ const WorkReference: React.FC = () => {
                                 </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                <SelectItem value="Regular">Current</SelectItem>
-                                <SelectItem value="Non-Regular">Former</SelectItem>
+                                <SelectItem value="Current">Current</SelectItem>
+                                <SelectItem value="Former">Former</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -444,7 +458,7 @@ const WorkReference: React.FC = () => {
         )}
         {formType === "withOutOrg" && (
             <Form {...form2}>
-            <form onSubmit={form2.handleSubmit(onSubmit)}>
+            <form onSubmit={form2.handleSubmit(onSubmit2)}>
             {step === 1 && (
                 <div>
                 <div className='mt-4 w-full px-8'>
@@ -528,8 +542,8 @@ const WorkReference: React.FC = () => {
                                 </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                <SelectItem value="Regular">Current</SelectItem>
-                                <SelectItem value="Non-Regular">Former</SelectItem>
+                                <SelectItem value="Current">Current</SelectItem>
+                                <SelectItem value="Former">Former</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -567,10 +581,10 @@ const WorkReference: React.FC = () => {
                     )}
                     />
                 </div>
-                <div className="mt-5 grid grid-cols-2 items-center justify-center">
-                    <div className="text-left left">
+                <div className="mt-5 flex items-center justify-center">
+                    {/* <div className="text-left left">
                      <button type="button" className='mr-auto md:mr-0' onClick={handlePrevStep}>Previous</button>
-                    </div>
+                    </div> */}
                     <div className="text-right right">
                       <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleNextStep}>Continue</button>
                     </div>
@@ -579,7 +593,7 @@ const WorkReference: React.FC = () => {
                 <p className='p-2'>{`Step ${step}`}</p>  
             </div>
             )}
-            {step === 3 && (
+            {step === 2 && (
               <div>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
@@ -731,7 +745,7 @@ const WorkReference: React.FC = () => {
                      <button type="button" className='mr-auto md:mr-0' onClick={handlePrevStep}>Previous</button>
                     </div>
                     <div className="text-right right">
-                      <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleNextStep}>Submit</button>
+                      <button type="button" className='bg-[#38313A] px-7 py-5 rounded-md text-white' onClick={handleNextStep}>Continue</button>
                     </div>
                 </div>
                 </div>
