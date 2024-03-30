@@ -10,6 +10,13 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+import {
     Popover,
     PopoverContent,
     PopoverTrigger,
@@ -169,20 +176,26 @@ const WorkReference: React.FC = () => {
                     )}
                     />
                     <FormField
-                    control={form.control}
-                    name="employeeType"
-                    render={({ field }) => (
-                        <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
-                            Employee Type
-                        </FormLabel>
-                        <FormControl>
-                            <Input placeholder="Permanent" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
+                        control={form.control}
+                        name="employeeType"
+                        render={({ field }) => (
+                            <FormItem className='w-full'>
+                            <FormLabel className='font-medium text-[16px]'>Employee Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a Employee Type" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                <SelectItem value="Regular">Regular (Current or Former Employee)</SelectItem>
+                                <SelectItem value="Non-Regular">Non-Regular e.g. Adhoc (On-going or Completed)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
                     <FormField
                     control={form.control}
                     name="subType"
