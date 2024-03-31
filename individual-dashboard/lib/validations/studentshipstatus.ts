@@ -28,16 +28,10 @@ export const StudentshipStatusValidation = z.object({
     message: "Entry Year must be a valid date in the past.",
 }),
   exitYear: z.date().optional(),
-  department: z.string().min(1, {
-    message: "Department must be at least 1 character.",
-  }),
   image: z.string().url().min(1),
 });
 
 export const StudentshipStatusValidation2 = z.object({
-    orgId: z.string().min(1, {
-      message: "Institution ID must be at least 1 character.",
-    }),
     firstName: z.string().min(1, {
       message: "Last Name must be at least 1 character.",
     }),
@@ -62,9 +56,6 @@ export const StudentshipStatusValidation2 = z.object({
       message: "Entry Year must be a valid date in the past.",
   }),
     exitYear: z.date().optional(),
-    department: z.string().min(1, {
-      message: "Department must be at least 1 character.",
-    }),
     image: z.string().url().min(1),
     orgName: z.string().min(1, {
     message: "Organization Name must be at least 1 character.",

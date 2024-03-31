@@ -12,7 +12,6 @@ const StudentshipStatusAdminSchema = new Schema({
   faculty: { type: String, required: true, minlength: 1 },
   entryYear: { type: Date, required: true, max: Date.now() },
   exitYear: Date,
-  department: { type: String, required: true, minlength: 1 },
   image: String,
   orgName: { type: String, required: true, minlength: 1 },
   orgAddress: { type: String, required: true, minlength: 1 },
