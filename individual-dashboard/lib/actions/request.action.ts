@@ -8,6 +8,8 @@ import WorkReferenceAdmin from "../utils/workreferenceadmin";
 import StudentshipStatus from "../utils/studentshipstatus";
 import StudentshipStatusAdmin from "../utils/studentshipstatusadmin";
 import MembershipReferenceAdmin from "../utils/membershipReferenceAdmin";
+import DocumentVerification from "../utils/documentVerification";
+import DocumentVerificationAdmin from "../utils/documentVerificationAdmin";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
 
@@ -410,5 +412,136 @@ export async function createMembershipReferenceForAdmin(params: MembershipParams
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save MembershipReference request: ${error.message}`);
+  }
+}
+
+interface DocumentParams {
+  orgId: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  id: string;
+  info: string;
+  image?: string;
+}
+
+// Define the createDocumentVerificationRequest function
+export async function createDocumentVerificationRequest(params: DocumentParams) {
+  try {
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await User.findOne({ email: session.user.email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new Document Verification document
+    const documentVerification = new DocumentVerification({
+      orgId: params.orgId,
+      firstName: params.firstName,
+      lastName: params.lastName,
+      middleName: params.middleName,
+      documentType: params.id, // Assuming id in MembershipParams corresponds to documentType
+      documentName: params.info, // Assuming info in MembershipParams corresponds to documentName
+      id: params.id,
+      info: params.info,
+      image: params.image, // Default to empty string if image is not provided
+      user: user._id,
+    });
+
+    // Save the Document Verification document to the database
+    await documentVerification.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save Document Verification request: ${error.message}`);
+  }
+}
+
+
+// Define the interface for MembershipParams
+interface DocumentAdminParams {
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  documentType: string;
+  documentName: string;
+  id: string;
+  info: string;
+  image: string;
+  orgName: string;
+  orgAddress: string;
+  orgPostalCode: string;
+  orgCountry: string;
+  orgEmail: string;
+  orgPhone: string;
+  contactName: string;
+  contactAddress: string;
+  contactPostalCode: string;
+  contactCountry: string;
+  contactEmail: string;
+  contactPhone: string;
+}
+
+
+// Define the createDocumentVerificationRequestForAdmin function
+export async function createDocumentVerificationRequestForAdmin(params: DocumentAdminParams) {
+  try {
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await User.findOne({ email: session.user.email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new Document Verification Admin document
+    const documentVerificationAdmin = new DocumentVerificationAdmin({
+      firstName: params.firstName,
+      lastName: params.lastName,
+      middleName: params.middleName,
+      documentType: params.documentType,
+      documentName: params.documentName,
+      id: params.id,
+      info: params.info,
+      image: params.image,
+      orgName: params.orgName,
+      orgAddress: params.orgAddress,
+      orgPostalCode: params.orgPostalCode,
+      orgCountry: params.orgCountry,
+      orgEmail: params.orgEmail,
+      orgPhone: params.orgPhone,
+      contactName: params.contactName,
+      contactAddress: params.contactAddress,
+      contactPostalCode: params.contactPostalCode,
+      contactCountry: params.contactCountry,
+      contactEmail: params.contactEmail,
+      contactPhone: params.contactPhone,
+      user: user._id,
+    });
+
+    // Save the Document Verification Admin document to the database
+    await documentVerificationAdmin.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save Document Verification Admin request: ${error.message}`);
   }
 }
