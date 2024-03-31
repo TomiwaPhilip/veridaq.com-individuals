@@ -7,7 +7,9 @@ import WorkReference from "../utils/workreference";
 import WorkReferenceAdmin from "../utils/workreferenceadmin";
 import StudentshipStatus from "../utils/studentshipstatus";
 import StudentshipStatusAdmin from "../utils/studentshipstatusadmin";
+import MembershipReferenceAdmin from "../utils/membershipReferenceAdmin";
 import User from "../utils/user";
+import MembershipReference from "../utils/membershipReference";
 
 interface Params {
   orgId: string;
@@ -284,5 +286,129 @@ export async function createStudentshipStatusForAdmin(params: StudentshipParamsA
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save StudentshipStatusAdmin request: ${error.message}`);
+  }
+}
+
+interface MembershipParams {
+  orgId: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  id: string;
+  info: string;
+  image?: string;
+}
+
+// Define the Membership Reference function
+export async function createMembershipReference(params: MembershipParams) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await User.findOne({ email: session.user.email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new Memebership Reference document
+    const membershipReference = new MembershipReference({
+      orgId: params.orgId,
+      firstName: params.firstName,
+      lastName: params.lastName,
+      middleName: params.middleName,
+      id: params.id,
+      info: params.info,
+      image: params.image,
+      user: user._id,
+    });
+
+    // Save the Memebership Reference document to the database
+    await membershipReference.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save Membership Reference request: ${error.message}`);
+  }
+}
+
+
+// Define the interface for the parameters
+interface MembershipParamsAdmin {
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  id: string;
+  info: string;
+  image?: string;
+  orgName: string;
+  orgAddress: string;
+  orgPostalCode: string;
+  orgCountry: string;
+  orgEmail: string;
+  orgPhone: string;
+  contactName: string;
+  contactAddress: string;
+  contactPostalCode: string;
+  contactCountry: string;
+  contactEmail: string;
+  contactPhone: string;
+}
+
+// Define the function to save membership reference data to the database
+export async function createMembershipReferenceForAdmin(params: MembershipParamsAdmin) {
+  
+  try {
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await User.findOne({ email: session.user.email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new MembershipReferenceAdmin document
+    const membershipReferenceAdmin = new MembershipReferenceAdmin({
+      firstName: params.firstName,
+      lastName: params.lastName,
+      middleName: params.middleName,
+      id: params.id,
+      info: params.info,
+      image: params.image,
+      orgName: params.orgName,
+      orgAddress: params.orgAddress,
+      orgPostalCode: params.orgPostalCode,
+      orgCountry: params.orgCountry,
+      orgEmail: params.orgEmail,
+      orgPhone: params.orgPhone,
+      contactName: params.contactName,
+      contactAddress: params.contactAddress,
+      contactPostalCode: params.contactPostalCode,
+      contactCountry: params.contactCountry,
+      contactEmail: params.contactEmail,
+      contactPhone: params.contactPhone,
+      user: user._id,
+    });
+
+    // Save the MembershipReferenceAdmin document to the database
+    await membershipReferenceAdmin.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save MembershipReference request: ${error.message}`);
   }
 }

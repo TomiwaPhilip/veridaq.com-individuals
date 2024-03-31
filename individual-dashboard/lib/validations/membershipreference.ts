@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const StudentshipStatusValidation = z.object({
+export const MembershipReferenceValidation = z.object({
   orgId: z.string().min(1, {
-    message: "Institution ID must be at least 1 character.",
+    message: "Organization ID must be at least 1 character.",
   }),
   firstName: z.string().min(1, {
     message: "Last Name must be at least 1 character.",
@@ -11,27 +11,16 @@ export const StudentshipStatusValidation = z.object({
     message: "Last Name must be at least 1 character.",
   }),
   middleName: z.string().optional(), // Allow empty string
-  currentLevel: z.string().min(1, {
-    message: "Current Level must be at least 1 characters.",
+  id: z.string().min(1, {
+    message: "Employee Type must be at least 1 characters.",
   }),
-  courseOfStudy: z.string().min(1, {
+  info: z.string().min(1, {
     message: "Sub Type must be at least 1 character.",
   }),
-  studentId: z.string().min(1, {
-    message: "Staff ID must be at least 1 character.",
-  }),
-  info: z.string().optional(),
-  faculty: z.string().min(1, {
-    message: "Faculty must be at least 1 character.",
-  }), 
-  entryYear: z.date().max(new Date(), {
-    message: "Entry Year must be a valid date in the past.",
-}),
-  exitYear: z.date().optional(),
-  image: z.string().url().min(1),
+  image: z.string().url().optional(),
 });
 
-export const StudentshipStatusValidation2 = z.object({
+export const MembershipReferenceValidation2 = z.object({
     firstName: z.string().min(1, {
       message: "Last Name must be at least 1 character.",
     }),
@@ -39,25 +28,14 @@ export const StudentshipStatusValidation2 = z.object({
       message: "Last Name must be at least 1 character.",
     }),
     middleName: z.string().optional(), // Allow empty string
-    currentLevel: z.string().min(1, {
-      message: "Current Level must be at least 1 characters.",
+    id: z.string().min(1, {
+      message: "Employee Type must be at least 1 characters.",
     }),
-    courseOfStudy: z.string().min(1, {
+    info: z.string().min(1, {
       message: "Sub Type must be at least 1 character.",
     }),
-    studentId: z.string().min(1, {
-      message: "Staff ID must be at least 1 character.",
-    }),
-    info: z.string().optional(),
-    faculty: z.string().min(1, {
-      message: "Faculty must be at least 1 character.",
-    }), 
-    entryYear: z.date().max(new Date(), {
-      message: "Entry Year must be a valid date in the past.",
-  }),
-    exitYear: z.date().optional(),
-    image: z.string().url().min(1),
-  orgName: z.string().min(1, {
+    image: z.string().url().optional(),
+    orgName: z.string().min(1, {
     message: "Organization Name must be at least 1 character.",
   }),
   orgAddress: z.string().min(1, {

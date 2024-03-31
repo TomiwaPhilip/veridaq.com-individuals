@@ -1,6 +1,7 @@
 import React from 'react';
 import WorkReference from '../form/workReference/workReference';
 import StudentshipStatus from '../form/studentshipstatus/studentshipStatus';
+import MembershipReference from '../form/membershipReference/membershipReference';
 
 interface StepperFormProps {
   id: string;
@@ -22,6 +23,12 @@ const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
         <StudentshipStatus />
       );
       title = "Request Studentship Status Veridaq"; // Change the title based on the id
+      break;
+    case '3':
+      content = (
+        <MembershipReference />
+      );
+      title = "Request Membership Reference Veridaq"; // Change the title based on the id
       break;
     // Include cases for other card ids if needed
     default:
