@@ -600,7 +600,7 @@ const StudentshipStatus: React.FC = () => {
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
                   <FormField
-                    control={form.control}
+                    control={form2.control}
                     name="faculty"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
@@ -613,7 +613,7 @@ const StudentshipStatus: React.FC = () => {
                     )}
                     />
                 <FormField
-                    control={form.control}
+                    control={form2.control}
                     name="entryYear"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
@@ -654,7 +654,7 @@ const StudentshipStatus: React.FC = () => {
                     )}
                     />
                 <FormField
-                    control={form.control}
+                    control={form2.control}
                     name="exitYear"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
@@ -695,7 +695,7 @@ const StudentshipStatus: React.FC = () => {
                     )}
                     />
                 <FormField
-                  control={form.control}
+                  control={form2.control}
                   name="image"
                   render={({ field }) => (
                     <FormItem className="flex items-center gap-4">

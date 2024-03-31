@@ -1,7 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
 const StudentshipStatusAdminSchema = new Schema({
-  orgId: { type: String, required: true, minlength: 1 },
   firstName: { type: String, required: true, minlength: 1 },
   lastName: { type: String, required: true, minlength: 1 },
   middleName: String,

@@ -120,7 +120,7 @@ const WorkReferenceAdminSchema = new Schema({
 });
 
 // Create and export the Mongoose model based on the schema
-const WorkReferenceAdmin = models.WorkReferenceAdmin || model("WorkReferenceAmdin", WorkReferenceAdminSchema);
+const WorkReferenceAdmin = models.WorkReferenceAdmin || model("WorkReferenceAdmin", WorkReferenceAdminSchema);
 
 
 export default WorkReferenceAdmin;
