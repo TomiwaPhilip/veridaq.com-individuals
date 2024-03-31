@@ -12,7 +12,7 @@ export const WorkReferenceValidation = z.object({
   }),
   middleName: z.string().optional(), // Allow empty string
   employeeType: z.string().min(1, {
-    message: "Employee Type must be at least 8 characters.",
+    message: "Employee Type must be at least 1 characters.",
   }),
   subType: z.string().min(1, {
     message: "Sub Type must be at least 1 character.",
@@ -47,7 +47,7 @@ export const WorkReferenceValidation2 = z.object({
   }),
   middleName: z.string().optional(), // Allow empty string
   employeeType: z.string().min(1, {
-    message: "Employee Type must be at least 8 characters.",
+    message: "Employee Type must be at least 1 characters.",
   }),
   subType: z.string().min(1, {
     message: "Sub Type must be at least 1 character.",

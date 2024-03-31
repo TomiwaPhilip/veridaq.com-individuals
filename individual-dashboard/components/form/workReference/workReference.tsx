@@ -252,7 +252,7 @@ const WorkReference: React.FC = () => {
                             Staff ID
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="D11234" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -267,7 +267,7 @@ const WorkReference: React.FC = () => {
                             Designation
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="Snr." {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -426,7 +426,7 @@ const WorkReference: React.FC = () => {
                             Personality Summary
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="Good" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -461,6 +461,7 @@ const WorkReference: React.FC = () => {
             <form onSubmit={form2.handleSubmit(onSubmit2)}>
             {step === 1 && (
                 <div>
+                    <p className='text-xl px-8'>Personal Details</p>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
                     <FormField
@@ -559,7 +560,7 @@ const WorkReference: React.FC = () => {
                             Staff ID
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="D11256" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -574,7 +575,7 @@ const WorkReference: React.FC = () => {
                             Designation
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="Snr." {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -595,6 +596,7 @@ const WorkReference: React.FC = () => {
             )}
             {step === 2 && (
               <div>
+                <p className='text-xl px-8'>Personal Details</p>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
                   <FormField
@@ -733,7 +735,7 @@ const WorkReference: React.FC = () => {
                             Personality Summary
                         </FormLabel>
                         <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="Good" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -754,6 +756,7 @@ const WorkReference: React.FC = () => {
             )}
             {step === 3 && (
               <div>
+                <p className='text-xl px-8'>Organization Details</p>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
                   <FormField
@@ -861,6 +864,7 @@ const WorkReference: React.FC = () => {
             )}
             {step === 4 && (
               <div>
+                <p className='text-xl px-8'>Contact Person Details</p>
                 <div className='mt-4 w-full px-8'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-center'>
                   <FormField
