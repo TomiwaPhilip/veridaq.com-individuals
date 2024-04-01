@@ -22,10 +22,15 @@ export function OutlineButtonSmall({ name }: { name: string }) {
     );
   }
   
-  export function NoOutlineButtonBig({ name, type }: { name: string, type: "submit" | "button"  }) {
+  export function NoOutlineButtonBig({ name, type, disabled }: { name: string, type: "submit" | "button", disabled?: boolean }) {
     return (
-      <button type={type} className="veridaq-gradient mt-5 text-white text-[20px] font-medium px-[5rem] py-4 rounded-md border-transparent hover:bg-transparent hover:veridaq-gradient hover:border-gray-800">
+      <button 
+        type={type} 
+        className="veridaq-gradient mt-5 text-white text-[20px] font-medium px-[5rem] py-4 rounded-md border-transparent hover:bg-transparent hover:veridaq-gradient hover:border-gray-800"
+        disabled={disabled}
+      >
         {name}
       </button>
     );
   }
+  

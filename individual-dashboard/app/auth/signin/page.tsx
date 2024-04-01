@@ -1,11 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { getSession } from "next-auth/react";
+import { useState } from "react";
 
 import {
-  Button,
   GoogleButton,
   LinkedinButton,
 } from "@/components/buttons/button";
@@ -21,7 +18,8 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
-import { SessionState } from "http2";
+import { signIn } from 'next-auth/react';
+
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 
 const formSchema = z.object({
@@ -32,9 +30,7 @@ const formSchema = z.object({
 
 export default function SignIn() {
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-      console.log(data);
-  }
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,6 +38,22 @@ export default function SignIn() {
       email: "",
     },
   });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    const result = await signIn('email', {
+      email: data.email,
+      redirect: true, // Change to true if you want NextAuth.js to handle redirection after sign-in
+    });
+    setIsLoading(false);
+    if (!result?.error) {
+      // Handle successful sign-in
+      console.log('Sign in successful');
+    } else {
+      // Handle sign-in error
+      console.error('Sign in error:', result.error);
+    }
+  };
 
   return (
     <main className="text-white">
@@ -66,9 +78,7 @@ export default function SignIn() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium text-[20px]">
-                      Email Address
-                    </FormLabel>
+                    <FormLabel className="font-medium text-[20px]">Email Address</FormLabel>
                     <FormControl>
                       <Input placeholder="example@mail.com" {...field} />
                     </FormControl>
@@ -77,7 +87,7 @@ export default function SignIn() {
                 )}
               />
               <div className="text-center">
-                <NoOutlineButtonBig type={"submit"} name={"Sign In"} />
+                <NoOutlineButtonBig type="submit" name={isLoading ? 'Sending Email...' : 'Send Magic Link'} disabled={isLoading} />
               </div>
             </form>
           </Form>

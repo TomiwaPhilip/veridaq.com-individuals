@@ -357,6 +357,29 @@ export function MessageLabel({ imgSrc, name }: { imgSrc: string; name: string })
   );
 }
 
+export function MessageBox(){
+  return (
+    <div className="absolute bottom-0 left-0 w-full m-5">
+      <label className="flex items-center gap-4 gradient-border1 bg-[#38313A] w-full rounded-full">
+        <input
+          type="text"
+          id="chat"
+          placeholder="Your Message..."
+          className="border-none outline-none block bg-[#38313A] text-white placeholder:text-white capitalize"
+        />
+        <Image
+          src="/assets/icons/icon-send.png"
+          width={25}
+          height={25}
+          className=""
+          alt="send_btn"
+        />
+      </label>
+    </div>
+  )
+}
+
+
 export function SuccessMessage(){
   return(
     <div className="flex flex-col items-center justify-center">

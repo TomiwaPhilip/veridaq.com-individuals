@@ -1,4 +1,4 @@
-import { MessageLabel, MessageCard } from "./shared";
+import { MessageLabel, MessageCard, MessageBox } from "./shared";
 
 export default function ChatBox() {
   return (
@@ -16,6 +16,7 @@ export default function ChatBox() {
           bgColor={"#443B46"}
         />
       </div>
+      <MessageBox />
     </div>
   );
 }
