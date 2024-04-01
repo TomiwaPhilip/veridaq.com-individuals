@@ -10,6 +10,7 @@ import StudentshipStatusAdmin from "../utils/studentshipstatusadmin";
 import MembershipReferenceAdmin from "../utils/membershipReferenceAdmin";
 import DocumentVerification from "../utils/documentVerification";
 import DocumentVerificationAdmin from "../utils/documentVerificationAdmin";
+import IndividualRequest from "../utils/individualRequest";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
 
@@ -543,5 +544,56 @@ export async function createDocumentVerificationRequestForAdmin(params: Document
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save Document Verification Admin request: ${error.message}`);
+  }
+}
+
+
+// Define the interface for the parameters based on the schema
+interface IndividualParams {
+  email: string;
+  typeOfRequest: string;
+  addresseeFullName?: string;
+  relationship: string;
+  yearsOfRelationship: Date;
+  personalityReview: string;
+  recommendationStatement: string;
+}
+
+// Define the function to create an IndividualRequest document
+export async function createIndividualRequest(params: IndividualParams) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await User.findOne({ email: session.user.email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new IndividualRequest document
+    const individualRequest = new IndividualRequest({
+      email: params.email,
+      typeOfRequest: params.typeOfRequest,
+      addresseeFullName: params.addresseeFullName,
+      relationship: params.relationship,
+      yearsOfRelationship: params.yearsOfRelationship,
+      personalityReview: params.personalityReview,
+      recommendationStatement: params.recommendationStatement,
+      user: user._id,
+    });
+
+    // Save the IndividualRequest document to the database
+    await individualRequest.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save Individual Request: ${error.message}`);
   }
 }

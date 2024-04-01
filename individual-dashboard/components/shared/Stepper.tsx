@@ -3,6 +3,7 @@ import WorkReference from '../form/workReference/workReference';
 import StudentshipStatus from '../form/studentshipstatus/studentshipStatus';
 import MembershipReference from '../form/membershipReference/membershipReference';
 import DocumentVerification from '../form/documentVerification/documentVerification';
+import IndividualRequest from "../form/individualRequest/individualRequest"
 
 interface StepperFormProps {
   id: string;
@@ -36,6 +37,12 @@ const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
           <DocumentVerification />
         );
         title = "Request Document Verification Veridaq"; // Change the title based on the id
+        break;
+    case '5':
+        content = (
+          <IndividualRequest />
+        );
+        title = "Request Individual Reference Veridaq."; // Change the title based on the id
         break;
     // Include cases for other card ids if needed
     default:
