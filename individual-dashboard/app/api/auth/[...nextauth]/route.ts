@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET as string,
     }),
     EmailProvider({
-      from: 'noreply@example.com',
+      from: 'noreply@veridaq.com',
       // Custom sendVerificationRequest() function
       sendVerificationRequest,
     }),
