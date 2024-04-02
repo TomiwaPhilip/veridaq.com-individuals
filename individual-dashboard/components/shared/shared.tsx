@@ -98,7 +98,7 @@ export function Nav() {
 }
 
 const handleSignOut = async () => {
-  await signOut({ redirect: true, callbackUrl: '/auth/sign-in' });
+  await signOut({ redirect: true, callbackUrl: '/auth/signin' });
 };
 
 
