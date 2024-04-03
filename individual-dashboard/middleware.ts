@@ -1,14 +1,20 @@
-import { withAuth } from "next-auth/middleware";
+import NextAuth from "next-auth";
 
-export default withAuth({
-  // Matches the pages config in `[...nextauth]`
-  pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error",
-  },
-});
+import authConfig from "@/auth.config";
+// import {
+//   DEFAULT_LOGIN_REDIRECT,
+//   apiAuthPrefix,
+//   authRoutes,
+//   publicRoutes,
+// } from "@/routes
 
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  console.log(req.url)
+})
+
+// Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 }
