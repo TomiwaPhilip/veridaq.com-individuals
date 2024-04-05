@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
-import { signIn } from 'next-auth/react';
 
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 
