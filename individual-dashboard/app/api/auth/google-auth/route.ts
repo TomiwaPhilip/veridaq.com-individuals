@@ -3,8 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { getGoogleAccessToken, getGoogleUserInfo } from "@/lib/actions/server-hooks/google-auth.action";
 import connectToDB from '@/lib/model/database';
-import Role from '@/lib/utils/roleSchema';
-import Organization from "@/lib/utils/organizationSchema";
+import User from '@/lib/utils/user';
 import { saveSession } from '@/lib/utils';
 
 
@@ -38,36 +37,22 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
       // Destructure the relevant properties from userInfo with optional chaining and nullish coalescing
       const { email, given_name, family_name, picture } = userInfo ?? {};
     
-      // Check if the user already exists in the Role collection with the correct login type
-      const existingUser = await Role.findOne({ email: email });
+      // Check if the user already exists in the User collection with the correct login type
+      const existingUser = await User.findOne({ email: email });
 
       if (existingUser) {
-        // User exists, obtain the organization ID from the existing user's organization field
-        const organizationId = existingUser.organization;
 
         // Create session data
         let sessionData = {
           userId: existingUser._id,
           email: existingUser.email,
-          firstName: existingUser.firstName,
-          lastName: existingUser.lastName,
-          image: '', // Initialize image as an empty string
-          isOnboarded: false,
-          isVerified: false,
-          role: existingUser.role,
-          orgId: organizationId,
+          firstName: existingUser.firstname,
+          lastName: existingUser.lastname,
+          image: existingUser.image, // Initialize image as an empty string
+          isOnboarded: existingUser.onboarded,
+          isVerified: existingUser.verified,
           isLoggedIn: true
         };
-
-        // Retrieve organization details
-        const existingOrg = await Organization.findById(organizationId);
-
-        if (existingOrg) {
-          // If organization exists, update session data with organization's image
-          sessionData.image = existingOrg.image;
-          sessionData.isOnboarded = existingOrg.onboarded;
-          sessionData.isVerified = existingOrg.verified;
-        }
 
         if (existingUser.loginType === 'google') {
           // User exists with the correct login type (Google), proceed with login
@@ -95,48 +80,27 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
           return NextResponse.redirect(new URL('/error', req.url));
         }
       } else {
-        // User does not exist, create a new organization and role with the received email
+        // User does not exist, create a new organization and User with the received email
+        console.log("User not found continuing with creating new user")
 
-        // Check if the organization already exists based on the received email
-        let organization = await Organization.findOne({ email: email });
-
-        // If the organization doesn't exist, create a new one
-        if (!organization) {
-          console.log("Organization not found, creating new organization");
-        
-          organization = await Organization.create({
-            email: email,
-            adminFirstName: given_name,
-            adminLastName: family_name
-          });
-        } else {
-          console.log("Organization found, using existing organization");
-        }
-
-        // Obtain the organization ID
-        const organizationId = organization._id;
-
-        // Create a new role for the user with the received email
-        const newRole = await Role.create({
+        // Create a new User for the user with the received email
+        const newUser = await User.create({
           email: email,
-          firstName: given_name,
-          lastName: family_name,
-          role: 'admin', // or whatever default role you want to assign
+          image: picture,
+          firstname: given_name,
+          lastname: family_name,
           loginType: 'google', // or the appropriate login type
-          organization: organizationId
         });
 
         // Create session data
         const sessionData = {
-          userId: newRole._id,
-          email: newRole.email,
-          firstName: newRole.firstName,
-          lastName: newRole.lastName,
-          image: organization.image,
-          isOnboarded: organization.onboarded,
-          isVerified: organization.verified,
-          role: newRole.role,
-          orgId: organizationId,
+          userId: newUser._id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          image: newUser.image,
+          isOnboarded: newUser.onboarded,
+          isVerified: newUser.verified,
           isLoggedIn: true
         };
 

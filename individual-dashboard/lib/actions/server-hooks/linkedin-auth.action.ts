@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const redirectUri = "https://crispy-space-enigma-9r549pgr7q72p4r9-3000.github.dev/api/auth/linkedin-auth";
+const redirectUri = "https://crispy-space-enigma-9r549pgr7q72p4r9-3000.app.github.dev/api/auth/linkedin-auth";
 const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID as string;
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET as string;
 const scope = 'openid profile email'; // Scopes for basic profile info, email address, and organization info

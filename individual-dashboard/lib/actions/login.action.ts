@@ -6,8 +6,7 @@ import { getGoogleAuthUrl } from "@/lib/actions/server-hooks/google-auth.action"
 import VerificationToken from "../utils/emailTokenSchema";
 import { generateToken, sendVerificationRequest, verifyToken } from "../utils";
 import connectToDB from "../model/database";
-import Role from '@/lib/utils/roleSchema';
-import Organization from "@/lib/utils/organizationSchema";
+import User from "../utils/user";
 import { saveSession } from '@/lib/utils';
 import { getLinkedInAuthUrl } from "./server-hooks/linkedin-auth.action";
 
@@ -20,7 +19,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://crispy-space-enigma-9r549pgr7q72p4r9-3000.github.dev/auth/verify?token=${token}`;
+    const url = `https://crispy-space-enigma-9r549pgr7q72p4r9-3000.app.github.dev/auth/verify?token=${token}`;
     
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email })
@@ -76,35 +75,21 @@ export async function verifyUserToken(token: string): Promise<boolean> {
     try {
 
       // Check if the user already exists in the Role collection with the correct login type
-      const existingUser = await Role.findOne({ email: email });
+      const existingUser = await User.findOne({ email: email });
 
       if (existingUser) {
-        // User exists, obtain the organization ID from the existing user's organization field
-        const organizationId = existingUser.organization;
 
         // Create session data
         let sessionData = {
           userId: existingUser._id,
           email: existingUser.email,
-          firstName: existingUser.firstName,
-          lastName: existingUser.lastName,
-          image: '', // Initialize image as an empty string
-          isOnboarded: false,
-          isVerified: false,
-          role: existingUser.role,
-          orgId: organizationId,
+          firstName: existingUser.firstname,
+          lastName: existingUser.lastname,
+          image: existingUser.image, // Initialize image as an empty string
+          isOnboarded: existingUser.onboarded,
+          isVerified: existingUser.verified,
           isLoggedIn: true
         };
-
-        // Retrieve organization details
-        const existingOrg = await Organization.findById(organizationId);
-
-        if (existingOrg) {
-          // If organization exists, update session data with organization's image
-          sessionData.image = existingOrg.image;
-          sessionData.isOnboarded = existingOrg.onboarded;
-          sessionData.isVerified = existingOrg.verified;
-        }
 
         // Save session
         await saveSession(sessionData);
@@ -117,39 +102,18 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         } else {
         // User does not exist, create a new organization and role with the received email
 
-        // Check if the organization already exists based on the received email
-        let organization = await Organization.findOne({ email: email });
-
-        // If the organization doesn't exist, create a new one
-        if (!organization) {
-          console.log("Organization not found, creating new organization");
-        
-          organization = await Organization.create({
-            email: email,
-          });
-        } else {
-          console.log("Organization found, using existing organization");
-        }
-
-        // Obtain the organization ID
-        const organizationId = organization._id;
-
-        // Create a new role for the user with the received email
-        const newRole = await Role.create({
+        // Create a new User for the user with the received email
+        const newUser = await User.create({
           email: email,
-          role: 'admin', // or whatever default role you want to assign
           loginType: 'email', // or the appropriate login type
-          organization: organizationId
         });
 
         // Create session data
         const sessionData = {
-          userId: newRole._id,
-          email: newRole.email,
-          isOnboarded: organization.onboarded,
-          isVerified: organization.verified,
-          role: newRole.role,
-          orgId: organizationId,
+          userId: newUser._id,
+          email: newUser.email,
+          isOnboarded: newUser.onboarded,
+          isVerified: newUser.verified,
           isLoggedIn: true
         };
 

@@ -8,11 +8,11 @@ const UserSchema = new Schema({
   },
   firstname: {
     type: String,
-    required: [true, 'Firstname is required!'],
+    // required: [true, 'Firstname is required!'],
   },
   lastname: {
     type: String,
-    required: [true, 'Lastname is required!'],
+    // required: [true, 'Lastname is required!'],
   },
   middlename: {
     type: String,
@@ -40,6 +40,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  loginType: {
+    type: String,
+    enum: ["email", "google", "linkedin"],
+  }
 });
 
 const User = models.User || model("User", UserSchema);
