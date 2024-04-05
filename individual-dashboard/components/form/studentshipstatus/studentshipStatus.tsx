@@ -46,7 +46,6 @@ const StudentshipStatus: React.FC = () => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const [files, setFiles] = useState("");
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -70,8 +69,6 @@ const StudentshipStatus: React.FC = () => {
 
   console.log(form.formState.errors)
   console.log(form2.formState.errors)
-
-  let file;
 
   const handleImage = async (
     e: ChangeEvent<HTMLInputElement>,

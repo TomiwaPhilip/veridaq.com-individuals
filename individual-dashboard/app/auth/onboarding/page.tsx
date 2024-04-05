@@ -1,6 +1,14 @@
-import Onboard from "@/components/form/onboarding/onboard";
+import getSession from "@/lib/actions/server-hooks/getsession.action";
 
-export default function Onboarding() {
+import Onboard from "@/components/form/onboarding/onboard";
+import {redirect} from "next/navigation"
+
+export default async function Onboarding() {
+  const session = await getSession();
+
+  if (session.isOnboarded) {
+    redirect("/");
+  }
   return (
     <Onboard />
   );

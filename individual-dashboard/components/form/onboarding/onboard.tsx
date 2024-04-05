@@ -14,10 +14,9 @@ import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useRef } from 'react';
 import { updateUser } from "@/lib/actions/onboarding.action";
-import { isBase64Image } from "@/lib/utils";
-import { useUploadThing } from "@/lib/utils/useUploadthing";
+import { upload } from '@vercel/blob/client';
 
   
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
@@ -26,8 +25,8 @@ import { OnboardingValidation } from "@/lib/validations/onboarding";
 export default function Onboard(){
 
     const router = useRouter();
-    const { startUpload } = useUploadThing("media");
-    const [files, setFiles] = useState<File[]>([]);
+    const inputFileRef = useRef<HTMLInputElement>(null);
+    const [disable, setDisable] = useState(true)
 
     const form = useForm<z.infer<typeof OnboardingValidation>>({
         resolver: zodResolver(OnboardingValidation),
@@ -41,41 +40,43 @@ export default function Onboard(){
           image: "",
         },
       });
-
-      const handleImage = (
+      
+      const handleImage = async (
         e: ChangeEvent<HTMLInputElement>,
         fieldChange: (value: string) => void,
       ) => {
         e.preventDefault();
-    
+      
         const fileReader = new FileReader();
-    
-        if (e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-          setFiles(Array.from(e.target.files));
-    
-          if (!file.type.includes("image")) return;
-    
-          fileReader.onload = async (event) => {
-            const imageDataUrl = event.target?.result?.toString() || "";
-            fieldChange(imageDataUrl);
-          };
-    
-          fileReader.readAsDataURL(file);
+        if (!inputFileRef.current?.files) {
+          throw new Error('No file selected');
         }
+        
+        const file = inputFileRef.current.files[0];
+        
+        fileReader.onload = async (e) => {
+          const fileData = e.target?.result;
+          if (typeof fileData === 'string') {
+            try {
+              const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/avatar/upload',
+              });
+              
+              // Update the form data with the new blob URL
+              fieldChange(newBlob.url);
+              setDisable(false);
+            } catch (error) {
+              console.error('Error uploading file:', error);
+            }
+          }
+        };
+        fileReader.readAsDataURL(file);
+
       };
 
+
       const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
-        const blob = data.image;
-    
-        const hasImageChanged = isBase64Image(blob);
-        if (hasImageChanged) {
-          const imgRes = await startUpload(files);
-    
-          if (imgRes && imgRes[0].url) {
-            data.image = imgRes[0].url;
-          }
-        }
         console.log(data);
         await updateUser({
           firstName: data.firstName,
@@ -224,6 +225,7 @@ export default function Onboard(){
                         <Input
                           type="file"
                           accept="image/*"
+                          ref={inputFileRef}
                           placeholder="Upload Profile Photo"
                           className="account-form_image-input"
                           onChange={(e) => handleImage(e, field.onChange)}
@@ -234,7 +236,7 @@ export default function Onboard(){
                 />
               </div>
               <div className="text-center">
-                <NoOutlineButtonBig type="submit" name="Save and Continue" />
+                <NoOutlineButtonBig type="submit" name="Save and Continue" disabled={disable} />
               </div>
             </form>
           </Form>

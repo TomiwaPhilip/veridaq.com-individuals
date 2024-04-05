@@ -91,6 +91,11 @@ const DocumentVerification: React.FC = () => {
   
     fileReader.readAsDataURL(file);
   };
+
+  const [inputValue, setInputValue] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+
+
   
 
   const onSubmit = async (data: z.infer<typeof DocumentVerificationValidation>) => {

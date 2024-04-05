@@ -1,7 +1,7 @@
 "use server";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import getSession from "./server-hooks/getsession.action";
+import { saveSession } from "../utils";
 
 import connectToDB from "../model/database";
 import User from "../utils/user";
@@ -26,13 +26,13 @@ export async function updateUser({
   image,
 }: Params) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
-    const email = session.user.email;
+    const email = session.email;
 
     // Connect to the database
     connectToDB();
@@ -53,6 +53,10 @@ export async function updateUser({
       // Upsert means both updating and inserting
       { upsert: true },
     );
+
+    session.isOnboarded = true;
+    session.image = image;
+    await session.save()
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
   }
