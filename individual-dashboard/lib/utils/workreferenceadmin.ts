@@ -15,7 +15,7 @@ const WorkReferenceAdminSchema = new Schema({
   employeeType: {
     type: String,
     required: [true, "Employee Type is required"],
-    minlength: 8,
+    minlength: 1,
   },
   subType: {
     type: String,

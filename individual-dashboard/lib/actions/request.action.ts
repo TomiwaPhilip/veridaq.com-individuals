@@ -8,6 +8,7 @@ import StudentshipStatus from "../utils/studentshipstatus";
 import StudentshipStatusAdmin from "../utils/studentshipstatusadmin";
 import MembershipReferenceAdmin from "../utils/membershipReferenceAdmin";
 import DocumentVerification from "../utils/documentVerification";
+import Organization from "../utils/organizationSchema";
 import DocumentVerificationAdmin from "../utils/documentVerificationAdmin";
 import IndividualRequest from "../utils/individualRequest";
 import User from "../utils/user";
@@ -608,5 +609,29 @@ export async function createIndividualRequest(params: IndividualParams) {
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save Individual Request: ${error.message}`);
+  }
+}
+
+interface Organization {
+  _id: string; // Assuming _id is converted to string
+  name: string;
+}
+
+export async function getOrganizations(): Promise<Organization[]> {
+  try {
+    connectToDB();
+
+    const organizations = await Organization.find({}, "name _id");
+
+    // Convert the _id field to a string
+    const formattedOrganizations = organizations.map((org) => ({
+      _id: org._id.toString(),
+      name: org.name,
+    }));
+
+    return formattedOrganizations;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Error querying Database");
   }
 }

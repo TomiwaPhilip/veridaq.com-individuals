@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -23,7 +23,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { format } from "date-fns";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -42,11 +50,32 @@ import {
   WorkReferenceValidation2,
 } from "@/lib/validations/workreference";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import { getOrganizations } from "@/lib/actions/request.action";
 
 const WorkReference: React.FC = () => {
+  interface Organization {
+    _id: string;
+    name: string;
+  }
+
   const [step, setStep] = useState(1);
   const [formType, setFormType] = useState("withOrg");
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      try {
+        const orgs = await getOrganizations();
+        setOrganizations(orgs);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchOrgs();
+  }, []);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -62,20 +91,6 @@ const WorkReference: React.FC = () => {
 
   const form = useForm<z.infer<typeof WorkReferenceValidation>>({
     resolver: zodResolver(WorkReferenceValidation),
-    defaultValues: {
-      orgId: "",
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      employeeType: "",
-      subType: "",
-      staffId: "",
-      designation: "",
-      department: "",
-      notableAchievement: "",
-      jobFunction: "",
-      personalitySummary: "",
-    },
   });
 
   const form2 = useForm<z.infer<typeof WorkReferenceValidation2>>({
@@ -140,114 +155,64 @@ const WorkReference: React.FC = () => {
                     control={form.control}
                     name="orgId"
                     render={({ field }) => (
-                      <FormItem className="w-full">
+                      <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
                           Name of Organization
                         </FormLabel>
-                        <Select>
-                          <SelectTrigger className="w-[280px]">
-                            <SelectValue placeholder="Select a timezone" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>North America</SelectLabel>
-                              <SelectItem value="est">
-                                Eastern Standard Time (EST)
-                              </SelectItem>
-                              <SelectItem value="cst">
-                                Central Standard Time (CST)
-                              </SelectItem>
-                              <SelectItem value="mst">
-                                Mountain Standard Time (MST)
-                              </SelectItem>
-                              <SelectItem value="pst">
-                                Pacific Standard Time (PST)
-                              </SelectItem>
-                              <SelectItem value="akst">
-                                Alaska Standard Time (AKST)
-                              </SelectItem>
-                              <SelectItem value="hst">
-                                Hawaii Standard Time (HST)
-                              </SelectItem>
-                            </SelectGroup>
-                            <SelectGroup>
-                              <SelectLabel>Europe & Africa</SelectLabel>
-                              <SelectItem value="gmt">
-                                Greenwich Mean Time (GMT)
-                              </SelectItem>
-                              <SelectItem value="cet">
-                                Central European Time (CET)
-                              </SelectItem>
-                              <SelectItem value="eet">
-                                Eastern European Time (EET)
-                              </SelectItem>
-                              <SelectItem value="west">
-                                Western European Summer Time (WEST)
-                              </SelectItem>
-                              <SelectItem value="cat">
-                                Central Africa Time (CAT)
-                              </SelectItem>
-                              <SelectItem value="eat">
-                                East Africa Time (EAT)
-                              </SelectItem>
-                            </SelectGroup>
-                            <SelectGroup>
-                              <SelectLabel>Asia</SelectLabel>
-                              <SelectItem value="msk">
-                                Moscow Time (MSK)
-                              </SelectItem>
-                              <SelectItem value="ist">
-                                India Standard Time (IST)
-                              </SelectItem>
-                              <SelectItem value="cst_china">
-                                China Standard Time (CST)
-                              </SelectItem>
-                              <SelectItem value="jst">
-                                Japan Standard Time (JST)
-                              </SelectItem>
-                              <SelectItem value="kst">
-                                Korea Standard Time (KST)
-                              </SelectItem>
-                              <SelectItem value="ist_indonesia">
-                                Indonesia Central Standard Time (WITA)
-                              </SelectItem>
-                            </SelectGroup>
-                            <SelectGroup>
-                              <SelectLabel>Australia & Pacific</SelectLabel>
-                              <SelectItem value="awst">
-                                Australian Western Standard Time (AWST)
-                              </SelectItem>
-                              <SelectItem value="acst">
-                                Australian Central Standard Time (ACST)
-                              </SelectItem>
-                              <SelectItem value="aest">
-                                Australian Eastern Standard Time (AEST)
-                              </SelectItem>
-                              <SelectItem value="nzst">
-                                New Zealand Standard Time (NZST)
-                              </SelectItem>
-                              <SelectItem value="fjt">
-                                Fiji Time (FJT)
-                              </SelectItem>
-                            </SelectGroup>
-                            <SelectGroup>
-                              <SelectLabel>South America</SelectLabel>
-                              <SelectItem value="art">
-                                Argentina Time (ART)
-                              </SelectItem>
-                              <SelectItem value="bot">
-                                Bolivia Time (BOT)
-                              </SelectItem>
-                              <SelectItem value="brt">
-                                Brasilia Time (BRT)
-                              </SelectItem>
-                              <SelectItem value="clt">
-                                Chile Standard Time (CLT)
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-[200px] justify-between",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value
+                                  ? organizations.find(
+                                      (organization) =>
+                                        organization._id === field.value,
+                                    )?.name
+                                  : "Select Organization"}
+                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput
+                                placeholder="Search Organization..."
+                                className="h-9"
+                              />
+                              <CommandEmpty>
+                                No Organization found.
+                              </CommandEmpty>
+                              <CommandGroup>
+                                {organizations.map((organization) => (
+                                  <CommandItem
+                                    value={organization.name}
+                                    key={organization._id}
+                                    onSelect={() => {
+                                      form.setValue("orgId", organization._id);
+                                    }}
+                                  >
+                                    {organization.name}
+                                    <CheckIcon
+                                      className={cn(
+                                        "ml-auto h-4 w-4",
+                                        organization._id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
