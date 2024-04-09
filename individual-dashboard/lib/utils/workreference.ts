@@ -1,38 +1,39 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models } from "mongoose";
 
 const WorkReferenceSchema = new Schema({
   orgId: {
-    type: String,
-    required: [true, 'Organization ID is required'],
+    type: Schema.Types.ObjectId,
+    ref: "Organization",
+    required: [true, "Organization ID is required"],
   },
   firstName: {
     type: String,
-    required: [true, 'First Name is required'],
+    required: [true, "First Name is required"],
   },
   lastName: {
     type: String,
-    required: [true, 'Last Name is required'],
+    required: [true, "Last Name is required"],
   },
   middleName: String,
   employeeType: {
     type: String,
-    required: [true, 'Employee Type is required'],
+    required: [true, "Employee Type is required"],
   },
   subType: {
     type: String,
-    required: [true, 'Sub Type is required'],
+    required: [true, "Sub Type is required"],
   },
   staffId: {
     type: String,
-    required: [true, 'Staff ID is required'],
+    required: [true, "Staff ID is required"],
   },
   designation: {
     type: String,
-    required: [true, 'Designation is required'],
+    required: [true, "Designation is required"],
   },
   workStartDate: {
     type: Date,
-    required: [true, 'Work Start Date is required'],
+    required: [true, "Work Start Date is required"],
   },
   workEndDate: {
     type: Date,
@@ -40,23 +41,35 @@ const WorkReferenceSchema = new Schema({
   },
   department: {
     type: String,
-    required: [true, 'Department is required'],
+    required: [true, "Department is required"],
   },
   notableAchievement: String,
   jobFunction: {
     type: String,
-    required: [true, 'Function is required'],
+    required: [true, "Function is required"],
   },
   personalitySummary: String,
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User collection
-    required: true, // Assuming a WorkReference must be associated with a User
+    ref: "User", // Reference to the User collection
+  },
+  issued: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  dateIssued: {
+    type: Date,
+    default: Date.now,
+  },
+  dateRequested: {
+    type: Date,
+    default: Date.now,
   },
 });
 
 // Create and export the Mongoose model based on the schema
-const WorkReference = models.WorkReference || model("WorkReference", WorkReferenceSchema);
-
+const WorkReference =
+  models.WorkReference || model("WorkReference", WorkReferenceSchema);
 
 export default WorkReference;

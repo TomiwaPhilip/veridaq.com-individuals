@@ -1,7 +1,6 @@
 "use server";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import getSession from "@/lib/actions/server-hooks/getsession.action";
 import connectToDB from "../model/database";
 import WorkReference from "../utils/workreference";
 import WorkReferenceAdmin from "../utils/workreferenceadmin";
@@ -13,6 +12,7 @@ import DocumentVerificationAdmin from "../utils/documentVerificationAdmin";
 import IndividualRequest from "../utils/individualRequest";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
+import { findUserByEmail } from "./server-hooks/hooks.action";
 
 interface Params {
   orgId: string;
@@ -48,9 +48,9 @@ export async function createWorkReferenceRequest({
   personalitySummary,
 }: Params) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -58,7 +58,7 @@ export async function createWorkReferenceRequest({
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -81,6 +81,7 @@ export async function createWorkReferenceRequest({
       jobFunction, // Changed from 'function' to 'jobFunction'
       personalitySummary,
       user: user._id,
+      dateRequested: new Date(),
     });
 
     // Save the WorkReference document to the database
@@ -90,7 +91,6 @@ export async function createWorkReferenceRequest({
     throw new Error(`Failed to save WorkReference request: ${error.message}`);
   }
 }
-
 
 interface Params2 {
   firstName: string;
@@ -122,9 +122,9 @@ interface Params2 {
 
 export async function createWorkReferenceRequestForAdmin(params: Params2) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -132,7 +132,7 @@ export async function createWorkReferenceRequestForAdmin(params: Params2) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -170,9 +170,9 @@ interface StudentshipParams {
 // Define the createStudentshipStatus function
 export async function createStudentshipStatus(params: StudentshipParams) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -180,7 +180,7 @@ export async function createStudentshipStatus(params: StudentshipParams) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -207,10 +207,11 @@ export async function createStudentshipStatus(params: StudentshipParams) {
     await studentshipStatus.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save StudentshipStatus request: ${error.message}`);
+    throw new Error(
+      `Failed to save StudentshipStatus request: ${error.message}`,
+    );
   }
 }
-
 
 interface StudentshipParamsAdmin {
   firstName: string;
@@ -238,11 +239,13 @@ interface StudentshipParamsAdmin {
   contactPhone: string;
 }
 
-export async function createStudentshipStatusForAdmin(params: StudentshipParamsAdmin) {
+export async function createStudentshipStatusForAdmin(
+  params: StudentshipParamsAdmin,
+) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -250,7 +253,7 @@ export async function createStudentshipStatusForAdmin(params: StudentshipParamsA
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -288,7 +291,9 @@ export async function createStudentshipStatusForAdmin(params: StudentshipParamsA
     await studentshipStatusAdmin.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save StudentshipStatusAdmin request: ${error.message}`);
+    throw new Error(
+      `Failed to save StudentshipStatusAdmin request: ${error.message}`,
+    );
   }
 }
 
@@ -305,9 +310,9 @@ interface MembershipParams {
 // Define the Membership Reference function
 export async function createMembershipReference(params: MembershipParams) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -315,7 +320,7 @@ export async function createMembershipReference(params: MembershipParams) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -337,10 +342,11 @@ export async function createMembershipReference(params: MembershipParams) {
     await membershipReference.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save Membership Reference request: ${error.message}`);
+    throw new Error(
+      `Failed to save Membership Reference request: ${error.message}`,
+    );
   }
 }
-
 
 // Define the interface for the parameters
 interface MembershipParamsAdmin {
@@ -365,13 +371,13 @@ interface MembershipParamsAdmin {
 }
 
 // Define the function to save membership reference data to the database
-export async function createMembershipReferenceForAdmin(params: MembershipParamsAdmin) {
-  
+export async function createMembershipReferenceForAdmin(
+  params: MembershipParamsAdmin,
+) {
   try {
+    const session = await getSession();
 
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -379,7 +385,7 @@ export async function createMembershipReferenceForAdmin(params: MembershipParams
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -412,7 +418,9 @@ export async function createMembershipReferenceForAdmin(params: MembershipParams
     await membershipReferenceAdmin.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save MembershipReference request: ${error.message}`);
+    throw new Error(
+      `Failed to save MembershipReference request: ${error.message}`,
+    );
   }
 }
 
@@ -427,12 +435,13 @@ interface DocumentParams {
 }
 
 // Define the createDocumentVerificationRequest function
-export async function createDocumentVerificationRequest(params: DocumentParams) {
+export async function createDocumentVerificationRequest(
+  params: DocumentParams,
+) {
   try {
+    const session = await getSession();
 
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -440,7 +449,7 @@ export async function createDocumentVerificationRequest(params: DocumentParams) 
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -464,10 +473,11 @@ export async function createDocumentVerificationRequest(params: DocumentParams) 
     await documentVerification.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save Document Verification request: ${error.message}`);
+    throw new Error(
+      `Failed to save Document Verification request: ${error.message}`,
+    );
   }
 }
-
 
 // Define the interface for MembershipParams
 interface DocumentAdminParams {
@@ -493,14 +503,14 @@ interface DocumentAdminParams {
   contactPhone: string;
 }
 
-
 // Define the createDocumentVerificationRequestForAdmin function
-export async function createDocumentVerificationRequestForAdmin(params: DocumentAdminParams) {
+export async function createDocumentVerificationRequestForAdmin(
+  params: DocumentAdminParams,
+) {
   try {
+    const session = await getSession();
 
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -508,7 +518,7 @@ export async function createDocumentVerificationRequestForAdmin(params: Document
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
 
     if (!user) {
       throw new Error("User not found");
@@ -543,10 +553,11 @@ export async function createDocumentVerificationRequestForAdmin(params: Document
     await documentVerificationAdmin.save();
     return true;
   } catch (error: any) {
-    throw new Error(`Failed to save Document Verification Admin request: ${error.message}`);
+    throw new Error(
+      `Failed to save Document Verification Admin request: ${error.message}`,
+    );
   }
 }
-
 
 // Define the interface for the parameters based on the schema
 interface IndividualParams {
@@ -562,9 +573,9 @@ interface IndividualParams {
 // Define the function to create an IndividualRequest document
 export async function createIndividualRequest(params: IndividualParams) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
 
-    if (!session || !session.user) {
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -572,7 +583,8 @@ export async function createIndividualRequest(params: IndividualParams) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.user.email });
+    const user = await findUserByEmail();
+    const user2 = await User.findOne({ email: params.email });
 
     if (!user) {
       throw new Error("User not found");
@@ -580,6 +592,7 @@ export async function createIndividualRequest(params: IndividualParams) {
 
     // Create a new IndividualRequest document
     const individualRequest = new IndividualRequest({
+      issuerUser: user2._id,
       email: params.email,
       typeOfRequest: params.typeOfRequest,
       addresseeFullName: params.addresseeFullName,
