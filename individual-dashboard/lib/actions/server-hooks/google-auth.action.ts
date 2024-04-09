@@ -1,16 +1,15 @@
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client } from "google-auth-library";
 
 const client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: 'https://crispy-space-enigma-9r549pgr7q72p4r9-3000.app.github.dev/api/auth/google-auth',
-  
+  redirectUri: "https://mhlnpn-3000.csb.app/api/auth/google-auth",
 });
 
 export async function getGoogleAuthUrl() {
   const url = client.generateAuthUrl({
-    access_type: 'offline',
-    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'email'],
+    access_type: "offline",
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "email"],
   });
   return url;
 }
@@ -20,7 +19,7 @@ export async function getGoogleAccessToken(code: string) {
     const { tokens } = await client.getToken(code);
     return tokens.id_token;
   } catch (error: any) {
-    console.error('Error getting access token:', error.message);
+    console.error("Error getting access token:", error.message);
     throw error; // Rethrow the error to be handled by the caller
   }
 }
@@ -34,7 +33,7 @@ export async function getGoogleUserInfo(accessToken: string) {
     const payload = ticket.getPayload();
     return payload;
   } catch (error: any) {
-    console.error('Error verifying ID token:', error.message);
+    console.error("Error verifying ID token:", error.message);
     throw error; // Rethrow the error to be handled by the caller
   }
 }

@@ -7,44 +7,42 @@ import VerificationToken from "../utils/emailTokenSchema";
 import { generateToken, sendVerificationRequest, verifyToken } from "../utils";
 import connectToDB from "../model/database";
 import User from "../utils/user";
-import { saveSession } from '@/lib/utils';
+import { saveSession } from "@/lib/utils";
 import { getLinkedInAuthUrl } from "./server-hooks/linkedin-auth.action";
 
-
 export async function signIn(email: string) {
-  console.log("I want to send emails")
+  console.log("I want to send emails");
   try {
-    connectToDB()
+    connectToDB();
 
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://crispy-space-enigma-9r549pgr7q72p4r9-3000.app.github.dev/auth/verify?token=${token}`;
-    
+    const url = `https://mhlnpn-3000.csb.app/auth/verify?token=${token}`;
+
     // Send email with resend.dev
-    await sendVerificationRequest({ url: url, email: email })
-    
-    console.log("Email sent!")
-    
+    await sendVerificationRequest({ url: url, email: email });
+
+    console.log("Email sent!");
+
     // Save email address, verification token, and expiration time in the database
     const save = await VerificationToken.create({
       token: token,
       email: email,
       createdAt: generatedAt, // Since generated in the function, set current time
       expiresAt: expiresIn,
-    })
+    });
 
-    if(save) {
-      console.log("saved token to DB")
+    if (save) {
+      console.log("saved token to DB");
     }
-    
+
     // Return a response
     return true;
   } catch (error) {
     return false;
   }
 }
-
 
 export async function verifyUserToken(token: string): Promise<boolean> {
   try {
@@ -73,12 +71,10 @@ export async function verifyUserToken(token: string): Promise<boolean> {
     const email = existingToken.email;
 
     try {
-
       // Check if the user already exists in the Role collection with the correct login type
       const existingUser = await User.findOne({ email: email });
 
       if (existingUser) {
-
         // Create session data
         let sessionData = {
           userId: existingUser._id,
@@ -88,7 +84,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           image: existingUser.image, // Initialize image as an empty string
           isOnboarded: existingUser.onboarded,
           isVerified: existingUser.verified,
-          isLoggedIn: true
+          isLoggedIn: true,
         };
 
         // Save session
@@ -99,13 +95,13 @@ export async function verifyUserToken(token: string): Promise<boolean> {
 
         // Redirect to the dashboard or appropriate page
         return true;
-        } else {
+      } else {
         // User does not exist, create a new organization and role with the received email
 
         // Create a new User for the user with the received email
         const newUser = await User.create({
           email: email,
-          loginType: 'email', // or the appropriate login type
+          loginType: "email", // or the appropriate login type
         });
 
         // Create session data
@@ -114,7 +110,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           email: newUser.email,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
-          isLoggedIn: true
+          isLoggedIn: true,
         };
 
         // Save session
@@ -126,16 +122,15 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         // Redirect to the dashboard or appropriate page
         return true;
       }
-    } catch(error: any) {
-      console.error('Error logging user in', error.message);
+    } catch (error: any) {
+      console.error("Error logging user in", error.message);
       return false;
     }
   } catch (error: any) {
-    console.error('Error verifying token:', error.message);
+    console.error("Error verifying token:", error.message);
     return false;
   }
 }
-
 
 export const signOut = async () => {
   const session = await getSession();
@@ -143,32 +138,30 @@ export const signOut = async () => {
   redirect("/auth/signin");
 };
 
-
-
-let googleAuthUrl: string
+let googleAuthUrl: string;
 export async function handleGoogleLogin() {
   try {
     // Get the Google OAuth URL
     googleAuthUrl = await getGoogleAuthUrl();
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle error
   } finally {
     // Redirect the user to the Google OAuth URL
-    redirect (googleAuthUrl)
+    redirect(googleAuthUrl);
   }
 }
 
-let linkedinAuthUrl: string
+let linkedinAuthUrl: string;
 export async function handleLinkedInLogin() {
   try {
     // Get the Google OAuth URL
     linkedinAuthUrl = await getLinkedInAuthUrl();
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle error
   } finally {
     // Redirect the user to the Google OAuth URL
-    redirect (linkedinAuthUrl)
+    redirect(linkedinAuthUrl);
   }
 }
