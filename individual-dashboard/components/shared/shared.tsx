@@ -173,7 +173,7 @@ export function Header() {
       <Image
         alt="user"
         src={session?.image as string}
-        className="rounded-full normal-border"
+        className="rounded-full normal-border aspect-square object-cover"
         width={50}
         height={50}
         onClick={handleSignOut}
