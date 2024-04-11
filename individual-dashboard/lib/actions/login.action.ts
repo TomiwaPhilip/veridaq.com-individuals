@@ -77,7 +77,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
       if (existingUser) {
         // Create session data
         let sessionData = {
-          userId: existingUser._id,
+          userId: existingUser._id.toString(),
           email: existingUser.email,
           firstName: existingUser.firstname,
           lastName: existingUser.lastname,
@@ -106,7 +106,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
 
         // Create session data
         const sessionData = {
-          userId: newUser._id,
+          userId: newUser._id.toString(),
           email: newUser.email,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
