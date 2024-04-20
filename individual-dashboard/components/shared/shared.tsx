@@ -340,7 +340,7 @@ export function Wallet() {
         <button
           type="submit"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink({email: email, amount: 43000})}
+          onClick={() => getPaymentLink({email: email, amount: 10000})}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
