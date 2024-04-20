@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
+import { getPaymentLink } from "@/lib/actions/payments.action";
 
 export function useSession() {
   const [session, setSession] = useState<SessionData | null>(null);
@@ -327,6 +328,8 @@ export function SearchBar() {
 }
 
 export function Wallet() {
+  const session = useSession();
+  const email = session?.email as string
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="bg-[#554957] px-4 rounded-lg py-4 text-center">
@@ -337,6 +340,7 @@ export function Wallet() {
         <button
           type="submit"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
+          onClick={() => getPaymentLink({email: email, amount: 43000})}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
