@@ -18,7 +18,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://mhlnpn-3000.csb.app/auth/verify?token=${token}`;
+    const url = `https://glowing-bassoon-69vxwrq9jp4xf7gx-3000.app.github.dev/auth/verify?token=${token}`;
 
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email });
