@@ -44,21 +44,25 @@ export async function getPaymentLink (params: getPaymentParams) {
   
 }
 
-export async function confirmPayment (ref: string) {
+export async function verifyPayment (ref: string) {
     console.log(ref)
 
-    const url = `https://sandbox-api-d.squadco.com/transaction/verify/${ref}`;
+    const url = `https://api-d.squadco.com/transaction/verify/${ref}`;
 
-    const response = await got.get(url, {
+    const response: any = await got.get(url, {
         headers: {
-            Authorization: "Bearer sandbox_sk_94f2b798466408ef4d19e848ee1a4d1a3e93f104046f",
+            Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
         },
         responseType: 'json' // Automatically parse response body as JSON
     });
 
     console.log(response)
+
+    if(response.body.success === true){ 
+        return true
+    } else {
+        return false
+    }
     
-    // redirect(response.data.checkout_url)
-  
 }
 

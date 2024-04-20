@@ -1,4 +1,5 @@
 import { Schema, model, models } from 'mongoose';
+import { string } from 'zod';
 
 const UserSchema = new Schema({
   email: {
@@ -43,6 +44,10 @@ const UserSchema = new Schema({
   loginType: {
     type: String,
     enum: ["email", "google", "linkedin"],
+  },
+  walletBalance: {
+    type: string,
+    default: "0.00"
   }
 });
 

@@ -82,6 +82,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           firstName: existingUser.firstname,
           lastName: existingUser.lastname,
           image: existingUser.image, // Initialize image as an empty string
+          walletBalance: existingUser.walletBalance,
           isOnboarded: existingUser.onboarded,
           isVerified: existingUser.verified,
           isLoggedIn: true,
@@ -108,6 +109,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         const sessionData = {
           userId: newUser._id.toString(),
           email: newUser.email,
+          walletBalance: newUser.walletBalance,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
           isLoggedIn: true,

@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { verifyPayment } from "@/lib/action/payment.action";
+import { verifyPayment } from "@/lib/actions/payments.action";
 import { RiLoader4Line } from "react-icons/ri";
 
 export default function Verify() {
@@ -10,22 +10,15 @@ export default function Verify() {
   const [verifyResult, setVerifyResult] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to false initially
 
-  const status = searchParams.get("status") as string;
-  const tx_ref = searchParams.get("tx_ref") as string;
-  const transaction_idString = searchParams.get("transaction_id") as string;
-  const transaction_id = parseInt(transaction_idString);
-  console.log(status, tx_ref, transaction_id);
+  const ref = searchParams.get("reference") as string;
+  console.log(ref);
 
   useEffect(() => {
     async function checkPayment() {
       console.log("Running the function!");
 
       try {
-        const verify = await verifyPayment({
-          status: status,
-          tx_ref: tx_ref,
-          transaction_id: transaction_id,
-        });
+        const verify = await verifyPayment(ref);
         if (verify) {
           setVerifyResult("Your payment has been verified and confirmed!");
           setLoading(false);
@@ -45,7 +38,7 @@ export default function Verify() {
 
   return (
     <main>
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen text-white">
         {loading ? (
           <>
             <RiLoader4Line className="animate-spin text-2xl mb-4" />
