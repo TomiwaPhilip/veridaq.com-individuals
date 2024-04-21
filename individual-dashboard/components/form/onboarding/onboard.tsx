@@ -75,6 +75,8 @@ export default function Onboard(){
 
       };
 
+      console.log(form.formState.errors)
+
 
       const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
         console.log(data);

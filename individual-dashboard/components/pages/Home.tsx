@@ -7,7 +7,7 @@ export default function HomePage() {
       <main className="bg-[#E1D7E2] mt-[70px]">
         <div className="flex items-center justify-center gap-6"> 
           <div className="mr-auto w-[40%]"> 
-            <p className="font-bold text-[28px] text-[#38313A]"> Let's help you get started today! </p>
+            <p className="font-bold text-[28px] text-[#38313A]"> Lets help you get started today! </p>
           </div>
           <Wallet />
         </div>

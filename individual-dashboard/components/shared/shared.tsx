@@ -330,15 +330,17 @@ export function SearchBar() {
 export function Wallet() {
   const session = useSession();
   const email = session?.email as string
+  const balance = session?.walletBalance as string
+  
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="bg-[#554957] px-4 rounded-lg py-4 text-center">
         <p className="text-sm text-[#FAEBEB] mb-5">Your Wallet Balance:</p>
-        <p className="text-[32px] text-white font-bold">N43,000.00</p>
+        <p className="text-[32px] text-white font-bold">{`N${balance}`}</p>
       </div>
       <div className="flex-col justify-center items-center text-center text-white">
         <button
-          type="submit"
+          type="button"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
           onClick={() => getPaymentLink({email: email, amount: 10000})}
         >

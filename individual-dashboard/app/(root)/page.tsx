@@ -1,33 +1,19 @@
-import { redirect } from 'next/navigation'; // Import useredirect for redirection
+import { redirect } from 'next/navigation';
+import getSession from '@/lib/actions/server-hooks/getsession.action';
 
 
 import HomePage from "@/components/pages/Home"
 
 export default async function Home() {
 
-    // const session = await getServerSession(authOptions);
+  const session = await getSession();
+  console.log(session.walletBalance)
 
-    // const email = session?.user?.email;
-
-    // if (!email) {
-    //   console.error('User email not found.');
-    //   return;
-    // }
-
-    // // Fetch user data and handle it
-    // const user = await getUser(email);
-    // if (!user) {
-    //   console.error('User data not found.');
-    //   return;
-    // }
-
-    // const { onboarded, verified } = user;
-
-    // if (!onboarded) {
-    //   redirect('/auth/onboarding'); // Use redirect for redirection
-    // } else if (!verified) {
-    //   redirect('/auth/verify'); // Use redirect for redirection
-    // };
+  if (!session.isOnboarded) {
+    redirect('/auth/onboarding'); // Use redirect for redirection
+  // } else if (!session.isVerified) {
+  //   redirect('/auth/verification')
+  }
 
   return (
     <HomePage />

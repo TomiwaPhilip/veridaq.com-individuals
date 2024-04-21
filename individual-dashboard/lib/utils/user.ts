@@ -46,7 +46,7 @@ const UserSchema = new Schema({
     enum: ["email", "google", "linkedin"],
   },
   walletBalance: {
-    type: string,
+    type: String,
     default: "0.00"
   }
 });

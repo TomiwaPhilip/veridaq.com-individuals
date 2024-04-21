@@ -16,16 +16,9 @@ interface Params {
   image: string;
 }
 
-export async function updateUser({
-  firstName,
-  lastName,
-  middleName,
-  streetAddress,
-  city,
-  country,
-  image,
-}: Params) {
+export async function updateUser(params: Params) {
   try {
+    console.log("At the server,", params)
     const session = await getSession();
 
     if (!session) {
@@ -41,13 +34,13 @@ export async function updateUser({
     await User.findOneAndUpdate(
       { email: email },
       {
-        firstName,
-        lastName,
-        middleName,
-        streetAddress,
-        city,
-        country,
-        image,
+        firstname: params.firstName,
+        lastname: params.lastName,
+        middlename: params.middleName,
+        street_address: params.streetAddress,
+        city: params.city,
+        country: params.country,
+        image: params.image,
         onboarded: true,
       },
       // Upsert means both updating and inserting
@@ -55,7 +48,9 @@ export async function updateUser({
     );
 
     session.isOnboarded = true;
-    session.image = image;
+    session.image = params.image;
+    session.firstName = params.firstName;
+    session.lastName = params.lastName;
     await session.save()
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
