@@ -25,14 +25,14 @@ export async function updateUser(params: Params) {
       throw new Error("Unauthorized");
     }
 
-    const email = session.email;
+    const userid = session.userId;
 
     // Connect to the database
     connectToDB();
 
     // Update the user in the database
     await User.findOneAndUpdate(
-      { email: email },
+      { _id: userid }, 
       {
         firstname: params.firstName,
         lastname: params.lastName,
