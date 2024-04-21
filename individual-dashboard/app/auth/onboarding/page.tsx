@@ -6,9 +6,9 @@ import {redirect} from "next/navigation"
 export default async function Onboarding() {
   const session = await getSession();
 
-  if (session.isOnboarded) {
-    redirect("/");
-  }
+  // if (session.isOnboarded) {
+  //   redirect("/");
+  // }
   return (
     <Onboard />
   );

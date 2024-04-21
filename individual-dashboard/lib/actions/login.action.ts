@@ -18,7 +18,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://mhlnpn-3000.csb.app/auth/verify?token=${token}`;
+    const url = `https://glowing-bassoon-69vxwrq9jp4xf7gx-3000.app.github.dev/auth/verify?token=${token}`;
 
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email });
@@ -82,6 +82,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           firstName: existingUser.firstname,
           lastName: existingUser.lastname,
           image: existingUser.image, // Initialize image as an empty string
+          walletBalance: existingUser.walletBalance,
           isOnboarded: existingUser.onboarded,
           isVerified: existingUser.verified,
           isLoggedIn: true,
@@ -108,6 +109,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         const sessionData = {
           userId: newUser._id.toString(),
           email: newUser.email,
+          walletBalance: newUser.walletBalance,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
           isLoggedIn: true,
