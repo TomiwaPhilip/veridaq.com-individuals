@@ -76,7 +76,8 @@ function convertNumberToString(num: number) {
 export async function verifyPayment (ref: string) {
     console.log(ref)
 
-    // Connect to the database
+    try {
+        // Connect to the database
     connectToDB();
 
     const session = await getSession();
@@ -134,6 +135,9 @@ export async function verifyPayment (ref: string) {
     } else {
         return false
     }
-    
+    } catch(error) {
+        console.error("Error Verifying Payments", error);
+        return false;
+    }
 }
 
