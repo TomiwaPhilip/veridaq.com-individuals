@@ -23,6 +23,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "date-fns": "^3.6.0",
+    "flutterwave-node-v3": "^1.1.9",
     "google-auth-library": "^9.7.0",
     "got": "^14.2.1",
     "iron-session": "^8.0.1",

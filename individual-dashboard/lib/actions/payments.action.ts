@@ -1,6 +1,7 @@
 "use server";
 
 import got from "got";
+const Flutterwave = require("flutterwave-node-v3");
 import { redirect } from "next/navigation";
 
 import getSession from "./server-hooks/getsession.action";
@@ -27,25 +28,26 @@ export async function getPaymentLink (params: getPaymentParams) {
 
     const transaction_ref = generateRandomString(16);
 
-    const response: any = await got.post('https://api-d.squadco.com/transaction/initiate',
+    const response: any = await got.post('https://api.flutterwave.com/v3/payments',
         {
             headers: {
-                Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
+                Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
             },
             json: {
                 amount: params.amount,
-                email: params.email,
                 currency: 'NGN',
-                initiate_type: 'inline',
-                transaction_ref: transaction_ref,
-                callback_url: 'http://squadco.com'
+                tx_ref: transaction_ref,
+                redirect_url: 'https://glowing-bassoon-69vxwrq9jp4xf7gx-3000.app.github.dev/auth/payment',
+                customer: {
+                    email: params.email,
+                }
             },
         }
     ).json()
 
     console.log(response)
     
-    redirect(response.data.checkout_url)
+    redirect(response.data.link)
   
 }
 
@@ -61,80 +63,84 @@ function convertStringToNumber(str: string) {
 function convertNumberToString(num: number) {
     // Convert number to string
     let str = num.toString();
+    str = `${str}.00`
 
-    // If string length is less than 3, prepend zeros until length is at least 3
-    while (str.length < 3) {
-        str = "0" + str;
-    }
-
-    // Insert decimal point two characters from the end of the string
-    const result = str.slice(0, -2) + "." + str.slice(-2);
-
-    return result;
+    return str;
 }
 
-export async function verifyPayment (ref: string) {
-    console.log(ref)
+export async function verifyPayment (
+    {status, tx_ref, transaction_id,}: 
+    {status: string; tx_ref: string; transaction_id: number;}) 
+    {
+
+    console.log(status, tx_ref, transaction_id, "At the serever");
+    const flw = new Flutterwave(
+      process.env.FLW_PUBLIC_KEY,
+      process.env.FLW_SECRET_KEY,
+    );
+ 
 
     try {
         // Connect to the database
-    connectToDB();
+        connectToDB();
 
-    const session = await getSession();
-    const userId = session.userId;
+        const session = await getSession();
+        const userId = session.userId;
 
-    const paymentDetails = await VerifiedPayment.findOne({ ref: ref }, { verified: 1, _id: 0 });
-    console.log(paymentDetails);
-    if (paymentDetails) {
-        if(paymentDetails.verified) return false
-    }
-    
-    const url = `https://api-d.squadco.com/transaction/verify/${ref}`;
-
-    const response: any = await got.get(url, {
-        headers: {
-            Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
-        },
-        responseType: 'json' // Automatically parse response body as JSON
-    });
-
-    console.log(response.body)
-
-    if(response.body.success === true){
+        const paymentDetails = await VerifiedPayment.findOne({ ref: tx_ref }, { verified: 1, _id: 0 });
+        console.log(paymentDetails);
+        if (paymentDetails) {
+            if(paymentDetails.verified) return false
+        }
         
-        const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
+        if (status === "successful" || status === "completed") {
+            console.log(status, tx_ref, transaction_id, "At the server");
+            const response = await flw.Transaction.verify({ id: transaction_id });
+            console.log(response);
+        
+            if (
+            response.data.status === "successful" ||
+            response.data.status === "completed"
+            ) {
+                // Success! Confirm the customer's paymentresponse.data.status
+                const email = response.data.customer.email;
+                const status = response.status;
 
-        const convertedSessionBalance = convertStringToNumber(user.walletBalance as string);
-        const addedBalance = convertedSessionBalance + response.body.data.transaction_amount;
-        const newBalance = convertNumberToString(addedBalance);
+                // Update wallet balance in DB and Session
+                const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
+                
+                const convertedSessionBalance = convertStringToNumber(user.walletBalance as string);
+                const addedBalance = convertedSessionBalance + response.data.amount;
+                const newBalance = convertNumberToString(addedBalance);
 
-        // Update the user in the database
-        const userDetails = await User.findOneAndUpdate(
-            { _id: userId }, 
-            {
-                walletBalance: newBalance,
-            },
-            // Upsert means both updating and inserting
-            { upsert: true, 
-                new: true,
-            },
-        );
+                // Update the user in the database
+                const userDetails = await User.findOneAndUpdate(
+                    { _id: userId }, 
+                    {
+                        walletBalance: newBalance,
+                    },
+                    // Upsert means both updating and inserting
+                    { upsert: true, 
+                        new: true,
+                    },
+                );
 
-        const paymentDetails = new VerifiedPayment({
-            ref: ref,
-            verified: true,
-            user: userId,
-        });
+                const paymentDetails = new VerifiedPayment({
+                    ref: tx_ref,
+                    verified: true,
+                    user: userId,
+                });
 
-        await paymentDetails.save();
+                await paymentDetails.save();
 
-        console.log(userDetails, paymentDetails);
-        session.walletBalance = userDetails.walletBalance;
-        await session.save();
-        return true;
-    } else {
-        return false
-    }
+                console.log(userDetails, paymentDetails);
+                session.walletBalance = userDetails.walletBalance;
+                await session.save();
+                return true;
+            }
+        } else {
+            return false
+        }
     } catch(error) {
         console.error("Error Verifying Payments", error);
         return false;

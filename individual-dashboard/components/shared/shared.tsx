@@ -354,7 +354,7 @@ export function Wallet() {
             <span style={{ marginLeft: "5px" }}>Add funds</span>
           </div>
         </button>
-        <button
+        {/* <button
           type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
         >
@@ -367,7 +367,7 @@ export function Wallet() {
             />
             <span style={{ marginLeft: "5px" }}>Withdraw funds</span>
           </div>
-        </button>
+        </button> */}
       </div>
     </div>
   );
