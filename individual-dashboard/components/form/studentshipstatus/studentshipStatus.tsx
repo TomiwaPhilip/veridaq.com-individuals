@@ -54,12 +54,16 @@ import {
 import { SuccessMessage, ErrorMessage, StatusMessage } from "@/components/shared/shared";
 import { getOrganizations } from "@/lib/actions/request.action";
 import { useSession } from "@/components/shared/shared";
+import { convertStringToNumber } from "@/lib/actions/payments.action";
 
 const StudentshipStatus: React.FC = () => {
   
   interface Organization {
     _id: string;
     name: string;
+    studentshipStatusFee?: number;
+    docVerificationFee?: number;
+    membershipRefFee?: number;
   }
 
   const [step, setStep] = useState(1);
@@ -70,11 +74,13 @@ const StudentshipStatus: React.FC = () => {
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
   const [error, setError] = useState(false);
+  const [fee, setFee] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchOrgs = async () => {
       try {
         const orgs = await getOrganizations();
+        console.log(orgs);
         setOrganizations(orgs);
       } catch (error) {
         console.error("Error fetching organizations:", error);
@@ -85,8 +91,13 @@ const StudentshipStatus: React.FC = () => {
     fetchOrgs();
   }, []);
 
-  function checkbalance() {
-    if (session?.walletBalance === "0.00") {
+  async function checkbalance(fee?: number) {
+    console.log(fee);
+    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    if (convertedBalance === fee) {
+      return
+    } else {
+      setFee(fee as number);
       setError(true);
       setIsDisabled(true);
     }
@@ -239,7 +250,7 @@ const StudentshipStatus: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance()
+                                      checkbalance(organization.studentshipStatusFee)
                                     }}
                                   >
                                     {organization.name}
@@ -1201,7 +1212,7 @@ const StudentshipStatus: React.FC = () => {
           </form>
         </Form>
       )}
-      {error ? <StatusMessage message="Insufficient Wallet Balance: fund your account with $40 to intiate request!" type="error" /> : null}
+      {error ? <StatusMessage message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`} type="error" /> : null}
     </main>
   );
 };

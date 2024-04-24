@@ -43,7 +43,7 @@ const OrganizationSchema = new Schema({
     type: String,
     default: null,
   },
-  credentialsType: {  
+  credentialsType: {
     type: String,
     enum: ["nin", "cacDoc", "letter"],
   },
@@ -52,6 +52,35 @@ const OrganizationSchema = new Schema({
     enum: ["true", "false"],
     default: "false",
   },
+  walletBalance: {
+    type: String,
+    default: "0.00",
+  },
+  accountName: {
+    type: String,
+  },
+  accountNumber: {
+    type: Number,
+  },
+  bankCode: {
+    type: Number,
+  },
+  active: {
+    type: Boolean,
+    default: false,
+  },
+  studentStatusFee: {
+    type: Number,
+    default: "4000",
+  },
+  docVerificationFee: {
+    type: Number,
+    default: "6250",
+  },
+  membershipRefFee: {
+    type: Number,
+    default: "4000",
+  }
 });
 
 const Organization =

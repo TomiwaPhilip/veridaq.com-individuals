@@ -49,12 +49,17 @@ import {
   DocumentVerificationValidation,
   DocumentVerificationValidation2,
 } from "@/lib/validations/documentverification";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import { SuccessMessage, ErrorMessage, StatusMessage } from "@/components/shared/shared";
+import { useSession } from "@/components/shared/shared";
+import { convertStringToNumber } from "@/lib/actions/payments.action";
 
 const DocumentVerification: React.FC = () => {
   interface Organization {
     _id: string;
     name: string;
+    studentshipStatusFee?: number;
+    docVerificationFee?: number;
+    membershipRefFee?: number;
   }
 
   const [step, setStep] = useState(1);
@@ -62,6 +67,10 @@ const DocumentVerification: React.FC = () => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const session = useSession();
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [error, setError] = useState(false);
+  const [fee, setFee] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -76,6 +85,24 @@ const DocumentVerification: React.FC = () => {
 
     fetchOrgs();
   }, []);
+
+  async function checkbalance(fee?: number) {
+    console.log(fee);
+    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    if (convertedBalance === fee) {
+      return
+    } else {
+      setFee(fee as number);
+      setError(true);
+      setIsDisabled(true);
+    }
+    // Reset error state after 10 seconds (adjust as needed)
+    setTimeout(() => {
+      setError(false);
+    }, 10000); // 10000 milliseconds = 10 seconds
+    console.log("I was clicked", error)
+  }
+
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -135,8 +162,6 @@ const DocumentVerification: React.FC = () => {
     fileReader.readAsDataURL(file);
   };
 
-  const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
 
   const onSubmit = async (
     data: z.infer<typeof DocumentVerificationValidation>,
@@ -224,6 +249,7 @@ const DocumentVerification: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
+                                      checkbalance(organization.docVerificationFee)
                                     }}
                                   >
                                     {organization.name}
@@ -250,6 +276,7 @@ const DocumentVerification: React.FC = () => {
                       type="button"
                       className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                       onClick={handleNextStep}
+                      disabled={isDisabled}
                     >
                       Continue
                     </button>
@@ -903,6 +930,7 @@ const DocumentVerification: React.FC = () => {
           </form>
         </Form>
       )}
+      {error ? <StatusMessage message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`} type="error" /> : null}
     </main>
   );
 };

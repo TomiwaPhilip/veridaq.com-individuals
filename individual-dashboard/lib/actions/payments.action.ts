@@ -52,7 +52,7 @@ export async function getPaymentLink (params: getPaymentParams) {
 }
 
 // Function to convert string to number
-function convertStringToNumber(str: string) {
+export async function convertStringToNumber(str: string) {
     // Remove decimal point and convert string to integer
     const integer = parseInt(str.replace('.', ''));
 
@@ -60,7 +60,7 @@ function convertStringToNumber(str: string) {
 }
 
 // Function to convert number to string
-function convertNumberToString(num: number) {
+export async function convertNumberToString(num: number) {
     // Convert number to string
     let str = num.toString();
     str = `${str}.00`
