@@ -615,21 +615,27 @@ export async function createIndividualRequest(params: IndividualParams) {
 interface Organization {
   _id: string; // Assuming _id is converted to string
   name: string;
+  studentshipStatusFee?: number;
+  docVerificationFee?: number;
+  membershipRefFee?: number;
 }
 
 export async function getOrganizations(): Promise<Organization[]> {
   try {
     connectToDB();
 
-    const organizations = await Organization.find({}, "name _id");
-
+    const organizations = await Organization.find({}, "name _id studentStatusFee docVerificationFee membershipRefFee");
+    console.log(organizations, "This is the organization from server");
     // Convert the _id field to a string
     const formattedOrganizations = organizations.map((org) => ({
       _id: org._id.toString(),
       name: org.name,
+      studentshipStatusFee: org.studentStatusFee,
+      docVerificationFee: org.docVerificationFee,
+      membershipRefFee: org.membershipRefFee,
     }));
 
-    // TODO sync and return organization pricing for each product
+    console.log(formattedOrganizations, "this is the fomatted data from server")
 
     return formattedOrganizations;
   } catch (error: any) {
