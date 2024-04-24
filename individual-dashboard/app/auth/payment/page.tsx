@@ -10,15 +10,22 @@ export default function Verify() {
   const [verifyResult, setVerifyResult] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to false initially
 
-  const ref = searchParams.get("reference") as string;
-  console.log(ref);
+  const status = searchParams.get("status") as string;
+  const tx_ref = searchParams.get("tx_ref") as string;
+  const transaction_idString = searchParams.get("transaction_id") as string;
+  const transaction_id = parseInt(transaction_idString);
+  console.log(status, tx_ref, transaction_id);
 
   useEffect(() => {
     async function checkPayment() {
       console.log("Running the function!");
 
       try {
-        const verify = await verifyPayment(ref);
+        const verify = await verifyPayment({
+          status: status,
+          tx_ref: tx_ref,
+          transaction_id: transaction_id,
+        });
         if (verify) {
           setVerifyResult("Your payment has been verified and confirmed!");
           setLoading(false);
