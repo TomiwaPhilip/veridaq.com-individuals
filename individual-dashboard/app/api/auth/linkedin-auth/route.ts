@@ -48,6 +48,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             lastName: existingUser.lastname,
             image: existingUser.image, // Initialize image as an empty 
             walletBalance: existingUser.walletBalance,
+            hasAccessFee: existingUser.hasAccessFee,
             isOnboarded: existingUser.onboarded,
             isVerified: existingUser.verified,
             isLoggedIn: true,
@@ -105,6 +106,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             lastName: newUser.lastName,
             image: newUser.image,
             walletBalance: newUser.walletBalance,
+            hasAccessFee: newUser.hasAccessFee,
             isOnboarded: newUser.onboarded,
             isVerified: newUser.verified,
             isLoggedIn: true,

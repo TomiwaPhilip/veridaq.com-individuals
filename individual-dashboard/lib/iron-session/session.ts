@@ -9,6 +9,7 @@ export interface SessionData {
   walletBalance?: string;
   isOnboarded?: boolean;
   isVerified?: boolean;
+  hasAccessFee?: boolean;
   isLoggedIn: boolean;
 }
 
