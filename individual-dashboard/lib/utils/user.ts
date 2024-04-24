@@ -52,6 +52,9 @@ const UserSchema = new Schema({
   hasAcessFee: {
     type: Boolean,
     default: false,
+  },
+  accessFeePaymentDate: {
+    type: Date,
   }
 });
 
