@@ -102,9 +102,7 @@ export async function verifyPayment (
             response.data.status === "successful" ||
             response.data.status === "completed"
             ) {
-                // Success! Confirm the customer's paymentresponse.data.status
-                const email = response.data.customer.email;
-                const status = response.status;
+                // Success!
 
                 // Update wallet balance in DB and Session
                 const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
