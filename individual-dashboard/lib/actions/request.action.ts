@@ -629,9 +629,31 @@ export async function getOrganizations(): Promise<Organization[]> {
       name: org.name,
     }));
 
+    // TODO sync and return organization pricing for each product
+
     return formattedOrganizations;
   } catch (error: any) {
     console.error(error);
     throw new Error("Error querying Database");
   }
 }
+
+
+// Function to reset hasAccessFee to false if accessFeePaymentDate is older than one year
+const resetHasAccessFee = async () => {
+  const now = new Date();
+  // Calculate the date one year ago
+  const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+  try {
+    // Find documents where accessFeePaymentDate is older than one year
+    const documentsToUpdate = await User.find({ hasAccessFee: true, accessFeePaymentDate: { $lt: oneYearAgo } });
+    // Update hasAccessFee to false for those documents
+    await User.updateMany({ _id: { $in: documentsToUpdate.map(doc => doc._id) } }, { $set: { hasAccessFee: false } });
+    console.log('hasAccessFee reset successfully.');
+  } catch (error) {
+    console.error('Error resetting hasAccessFee:', error);
+  }
+};
+
+// Run the function every day to check for documents to reset
+setInterval(resetHasAccessFee, 24 * 60 * 60 * 1000); // Run every 24 hours

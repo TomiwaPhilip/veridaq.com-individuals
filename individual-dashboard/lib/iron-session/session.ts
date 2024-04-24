@@ -9,11 +9,12 @@ export interface SessionData {
   walletBalance?: string;
   isOnboarded?: boolean;
   isVerified?: boolean;
+  hasAccessFee?: boolean;
   isLoggedIn: boolean;
 }
 
 export const defaultSession:SessionData = {
-  isLoggedIn:false
+  isLoggedIn:false,
 }
 
 export const sessionOptions: SessionOptions ={

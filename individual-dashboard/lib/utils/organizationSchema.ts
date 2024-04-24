@@ -43,7 +43,7 @@ const OrganizationSchema = new Schema({
     type: String,
     default: null,
   },
-  credentialsType: {
+  credentialsType: {  
     type: String,
     enum: ["nin", "cacDoc", "letter"],
   },

@@ -83,6 +83,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           lastName: existingUser.lastname,
           image: existingUser.image, // Initialize image as an empty string
           walletBalance: existingUser.walletBalance,
+          hasAccessFee: existingUser.hasAccessFee,
           isOnboarded: existingUser.onboarded,
           isVerified: existingUser.verified,
           isLoggedIn: true,
@@ -110,6 +111,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           userId: newUser._id.toString(),
           email: newUser.email,
           walletBalance: newUser.walletBalance,
+          hasAccessFee: newUser.hasAccessFee,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
           isLoggedIn: true,

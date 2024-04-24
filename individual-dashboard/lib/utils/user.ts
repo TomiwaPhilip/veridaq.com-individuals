@@ -48,6 +48,13 @@ const UserSchema = new Schema({
   walletBalance: {
     type: String,
     default: "0.00"
+  },
+  hasAcessFee: {
+    type: Boolean,
+    default: false,
+  },
+  accessFeePaymentDate: {
+    type: Date,
   }
 });
 
