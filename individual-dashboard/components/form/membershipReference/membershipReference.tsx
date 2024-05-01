@@ -10,15 +10,6 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -30,6 +21,9 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,7 +43,11 @@ import {
   MembershipReferenceValidation,
   MembershipReferenceValidation2,
 } from "@/lib/validations/membershipreference";
-import { SuccessMessage, ErrorMessage, StatusMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  StatusMessage,
+} from "@/components/shared/shared";
 import { useSession } from "@/components/shared/shared";
 import { convertStringToNumber } from "@/lib/actions/payments.action";
 
@@ -70,7 +68,7 @@ const MembershipReference: React.FC = () => {
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [fee, setFee] = useState<number | null>(null)
+  const [fee, setFee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -90,9 +88,11 @@ const MembershipReference: React.FC = () => {
 
   async function checkbalance(fee?: number) {
     console.log(fee);
-    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    const convertedBalance = await convertStringToNumber(
+      session?.walletBalance as string,
+    );
     if (convertedBalance === fee) {
-      return
+      return;
     } else {
       setFee(fee as number);
       setError(true);
@@ -102,14 +102,16 @@ const MembershipReference: React.FC = () => {
     setTimeout(() => {
       setError(false);
     }, 10000); // 10000 milliseconds = 10 seconds
-    console.log("I was clicked", error)
+    console.log("I was clicked", error);
   }
 
   async function checkbalance2() {
     const fee = 4000;
-    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    const convertedBalance = await convertStringToNumber(
+      session?.walletBalance as string,
+    );
     if (convertedBalance === fee) {
-      return
+      return;
     } else {
       setFee(fee as number);
       setError(true);
@@ -119,7 +121,7 @@ const MembershipReference: React.FC = () => {
     setTimeout(() => {
       setError(false);
     }, 10000); // 10000 milliseconds = 10 seconds
-    console.log("I was clicked", error)
+    console.log("I was clicked", error);
   }
 
   const handleNextStep = () => {
@@ -265,7 +267,9 @@ const MembershipReference: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance(organization.membershipRefFee)
+                                      checkbalance(
+                                        organization.membershipRefFee,
+                                      );
                                     }}
                                   >
                                     {organization.name}
@@ -374,14 +378,60 @@ const MembershipReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="info"
+                      name="memberSince"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel className="font-medium text-[16px]">
+                            Member/Alumni Since
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
+                                    !field.value && "text-muted-foreground",
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                  date > new Date() || date < new Date("1900")
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="alumniCategory"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Additional Info
+                            Alumni Category
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Info" {...field} />
+                            <Input placeholder="Post Graduate" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -529,15 +579,61 @@ const MembershipReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form2.control}
-                      name="info"
+                      control={form.control}
+                      name="memberSince"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel className="font-medium text-[16px]">
+                            Member/Alumni Since
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
+                                    !field.value && "text-muted-foreground",
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                  date > new Date() || date < new Date("1900")
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="alumniCategory"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Additional Info
+                            Alumni Category
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Info" {...field} />
+                            <Input placeholder="Post Graduate" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -849,7 +945,12 @@ const MembershipReference: React.FC = () => {
           </form>
         </Form>
       )}
-      {error ? <StatusMessage message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`} type="error" /> : null}
+      {error ? (
+        <StatusMessage
+          message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`}
+          type="error"
+        />
+      ) : null}
     </main>
   );
 };

@@ -304,8 +304,9 @@ interface MembershipParams {
   lastName: string;
   middleName?: string;
   id: string;
-  info: string;
+  memberSince: Date;
   image?: string;
+  alumniCategory?: string;
 }
 
 // Define the Membership Reference function
@@ -334,7 +335,8 @@ export async function createMembershipReference(params: MembershipParams) {
       lastName: params.lastName,
       middleName: params.middleName,
       id: params.id,
-      info: params.info,
+      memberSince: params.memberSince,
+      alumniCategory: params.alumniCategory,
       image: params.image,
       user: user._id,
     });
@@ -355,7 +357,8 @@ interface MembershipParamsAdmin {
   lastName: string;
   middleName?: string;
   id: string;
-  info: string;
+  memberSince: Date;
+  alumniCategory?: string;
   image?: string;
   orgName: string;
   orgAddress: string;
@@ -398,7 +401,8 @@ export async function createMembershipReferenceForAdmin(
       lastName: params.lastName,
       middleName: params.middleName,
       id: params.id,
-      info: params.info,
+      memberSince: params.memberSince,
+      alumniCategory: params.alumniCategory,
       image: params.image,
       orgName: params.orgName,
       orgAddress: params.orgAddress,
@@ -624,7 +628,10 @@ export async function getOrganizations(): Promise<Organization[]> {
   try {
     connectToDB();
 
-    const organizations = await Organization.find({}, "name _id studentStatusFee docVerificationFee membershipRefFee");
+    const organizations = await Organization.find(
+      {},
+      "name _id studentStatusFee docVerificationFee membershipRefFee",
+    );
     console.log(organizations, "This is the organization from server");
     // Convert the _id field to a string
     const formattedOrganizations = organizations.map((org) => ({
@@ -635,7 +642,10 @@ export async function getOrganizations(): Promise<Organization[]> {
       membershipRefFee: org.membershipRefFee,
     }));
 
-    console.log(formattedOrganizations, "this is the fomatted data from server")
+    console.log(
+      formattedOrganizations,
+      "this is the fomatted data from server",
+    );
 
     return formattedOrganizations;
   } catch (error: any) {
@@ -644,20 +654,29 @@ export async function getOrganizations(): Promise<Organization[]> {
   }
 }
 
-
 // Function to reset hasAccessFee to false if accessFeePaymentDate is older than one year
 const resetHasAccessFee = async () => {
   const now = new Date();
   // Calculate the date one year ago
-  const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+  const oneYearAgo = new Date(
+    now.getFullYear() - 1,
+    now.getMonth(),
+    now.getDate(),
+  );
   try {
     // Find documents where accessFeePaymentDate is older than one year
-    const documentsToUpdate = await User.find({ hasAccessFee: true, accessFeePaymentDate: { $lt: oneYearAgo } });
+    const documentsToUpdate = await User.find({
+      hasAccessFee: true,
+      accessFeePaymentDate: { $lt: oneYearAgo },
+    });
     // Update hasAccessFee to false for those documents
-    await User.updateMany({ _id: { $in: documentsToUpdate.map(doc => doc._id) } }, { $set: { hasAccessFee: false } });
-    console.log('hasAccessFee reset successfully.');
+    await User.updateMany(
+      { _id: { $in: documentsToUpdate.map((doc) => doc._id) } },
+      { $set: { hasAccessFee: false } },
+    );
+    console.log("hasAccessFee reset successfully.");
   } catch (error) {
-    console.error('Error resetting hasAccessFee:', error);
+    console.error("Error resetting hasAccessFee:", error);
   }
 };
 
