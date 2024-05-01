@@ -9,9 +9,10 @@ import IndividualRequest from "../form/individualRequest/individualRequest";
 
 interface StepperFormProps {
   id: string;
+  docId?: string | null;
 }
 
-const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
+const StepperForm: React.FC<StepperFormProps> = ({ id, docId }) => {
   let content;
   let title;
 
@@ -33,7 +34,7 @@ const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
       title = "Request Document Verification Veridaq"; // Change the title based on the id
       break;
     case "5":
-      content = <IndividualRequest />;
+      content = <IndividualRequest docId={docId} />;
       title = "Request Individual Reference Veridaq."; // Change the title based on the id
       break;
     // Include cases for other card ids if needed

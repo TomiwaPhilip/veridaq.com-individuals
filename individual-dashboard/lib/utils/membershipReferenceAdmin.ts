@@ -6,8 +6,10 @@ const MembershipReferenceAdminSchema = new Schema({
   lastName: { type: String, required: true, minlength: 1 },
   middleName: String,
   id: { type: String, required: true, minlength: 1 },
-  info: { type: String, required: true, minlength: 1 },
+  memberSince: { type: Date, required: true, max: Date.now() },
   image: String,
+  alumniCategory: String,
+  info: { type: String, required: true, minlength: 1 },
   orgName: { type: String, required: true, minlength: 1 },
   orgAddress: { type: String, required: true, minlength: 1 },
   orgPostalCode: { type: String, required: true, minlength: 1 },
@@ -37,6 +39,14 @@ const MembershipReferenceAdminSchema = new Schema({
   dateRequested: {
     type: Date,
     default: Date.now,
+  },
+  badgeUrl: {
+    type: String,
+    default: null,
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Admin",
   },
 });
 

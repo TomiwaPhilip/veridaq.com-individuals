@@ -2,98 +2,96 @@
 
 import { useRouter } from "next/navigation";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "@/components/form/form";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form/form";
 import { Input } from "@/components/form/input";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React, { useState, ChangeEvent, useRef } from 'react';
+import React, { useState, ChangeEvent, useRef } from "react";
 import { updateUser } from "@/lib/actions/onboarding.action";
-import { upload } from '@vercel/blob/client';
+import { upload } from "@vercel/blob/client";
 
-  
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
 
-export default function Onboard(){
+export default function Onboard() {
+  const router = useRouter();
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [disable, setDisable] = useState(true);
 
-    const router = useRouter();
-    const inputFileRef = useRef<HTMLInputElement>(null);
-    const [disable, setDisable] = useState(true)
+  const form = useForm<z.infer<typeof OnboardingValidation>>({
+    resolver: zodResolver(OnboardingValidation),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      streetAddress: "",
+      city: "",
+      country: "",
+      image: "",
+    },
+  });
 
-    const form = useForm<z.infer<typeof OnboardingValidation>>({
-        resolver: zodResolver(OnboardingValidation),
-        defaultValues: {
-          firstName: "",
-          lastName: "",
-          middleName: "",
-          streetAddress: "",
-          city: "",
-          country: "",
-          image: "",
-        },
-      });
-      
-      const handleImage = async (
-        e: ChangeEvent<HTMLInputElement>,
-        fieldChange: (value: string) => void,
-      ) => {
-        e.preventDefault();
-      
-        const fileReader = new FileReader();
-        if (!inputFileRef.current?.files) {
-          throw new Error('No file selected');
+  const handleImage = async (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void,
+  ) => {
+    e.preventDefault();
+
+    const fileReader = new FileReader();
+    if (!inputFileRef.current?.files) {
+      throw new Error("No file selected");
+    }
+
+    const file = inputFileRef.current.files[0];
+
+    fileReader.onload = async (e) => {
+      const fileData = e.target?.result;
+      if (typeof fileData === "string") {
+        try {
+          const newBlob = await upload(file.name, file, {
+            access: "public",
+            handleUploadUrl: "/api/avatar/upload",
+          });
+
+          // Update the form data with the new blob URL
+          fieldChange(newBlob.url);
+          setDisable(false);
+        } catch (error) {
+          console.error("Error uploading file:", error);
         }
-        
-        const file = inputFileRef.current.files[0];
-        
-        fileReader.onload = async (e) => {
-          const fileData = e.target?.result;
-          if (typeof fileData === 'string') {
-            try {
-              const newBlob = await upload(file.name, file, {
-                access: 'public',
-                handleUploadUrl: '/api/avatar/upload',
-              });
-              
-              // Update the form data with the new blob URL
-              fieldChange(newBlob.url);
-              setDisable(false);
-            } catch (error) {
-              console.error('Error uploading file:', error);
-            }
-          }
-        };
-        fileReader.readAsDataURL(file);
+      }
+    };
+    fileReader.readAsDataURL(file);
+  };
 
-      };
+  console.log(form.formState.errors);
 
-      console.log(form.formState.errors)
+  const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
+    console.log(data);
+    const result = await updateUser({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      middleName: data.middleName,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      country: data.country,
+      image: data.image,
+      professionalDesignation: data.professionalDesignation,
+    });
 
+    if (result) router.push("/auth/verify");
+  };
 
-      const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
-        console.log(data);
-        await updateUser({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          middleName: data.middleName,
-          streetAddress: data.streetAddress,
-          city: data.city,
-          country: data.country,
-          image: data.image,
-        });
-        router.push("/auth/verify");
-      };
-
-    return (
-        <div className="text-white">
+  return (
+    <div className="text-white">
       <div className="mt-[30px] pb-5">
         <p className="text-center text-2xl font-bold">
           Complete your profile to continue
@@ -151,6 +149,23 @@ export default function Onboard(){
                 />
                 <FormField
                   control={form.control}
+                  name="professionalDesignation"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Professional Designation
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Director" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
+                  control={form.control}
                   name="streetAddress"
                   render={({ field }) => (
                     <FormItem className="w-full">
@@ -164,8 +179,6 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="city"
@@ -181,7 +194,9 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
-                  <FormField
+              </div>
+              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+                <FormField
                   control={form.control}
                   name="country"
                   render={({ field }) => (
@@ -196,8 +211,6 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10">
                 <FormField
                   control={form.control}
                   name="image"
@@ -238,12 +251,16 @@ export default function Onboard(){
                 />
               </div>
               <div className="text-center">
-                <NoOutlineButtonBig type="submit" name="Save and Continue" disabled={disable} />
+                <NoOutlineButtonBig
+                  type="submit"
+                  name="Save and Continue"
+                  disabled={disable}
+                />
               </div>
             </form>
           </Form>
         </div>
       </div>
     </div>
-    )
+  );
 }

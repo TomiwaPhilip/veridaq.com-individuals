@@ -10,12 +10,12 @@ const MembershipReferenceSchema = new Schema({
   lastName: { type: String, required: true, minlength: 1 },
   middleName: String,
   id: { type: String, required: true, minlength: 1 },
-  info: { type: String, required: true, minlength: 1 },
+  memberSince: { type: Date, required: true, max: Date.now() },
   image: String,
+  alumniCategory: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: "User", // Reference to the User collection
-    required: true, // Assuming a StudentshipStatusAdmin must be associated with a User
   },
   issued: {
     type: Boolean,
@@ -29,6 +29,14 @@ const MembershipReferenceSchema = new Schema({
   dateRequested: {
     type: Date,
     default: Date.now,
+  },
+  badgeUrl: {
+    type: String,
+    default: null,
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
   },
 });
 

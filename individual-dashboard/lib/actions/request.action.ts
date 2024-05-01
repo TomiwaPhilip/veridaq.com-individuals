@@ -14,6 +14,12 @@ import IndividualRequest from "../utils/individualRequest";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
 import { findUserByEmail } from "./server-hooks/hooks.action";
+import {
+  generateVeridaqID,
+  concatenateDates,
+  getCurrentDateTime,
+} from "../utils";
+import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 
 interface Params {
   orgId: string;
@@ -304,8 +310,9 @@ interface MembershipParams {
   lastName: string;
   middleName?: string;
   id: string;
-  info: string;
+  memberSince: Date;
   image?: string;
+  alumniCategory?: string;
 }
 
 // Define the Membership Reference function
@@ -334,7 +341,8 @@ export async function createMembershipReference(params: MembershipParams) {
       lastName: params.lastName,
       middleName: params.middleName,
       id: params.id,
-      info: params.info,
+      memberSince: params.memberSince,
+      alumniCategory: params.alumniCategory,
       image: params.image,
       user: user._id,
     });
@@ -355,7 +363,8 @@ interface MembershipParamsAdmin {
   lastName: string;
   middleName?: string;
   id: string;
-  info: string;
+  memberSince: Date;
+  alumniCategory?: string;
   image?: string;
   orgName: string;
   orgAddress: string;
@@ -398,7 +407,8 @@ export async function createMembershipReferenceForAdmin(
       lastName: params.lastName,
       middleName: params.middleName,
       id: params.id,
-      info: params.info,
+      memberSince: params.memberSince,
+      alumniCategory: params.alumniCategory,
       image: params.image,
       orgName: params.orgName,
       orgAddress: params.orgAddress,
@@ -569,6 +579,7 @@ interface IndividualParams {
   yearsOfRelationship: Date;
   personalityReview: string;
   recommendationStatement: string;
+  id?: string;
 }
 
 // Define the function to create an IndividualRequest document
@@ -584,12 +595,7 @@ export async function createIndividualRequest(params: IndividualParams) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await findUserByEmail();
     const user2 = await User.findOne({ email: params.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
 
     // Create a new IndividualRequest document
     const individualRequest = new IndividualRequest({
@@ -601,7 +607,7 @@ export async function createIndividualRequest(params: IndividualParams) {
       yearsOfRelationship: params.yearsOfRelationship,
       personalityReview: params.personalityReview,
       recommendationStatement: params.recommendationStatement,
-      user: user._id,
+      user: session?.userId,
     });
 
     // Save the IndividualRequest document to the database
@@ -609,6 +615,65 @@ export async function createIndividualRequest(params: IndividualParams) {
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save Individual Request: ${error.message}`);
+  }
+}
+
+export async function generateIndividualRequest(params: IndividualParams) {
+  try {
+    // Connect to the database
+    connectToDB();
+
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const issuerDesignation = session.professionalDesignation;
+    const issuerName = (session.firstName + " " + session.lastName) as string;
+    const period = concatenateDates(params.yearsOfRelationship);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+
+    console.log(params.id);
+
+    let result;
+
+    const data = {
+      individualName: params.addresseeFullName,
+      issuerName: issuerName,
+      relationship: params.relationship,
+      yearsOfRelationship: period,
+      personalityReview: params.personalityReview,
+      recommendationStatement: params.recommendationStatement,
+      issuerDesignation: issuerDesignation,
+      issuerContact: params.email,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url =
+      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/individual-reference";
+    const docName = "individualReference.pdf";
+
+    result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      await IndividualRequest.findByIdAndUpdate(
+        params.id,
+        {
+          issued: true,
+          dateIssued: new Date(),
+          badgeUrl: result,
+        },
+        { new: true },
+      );
+      return true; // Return true if update is successful
+    } else return false;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to generateIndividualRequest request: ${error.message}`,
+    );
   }
 }
 
@@ -624,7 +689,10 @@ export async function getOrganizations(): Promise<Organization[]> {
   try {
     connectToDB();
 
-    const organizations = await Organization.find({}, "name _id studentStatusFee docVerificationFee membershipRefFee");
+    const organizations = await Organization.find(
+      {},
+      "name _id studentStatusFee docVerificationFee membershipRefFee",
+    );
     console.log(organizations, "This is the organization from server");
     // Convert the _id field to a string
     const formattedOrganizations = organizations.map((org) => ({
@@ -635,7 +703,10 @@ export async function getOrganizations(): Promise<Organization[]> {
       membershipRefFee: org.membershipRefFee,
     }));
 
-    console.log(formattedOrganizations, "this is the fomatted data from server")
+    console.log(
+      formattedOrganizations,
+      "this is the fomatted data from server",
+    );
 
     return formattedOrganizations;
   } catch (error: any) {
@@ -644,22 +715,437 @@ export async function getOrganizations(): Promise<Organization[]> {
   }
 }
 
-
 // Function to reset hasAccessFee to false if accessFeePaymentDate is older than one year
 const resetHasAccessFee = async () => {
   const now = new Date();
   // Calculate the date one year ago
-  const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+  const oneYearAgo = new Date(
+    now.getFullYear() - 1,
+    now.getMonth(),
+    now.getDate(),
+  );
   try {
     // Find documents where accessFeePaymentDate is older than one year
-    const documentsToUpdate = await User.find({ hasAccessFee: true, accessFeePaymentDate: { $lt: oneYearAgo } });
+    const documentsToUpdate = await User.find({
+      hasAccessFee: true,
+      accessFeePaymentDate: { $lt: oneYearAgo },
+    });
     // Update hasAccessFee to false for those documents
-    await User.updateMany({ _id: { $in: documentsToUpdate.map(doc => doc._id) } }, { $set: { hasAccessFee: false } });
-    console.log('hasAccessFee reset successfully.');
+    await User.updateMany(
+      { _id: { $in: documentsToUpdate.map((doc) => doc._id) } },
+      { $set: { hasAccessFee: false } },
+    );
+    console.log("hasAccessFee reset successfully.");
   } catch (error) {
-    console.error('Error resetting hasAccessFee:', error);
+    console.error("Error resetting hasAccessFee:", error);
   }
 };
 
 // Run the function every day to check for documents to reset
 setInterval(resetHasAccessFee, 24 * 60 * 60 * 1000); // Run every 24 hours
+
+// Helper function to format the date as "DD-MM-YYYY"
+function formatDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear().toString();
+  return `${day}-${month}-${year}`;
+}
+
+export async function getIndividualReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const individualReferences = await IndividualRequest.find({
+      userId,
+      issued: false,
+    }).select("addresseeFullName dateRequested");
+
+    // Format the data before returning to the frontend
+    const formattedData = individualReferences.map((doc) => ({
+      DocDetails: `Individual Reference Veridaq Request from ${doc.addresseeFullName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      DocDate: formatDate(doc.dateRequested), // Format the date
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch Individual Reference documents");
+  }
+}
+
+export async function getIndividualReferenceById(docId: string) {
+  try {
+    // Connect to the database
+    connectToDB();
+
+    // Query the WorkReference collection based on the provided docId
+    const individualReference = await IndividualRequest.findById(docId);
+
+    if (!individualReference) {
+      throw new Error("Document not found");
+    }
+
+    // Convert the MongoDB _id field and other IDs to string
+    const stringifiedIndividualReference = {
+      ...individualReference.toJSON(),
+      _id: individualReference._id.toString(), // Convert _id to string
+      issuerUser: individualReference.orgId.toString(), // Convert orgId to string
+      user: individualReference.user.toString(), // Convert user ID to string
+    };
+
+    // console.log(stringifiedWorkReference);
+
+    return stringifiedIndividualReference;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(
+      `Failed to fetch individualReference document with ID: ${docId}`,
+    );
+  }
+}
+
+export async function getIssuedIndividualReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const individualRequest = await IndividualRequest.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = individualRequest.map((doc) => ({
+      heading: `Individual Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F26BBA",
+      outlineColor: "#A593C5",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued individualRequest documents");
+  }
+}
+
+export async function getIssuedStudentshipStatus() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const studentshipStatus = await StudentshipStatus.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = studentshipStatus.map((doc) => ({
+      heading: `Studentship Status Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F26BBA",
+      outlineColor: "#A593C5",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getIssuedDocVerification() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const docVerification = await DocumentVerification.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = docVerification.map((doc) => ({
+      heading: `Document Verification Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#AF8BA4",
+      outlineColor: "#F4DBE4",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getIssuedWorkReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await WorkReference.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = workReferences.map((doc) => ({
+      heading: `Work Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F4DBE4",
+      outlineColor: "#897A8B",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+export async function getIssuedMemberReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const memberReferences = await MembershipReference.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = memberReferences.map((doc) => ({
+      heading: `Member Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#FFFFFF",
+      bgColor: "#38313A",
+      outlineColor: "#C3B8D8",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued memberReferences documents");
+  }
+}
+
+export async function getIssuedAdminStudentshipStatus() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const studentshipStatus = await StudentshipStatusAdmin.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = studentshipStatus.map((doc) => ({
+      heading: `Studentship Status Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F26BBA",
+      outlineColor: "#A593C5",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getIssuedAdminDocVerification() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const docVerification = await DocumentVerificationAdmin.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = docVerification.map((doc) => ({
+      heading: `Document Verification Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#AF8BA4",
+      outlineColor: "#F4DBE4",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getIssuedAdminWorkReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await WorkReferenceAdmin.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = workReferences.map((doc) => ({
+      heading: `Work Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F4DBE4",
+      outlineColor: "#897A8B",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+export async function getIssuedAdminMemberReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const memberReferences = await MembershipReferenceAdmin.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = memberReferences.map((doc) => ({
+      heading: `Member Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#FFFFFF",
+      bgColor: "#38313A",
+      outlineColor: "#C3B8D8",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued memberReferences documents");
+  }
+}

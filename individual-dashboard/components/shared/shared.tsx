@@ -152,7 +152,7 @@ export function Header() {
       )}
       {pathname === "/veridaq-box" && (
         <p className="text-[32px] font-semibold text-gradient mr-auto">
-          Receive mails or Issue Veridaq, here.
+          Issue Veridaq, here.
         </p>
       )}
       {pathname === "/veridaq-store" && (
@@ -172,26 +172,26 @@ export function Header() {
         height={35}
       />
       {session?.image ? (
-              <Image
-                alt="user"
-                src={session.image as string}
-                className="rounded-full aspect-square object-cover normal-border"
-                width={50}
-                height={50}
-                onClick={handleSignOut}
-                style={{ cursor: "pointer" }}
-              />
-            ) : (
-              <Image
-                alt="fallback"
-                src="/assets/images/user.png"
-                className="rounded-full aspect-square object-cover normal-border"
-                width={50}
-                height={50}
-                onClick={handleSignOut}
-                style={{ cursor: "pointer" }}
-              />
-            )}
+        <Image
+          alt="user"
+          src={session.image as string}
+          className="rounded-full aspect-square object-cover normal-border"
+          width={50}
+          height={50}
+          onClick={handleSignOut}
+          style={{ cursor: "pointer" }}
+        />
+      ) : (
+        <Image
+          alt="fallback"
+          src="/assets/images/user.png"
+          className="rounded-full aspect-square object-cover normal-border"
+          width={50}
+          height={50}
+          onClick={handleSignOut}
+          style={{ cursor: "pointer" }}
+        />
+      )}
     </header>
   );
 }
@@ -267,15 +267,45 @@ export function Card3({
   bgColor,
   outlineColor,
   textColor,
+  link,
 }: {
   heading: string;
   bgColor: string;
   outlineColor: string;
   textColor: string;
+  link: string;
 }) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [copy, setCopy] = useState("Copy Link");
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleCopyLink = (link: string) => {
+    // Copy link to clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(link)
+        .then(() => {
+          setCopy("Copied");
+          console.log("Link copied to clipboard!");
+          setTimeout(() => {
+            setCopy("Copy Link");
+          }, 4000);
+        })
+        .catch((error) => {
+          // Unable to write to clipboard
+          console.error("Failed to copy link to clipboard:", error);
+        });
+    } else {
+      setCopy("Unable to Copy");
+    }
+  };
+
   return (
     <div
-      className="card rounded-lg text-[#38313A] text-center"
+      className="card rounded-lg text-[#38313A] text-center relative"
       style={{
         backgroundColor: bgColor,
         borderColor: outlineColor,
@@ -291,12 +321,27 @@ export function Card3({
         className="py-2 flex justify-center text-center"
         style={{ backgroundColor: outlineColor }}
       >
-        <Image
-          src={"/assets/icons/icon-command.png"}
-          alt="options"
-          width={40}
-          height={40}
-        />
+        <button onClick={toggleDropdown} className="hover:cursor-pointer">
+          <Image
+            src={"/assets/icons/icon-command.png"}
+            alt="options"
+            width={40}
+            height={40}
+          />
+        </button>
+        {isDropdownOpen && (
+          <div className="absolute top-full right-0 mt-2 z-10 bg-white text-black rounded-lg shadow-md">
+            <button
+              onClick={() => handleCopyLink(link)}
+              className="block w-full py-2 px-4 text-left"
+            >
+              {copy}
+            </button>
+            <Link href={link}>
+              <button className="block w-full py-2 px-4 text-left">Open</button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -327,11 +372,36 @@ export function SearchBar() {
   );
 }
 
+export function SearchBar2() {
+  return (
+    <div className="">
+      <label
+        htmlFor="search"
+        className="flex items-center gap-4 bg-[#E1D7E2] border-4 border-[#554957] w-max p-2 ml-auto rounded-md mt-8"
+      >
+        <input
+          type="text"
+          id="search"
+          placeholder="search"
+          className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
+        />
+        <Image
+          src="/assets/icons/search.svg"
+          width={25}
+          height={25}
+          className="object-contain"
+          alt="search"
+        />
+      </label>
+    </div>
+  );
+}
+
 export function Wallet() {
   const session = useSession();
-  const email = session?.email as string
-  const balance = session?.walletBalance as string
-  
+  const email = session?.email as string;
+  const balance = session?.walletBalance as string;
+
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="bg-[#554957] px-4 rounded-lg py-4 text-center">
@@ -342,7 +412,7 @@ export function Wallet() {
         <button
           type="button"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink({email: email, amount: 10000})}
+          onClick={() => getPaymentLink({ email: email, amount: 10000 })}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
@@ -506,12 +576,57 @@ export function ErrorMessage() {
   );
 }
 
-interface StatusMessageProps {
-  message: string;
-  type: 'error' | 'success';
+export function VeridaqDocument({
+  DocDetails,
+  DocDate,
+  id,
+  docId,
+  onClick,
+}: {
+  DocDetails: string;
+  DocDate: string;
+  id: string;
+  docId: string;
+  onClick: (id: string, docId: string) => void;
+}) {
+  const handleClick = () => {
+    onClick(id, docId); // Pass the id to the onClick handler
+  };
+
+  return (
+    <div
+      className="flex items-start gap-3 pt-4 pb-4 hover:cursor-pointer"
+      onClick={handleClick}
+    >
+      <div className="">
+        <Image
+          src={"/assets/icons/veridaq_icon.svg"}
+          alt="veridaq_icon"
+          width={40}
+          height={40}
+        />
+      </div>
+      <div className="flex-col items-start">
+        <div className="">
+          <p>{DocDetails}</p>
+        </div>
+        <div className="">
+          <p>{DocDate}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export const StatusMessage: React.FC<StatusMessageProps> = ({ message, type }) => {
+interface StatusMessageProps {
+  message: string;
+  type: "error" | "success";
+}
+
+export const StatusMessage: React.FC<StatusMessageProps> = ({
+  message,
+  type,
+}) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -525,8 +640,8 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({ message, type }) =
   return (
     <div
       className={`fixed bottom-5 right-5 p-3 rounded-md text-white ${
-        type === 'error' ? 'bg-red-500' : 'bg-green-500'
-      } ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
     </div>
