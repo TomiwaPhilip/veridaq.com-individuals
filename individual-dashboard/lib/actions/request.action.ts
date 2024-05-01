@@ -167,6 +167,7 @@ interface StudentshipParams {
   currentLevel: string;
   courseOfStudy: string;
   studentId: string;
+  categoryOfStudy: string;
   info?: string; // Optional info field
   faculty: string;
   entryYear: Date;
@@ -201,6 +202,7 @@ export async function createStudentshipStatus(params: StudentshipParams) {
       middleName: params.middleName,
       currentLevel: params.currentLevel,
       courseOfStudy: params.courseOfStudy,
+      categoryOfStudy: params.categoryOfStudy,
       studentId: params.studentId,
       info: params.info,
       faculty: params.faculty,
@@ -227,6 +229,7 @@ interface StudentshipParamsAdmin {
   currentLevel: string;
   courseOfStudy: string;
   studentId: string;
+  categoryOfStudy: string;
   info?: string; // Optional info field
   faculty: string;
   entryYear: Date;
@@ -275,6 +278,7 @@ export async function createStudentshipStatusForAdmin(
       courseOfStudy: params.courseOfStudy,
       studentId: params.studentId,
       info: params.info,
+      categoryOfStudy: params.categoryOfStudy,
       faculty: params.faculty,
       entryYear: params.entryYear,
       exitYear: params.exitYear,
