@@ -54,7 +54,33 @@ export async function updateUser(params: Params) {
     session.firstName = params.firstName;
     session.lastName = params.lastName;
     await session.save();
+
+    return true;
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+export async function getUserDetails() {
+  try {
+    const session = await getSession();
+    // Connect To Db
+    connectToDB();
+
+    const userDetails = await User.findById(session.userId, {
+      firstname: 1,
+      lastname: 1,
+      middlename: 1,
+      street_address: 1,
+      city: 1,
+      country: 1,
+      image: 1,
+      professional_designation: 1,
+      _id: 0,
+    });
+    return userDetails;
+  } catch (error) {
+    console.error("Error querying DB for User details", error);
+    throw new Error("Error querying DB for User details");
   }
 }

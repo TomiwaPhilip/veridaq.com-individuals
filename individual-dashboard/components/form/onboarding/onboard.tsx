@@ -76,7 +76,7 @@ export default function Onboard() {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
-    await updateUser({
+    const result = await updateUser({
       firstName: data.firstName,
       lastName: data.lastName,
       middleName: data.middleName,
@@ -86,7 +86,8 @@ export default function Onboard() {
       image: data.image,
       professionalDesignation: data.professionalDesignation,
     });
-    router.push("/auth/verify");
+
+    if (result) router.push("/auth/verify");
   };
 
   return (
