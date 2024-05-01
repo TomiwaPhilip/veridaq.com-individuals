@@ -155,7 +155,7 @@ export default function Onboard() {
                         Professional Designation
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="No. 123, ABC Street" {...field} />
+                        <Input placeholder="Director" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

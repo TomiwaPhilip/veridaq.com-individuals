@@ -14,6 +14,12 @@ import IndividualRequest from "../utils/individualRequest";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
 import { findUserByEmail } from "./server-hooks/hooks.action";
+import {
+  generateVeridaqID,
+  concatenateDates,
+  getCurrentDateTime,
+} from "../utils";
+import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 
 interface Params {
   orgId: string;
@@ -573,6 +579,7 @@ interface IndividualParams {
   yearsOfRelationship: Date;
   personalityReview: string;
   recommendationStatement: string;
+  id?: string;
 }
 
 // Define the function to create an IndividualRequest document
@@ -588,12 +595,7 @@ export async function createIndividualRequest(params: IndividualParams) {
     connectToDB();
 
     // Find the user in the User collection by email
-    const user = await findUserByEmail();
     const user2 = await User.findOne({ email: params.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
 
     // Create a new IndividualRequest document
     const individualRequest = new IndividualRequest({
@@ -605,7 +607,7 @@ export async function createIndividualRequest(params: IndividualParams) {
       yearsOfRelationship: params.yearsOfRelationship,
       personalityReview: params.personalityReview,
       recommendationStatement: params.recommendationStatement,
-      user: user._id,
+      user: session?.userId,
     });
 
     // Save the IndividualRequest document to the database
@@ -613,6 +615,65 @@ export async function createIndividualRequest(params: IndividualParams) {
     return true;
   } catch (error: any) {
     throw new Error(`Failed to save Individual Request: ${error.message}`);
+  }
+}
+
+export async function generateIndividualRequest(params: IndividualParams) {
+  try {
+    // Connect to the database
+    connectToDB();
+
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const issuerDesignation = session.professionalDesignation;
+    const issuerName = (session.firstName + " " + session.lastName) as string;
+    const period = concatenateDates(params.yearsOfRelationship);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+
+    console.log(params.id);
+
+    let result;
+
+    const data = {
+      individualName: params.addresseeFullName,
+      issuerName: issuerName,
+      relationship: params.relationship,
+      yearsOfRelationship: period,
+      personalityReview: params.personalityReview,
+      recommendationStatement: params.recommendationStatement,
+      issuerDesignation: issuerDesignation,
+      issuerContact: params.email,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url =
+      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/individual-reference";
+    const docName = "individualReference.pdf";
+
+    result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      await IndividualRequest.findByIdAndUpdate(
+        params.id,
+        {
+          issued: true,
+          dateIssued: new Date(),
+          badgeUrl: result,
+        },
+        { new: true },
+      );
+      return true; // Return true if update is successful
+    } else return false;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to generateIndividualRequest request: ${error.message}`,
+    );
   }
 }
 
