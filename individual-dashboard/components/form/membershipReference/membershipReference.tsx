@@ -68,7 +68,7 @@ const MembershipReference: React.FC = () => {
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [fee, setFee] = useState<number | null>(null);
+  const [fee, setFee] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -102,11 +102,11 @@ const MembershipReference: React.FC = () => {
     setTimeout(() => {
       setError(false);
     }, 10000); // 10000 milliseconds = 10 seconds
-    console.log("I was clicked", error);
   }
 
   async function checkbalance2() {
     const fee = 4000;
+
     const convertedBalance = await convertStringToNumber(
       session?.walletBalance as string,
     );
