@@ -37,7 +37,7 @@ export default function Settings(params: SettingsProps) {
   const [disable, setDisable] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
-  console.log(params);
+
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
     defaultValues: {
