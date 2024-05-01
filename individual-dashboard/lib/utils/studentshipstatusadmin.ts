@@ -7,6 +7,7 @@ const StudentshipStatusAdminSchema = new Schema({
   currentLevel: { type: String, required: true, minlength: 1 },
   courseOfStudy: { type: String, required: true, minlength: 1 },
   studentId: { type: String, required: true, minlength: 1 },
+  categoryOfStudy: { type: String, required: true, minlength: 1 },
   info: String,
   faculty: { type: String, required: true, minlength: 1 },
   entryYear: { type: Date, required: true, max: Date.now() },
