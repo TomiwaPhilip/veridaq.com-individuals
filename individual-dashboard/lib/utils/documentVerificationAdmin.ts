@@ -40,6 +40,14 @@ const DocumentVerificationAdminSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  badgeUrl: {
+    type: String,
+    default: null,
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Admin",
+  },
 });
 
 // Create and export the Mongoose model based on the schema
