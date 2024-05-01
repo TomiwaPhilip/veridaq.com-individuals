@@ -10,6 +10,9 @@ export const OnboardingValidation = z.object({
   middleName: z.string().min(1, {
     message: "Lastname must be at least 1 character.",
   }),
+  professionalDesignation: z.string().min(1, {
+    message: "Professional Designation must be at least 1 characters.",
+  }),
   streetAddress: z.string().min(8, {
     message: "Street Address must be at least 8 characters.",
   }),

@@ -14,11 +14,12 @@ interface Params {
   city: string;
   country: string;
   image: string;
+  professionalDesignation: string;
 }
 
 export async function updateUser(params: Params) {
   try {
-    console.log("At the server,", params)
+    console.log("At the server,", params);
     const session = await getSession();
 
     if (!session) {
@@ -32,11 +33,12 @@ export async function updateUser(params: Params) {
 
     // Update the user in the database
     await User.findOneAndUpdate(
-      { _id: userid }, 
+      { _id: userid },
       {
         firstname: params.firstName,
         lastname: params.lastName,
         middlename: params.middleName,
+        professional_designation: params.professionalDesignation,
         street_address: params.streetAddress,
         city: params.city,
         country: params.country,
@@ -51,7 +53,7 @@ export async function updateUser(params: Params) {
     session.image = params.image;
     session.firstName = params.firstName;
     session.lastName = params.lastName;
-    await session.save()
+    await session.save();
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
   }

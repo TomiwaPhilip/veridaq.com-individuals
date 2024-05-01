@@ -1,11 +1,11 @@
-import { Schema, model, models } from 'mongoose';
-import { string } from 'zod';
+import { Schema, model, models } from "mongoose";
+import { string } from "zod";
 
 const UserSchema = new Schema({
   email: {
     type: String,
-    unique: [true, 'Email already exists!'],
-    required: [true, 'Email is required!'],
+    unique: [true, "Email already exists!"],
+    required: [true, "Email is required!"],
   },
   firstname: {
     type: String,
@@ -19,6 +19,9 @@ const UserSchema = new Schema({
     type: String,
   },
   street_address: {
+    type: String,
+  },
+  professional_designation: {
     type: String,
   },
   city: {
@@ -47,7 +50,7 @@ const UserSchema = new Schema({
   },
   walletBalance: {
     type: String,
-    default: "0.00"
+    default: "0.00",
   },
   hasAcessFee: {
     type: Boolean,
@@ -55,7 +58,7 @@ const UserSchema = new Schema({
   },
   accessFeePaymentDate: {
     type: Date,
-  }
+  },
 });
 
 const User = models.User || model("User", UserSchema);
