@@ -60,7 +60,7 @@ export const cardData2 = [
     id: "4",
   },
   {
-    heading: "Individual Reference/Recommendation Veridaq",
+    heading: "Individual Reference/ Recommendation Veridaq",
     textColor: "#38313A",
     bgColor: "#D6B9C3",
     outlineColor: "#F69DD1",

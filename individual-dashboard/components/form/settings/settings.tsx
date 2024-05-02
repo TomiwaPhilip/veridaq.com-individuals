@@ -107,13 +107,13 @@ export default function Settings(params: SettingsProps) {
   };
 
   return (
-    <div className="text-[#38313A]">
+    <div className="text-[#38313A] mb-[5rem] sm:mb-[0rem]">
       <div className="mt-[30px]">
         <p className="text-2xl font-bold mb-5">Veridaq Account Details</p>
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7 justify-center">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -135,7 +135,7 @@ export default function Settings(params: SettingsProps) {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        Password
+                        Lastname
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Doe" {...field} />
@@ -144,8 +144,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="middleName"
@@ -176,8 +174,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="streetAddress"
@@ -208,8 +204,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="country"
@@ -238,7 +232,7 @@ export default function Settings(params: SettingsProps) {
                             width={96}
                             height={96}
                             priority
-                            className="rounded-full object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         ) : (
                           <Image
@@ -246,7 +240,7 @@ export default function Settings(params: SettingsProps) {
                             alt="image"
                             width={96}
                             height={96}
-                            className="object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         )}
                       </FormLabel>
@@ -263,13 +257,13 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
               <div className="">
                 <BlackButton
                   type="submit"
                   name="Save Changes"
                   disabled={disable}
                 />
+              </div>
               </div>
             </form>
           </Form>

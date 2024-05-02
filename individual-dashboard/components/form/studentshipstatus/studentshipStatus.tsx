@@ -220,21 +220,21 @@ const StudentshipStatus: React.FC = () => {
                                 variant="outline"
                                 role="combobox"
                                 className={cn(
-                                  "w-[200px] justify-between",
+                                  "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-3 py-3 text-left",
                                   !field.value && "text-muted-foreground",
                                 )}
                               >
                                 {field.value
                                   ? organizations.find(
-                                      (organization) =>
-                                        organization._id === field.value,
-                                    )?.name
+                                    (organization) =>
+                                      organization._id === field.value,
+                                  )?.name
                                   : "Select Organization"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
+                          <PopoverContent className="w-full p-0">
                             <Command>
                               <CommandInput
                                 placeholder="Search Organization..."
@@ -272,10 +272,10 @@ const StudentshipStatus: React.FC = () => {
                       </FormItem>
                     )}
                   />
-                  <div className="mt-10 grid grid-cols-2 gap-10">
+                  <div className="mt-10 flex flex-col w-full gap-5 md:flex-row">
                     <button
                       type="button"
-                      className="bg-[#38313A] px-7 py-5 rounded-md text-white"
+                      className="bg-[#38313A] px-4 py-4 rounded-md text-white"
                       onClick={handleNextStep}
                       disabled={isDisabled}
                     >
@@ -283,10 +283,10 @@ const StudentshipStatus: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      className="border border-[#38313A] px-7 py-5 rounded-md text-[#38313A] max-w-[200px]"
+                      className="border border-[#38313A] px-4 py-4 rounded-md text-[#38313A]"
                       onClick={handleFormType}
                     >
-                      My Institution is not here
+                      My Organization is not here
                     </button>
                   </div>
                 </div>
@@ -362,9 +362,9 @@ const StudentshipStatus: React.FC = () => {
                             <SelectContent>
                               <SelectItem value="100L">100L</SelectItem>
                               <SelectItem value="200L">200L</SelectItem>
-                              <SelectItem value="100L">300L</SelectItem>
-                              <SelectItem value="200L">400L</SelectItem>
-                              <SelectItem value="200L">500L</SelectItem>
+                              <SelectItem value="300L">300L</SelectItem>
+                              <SelectItem value="400L">400L</SelectItem>
+                              <SelectItem value="500L">500L</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -389,7 +389,7 @@ const StudentshipStatus: React.FC = () => {
                         </FormItem>
                       )}
                     />
-                                                        <FormField
+                  <FormField
                     control={form.control}
                     name="categoryOfStudy"
                     render={({ field }) => (
@@ -403,7 +403,7 @@ const StudentshipStatus: React.FC = () => {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a Current Level" />
+                              <SelectValue placeholder="Select a Category of Study" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -606,7 +606,7 @@ const StudentshipStatus: React.FC = () => {
                                 width={96}
                                 height={96}
                                 priority
-                                className="rounded-full object-contain"
+                                className="rounded-full aspect-square object-cover"
                               />
                             ) : (
                               <Image
@@ -614,7 +614,7 @@ const StudentshipStatus: React.FC = () => {
                                 alt="image"
                                 width={96}
                                 height={96}
-                                className="object-contain"
+                                className="rounded-full aspect-square object-cover"
                               />
                             )}
                           </FormLabel>
@@ -739,9 +739,9 @@ const StudentshipStatus: React.FC = () => {
                             <SelectContent>
                               <SelectItem value="100L">100L</SelectItem>
                               <SelectItem value="200L">200L</SelectItem>
-                              <SelectItem value="100L">300L</SelectItem>
-                              <SelectItem value="200L">400L</SelectItem>
-                              <SelectItem value="200L">500L</SelectItem>
+                              <SelectItem value="300L">300L</SelectItem>
+                              <SelectItem value="400L">400L</SelectItem>
+                              <SelectItem value="500L">500L</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -766,7 +766,7 @@ const StudentshipStatus: React.FC = () => {
                         </FormItem>
                       )}
                     />
-                                                        <FormField
+                  <FormField
                     control={form.control}
                     name="categoryOfStudy"
                     render={({ field }) => (
@@ -978,7 +978,7 @@ const StudentshipStatus: React.FC = () => {
                                 width={96}
                                 height={96}
                                 priority
-                                className="rounded-full object-contain"
+                                className="rounded-full aspect-square object-cover"
                               />
                             ) : (
                               <Image
@@ -986,7 +986,7 @@ const StudentshipStatus: React.FC = () => {
                                 alt="image"
                                 width={96}
                                 height={96}
-                                className="object-contain"
+                                className="rounded-full aspect-square object-cover"
                               />
                             )}
                           </FormLabel>

@@ -96,10 +96,10 @@ export default function Onboard() {
         <p className="text-center text-2xl font-bold">
           Complete your profile to continue
         </p>
-        <div className="pt-[3rem] px-[10rem]">
+        <div className="pt-[3rem] px-[2rem]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7 justify-center">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -130,8 +130,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="middleName"
@@ -162,8 +160,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="streetAddress"
@@ -194,8 +190,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="country"
@@ -224,7 +218,7 @@ export default function Onboard() {
                             width={96}
                             height={96}
                             priority
-                            className="rounded-full object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         ) : (
                           <Image
@@ -232,7 +226,7 @@ export default function Onboard() {
                             alt="image"
                             width={96}
                             height={96}
-                            className="object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         )}
                       </FormLabel>

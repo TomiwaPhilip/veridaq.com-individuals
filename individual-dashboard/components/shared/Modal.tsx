@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import StepperForm from "./Stepper";
 
@@ -16,11 +14,11 @@ const ModalWithStepper: React.FC<ModalWithStepperProps> = ({
 }) => {
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-50 backdrop-blur-sm"
+      className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-50 backdrop-blur-sm overflow-auto"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg normal-border"
+        className="bg-white rounded-lg shadow-lg normal-border max-w-lg w-full max-h-[55vh] h-[55vh] overflow-auto mx-5 md:mx-0"
         onClick={(e) => e.stopPropagation()}
       >
         <StepperForm id={id} docId={docId} />

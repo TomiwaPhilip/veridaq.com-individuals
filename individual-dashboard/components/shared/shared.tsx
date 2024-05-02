@@ -689,7 +689,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
 
   return (
     <div
-      className={`fixed bottom-5 right-5 p-3 rounded-md text-white ${type === "error" ? "bg-red-500" : "bg-green-500"
+      className={`fixed top-5 right-5 p-3 rounded-md text-white ${type === "error" ? "bg-red-500" : "bg-green-500"
         } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
