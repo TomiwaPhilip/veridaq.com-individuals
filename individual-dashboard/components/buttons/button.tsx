@@ -22,7 +22,7 @@ export function Button({
 export function GoogleButton() {
   return (
     <button
-      className="bg-[#E18571] flex items-center justify-center py-3 px-10 w-full rounded-lg"
+      className="bg-[#4285F4] flex items-center justify-center py-3 px-10 w-full rounded-lg"
       onClick={() => handleGoogleLogin()} // Call signIn with the provider ID ("google" in this case)
     >
       <img
@@ -30,7 +30,7 @@ export function GoogleButton() {
         className="w-8 h-8 mr-2"
         alt="Google Logo"
       />
-      <span className="font-semibold text-[18px]">Sign in with Google</span>
+      <span className="font-semibold text-[14px] md:text-[18px]">Sign in with Google</span>
     </button>
   );
 }
@@ -46,7 +46,7 @@ export function LinkedinButton() {
         className="w-8 h-8 mr-2"
         alt="Linkedin Logo"
       />
-      <span className="font-semibold text-[18px]">Sign in with LinkedIn</span>
+      <span className="font-semibold text-[14px] md:text-[18px]">Sign in with LinkedIn</span>
     </button>
   );
 }

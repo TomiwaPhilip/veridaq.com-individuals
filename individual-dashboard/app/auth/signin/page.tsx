@@ -21,17 +21,19 @@ import { Input } from "@/components/form/input";
 import { signIn } from "@/lib/actions/login.action";
 
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
+import { StatusMessage } from "@/components/shared/shared";
 
 const formSchema = z.object({
-  email: z.string().min(8, {
-    message: "Email must be at least 8 characters.",
+  email: z.string().min(5, {
+    message: "Email must be at least 5 characters.",
   }),
 });
 
 export default function SignIn() {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmailSent, setIsEmailSent] = useState("");
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,25 +44,28 @@ export default function SignIn() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    setIsEmailSent(false);
+    setIsError(false);
     const result = await signIn(data.email);
-    setIsLoading(false);
     if (result) {
       // Handle successful sign-in
-      setIsEmailSent("Email has been sent!");
+      setIsLoading(false);
+      setIsEmailSent(true);
     } else {
       // Handle sign-in error
-      setIsEmailSent("Error! No email sent")
+      setIsLoading(false);
+      setIsEmailSent(false)
       console.error('Sign in error:', result);
     }
   };
 
   return (
-    <main className="text-white">
-      <div className="mt-[30px] pb-5">
+    <main className="text-white flex items-center justify-center min-h-screen">
+      <div className="max-w-md mx-auto px-6 lg:px-8 pt-8 pb-5">
         <p className="text-center text-2xl font-bold">
-          Sign in to Veridaq.com
+          Continue to Veridaq.com
         </p>
-        <div className="max-w-md mx-auto px-10 sm:px-6 lg:px-8 pt-8">
+        <div className="pt-8">
           <GoogleButton />
           <br />
           <LinkedinButton />
@@ -85,7 +90,8 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              <p>{isEmailSent}</p>
+              {isEmailSent === true && <StatusMessage type="success" message="Email sent!" />}
+              {isError === true && <StatusMessage type="error" message="Error sending email. Try again!" />}
               <div className="text-center">
                 <NoOutlineButtonBig type="submit" name={isLoading ? 'Sending Email...' : 'Send Magic Link'} disabled={isLoading} />
               </div>
@@ -93,10 +99,11 @@ export default function SignIn() {
           </Form>
           <p className="text-center pt-10 text-sm">
             By signing in you agree with our{" "}
-            <span className="text-[#876FB2]">terms and conditions. </span>{" "}
+            <span className="text-[#4285F4]">terms and conditions. </span>{" "}
           </p>
         </div>
       </div>
     </main>
+
   );
 }

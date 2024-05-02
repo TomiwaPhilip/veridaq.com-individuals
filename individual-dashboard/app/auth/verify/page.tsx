@@ -39,7 +39,7 @@ export default function Verify() {
             {loading ? (
                 <RiLoader4Line className="animate-spin text-2xl mb-4" />
             ) : (
-                <p className='text-center text-xl font-bold'>{verifyResult}</p>
+                <p className='text-center text-xl font-bold p-5'>{verifyResult}</p>
             )}
             <span onClick={handleVerify}>
                 <NoOutlineButtonBig
