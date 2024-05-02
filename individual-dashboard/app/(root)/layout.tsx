@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 
-import { Nav, Header } from "@/components/shared/shared";
+import BottomBar, { Nav, Header } from "@/components/shared/shared";
 
 export const metadata: Metadata = {
   title: "My Dashboard",
@@ -18,10 +18,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>  
         <main className="">
           <Nav />
-          <div className="p-8 absolute right-0 left-[230px]">
+          <div className="p-8 absolute right-0 lg:left-[230px]">
             <Header/>
             {children}
           </div>
+          <BottomBar />
         </main>
       </body>
     </html>
