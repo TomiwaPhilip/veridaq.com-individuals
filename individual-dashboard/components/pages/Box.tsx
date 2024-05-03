@@ -62,7 +62,7 @@ export default function Box() {
           Pending Veridaq Issuance from Individual Veridaq Request to you.
         </p>
         <div className="mt-10">
-          <div className="flex-1">
+          <div className="">
             <div className="p-7 bg-[#C3B8D8] rounded-lg h-full">
               <div className="">
                 <SearchBar2 />

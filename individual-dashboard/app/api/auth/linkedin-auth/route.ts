@@ -1,5 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import connectToDB from "@/lib/model/database";
 import User from "@/lib/utils/user";
@@ -9,7 +8,7 @@ import {
   getUserProfile,
 } from "@/lib/actions/server-hooks/linkedin-auth.action";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   if (req.method === "GET") {
     try {
       if (!req.url) {

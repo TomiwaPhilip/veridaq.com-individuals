@@ -1,5 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import {
   getGoogleAccessToken,
@@ -9,7 +8,7 @@ import connectToDB from "@/lib/model/database";
 import User from "@/lib/utils/user";
 import { saveSession } from "@/lib/utils";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   if (!req.url) {
     return new Response("No request query found!", { status: 401 });
   }
