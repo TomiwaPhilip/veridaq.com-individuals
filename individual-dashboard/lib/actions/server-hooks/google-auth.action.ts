@@ -3,7 +3,7 @@ import { OAuth2Client } from "google-auth-library";
 const client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: "https://mhlnpn-3000.csb.app/api/auth/google-auth",
+  redirectUri: "https://individual.veridaq.com/api/auth/google-auth",
 });
 
 export async function getGoogleAuthUrl() {
