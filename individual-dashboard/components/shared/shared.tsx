@@ -626,8 +626,6 @@ export function ErrorMessage() {
   );
 }
 
-import Image from 'next/image';
-
 export function VeridaqDocument({
   DocDetails,
   DocDate,
