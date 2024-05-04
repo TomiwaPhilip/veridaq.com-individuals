@@ -9,9 +9,13 @@ import User from "@/lib/utils/user";
 import { saveSession } from "@/lib/utils";
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  if (!req.url) {
+  
+  if (!req.nextUrl) {
     return new Response("No request query found!", { status: 401 });
   }
+
+  const codde = req.nextUrl.searchParams
+  console.log(codde, "codde")
   const urlSearchParams = new URLSearchParams(req.url.split("?")[1]);
   const code = urlSearchParams.get("code");
 
