@@ -61,6 +61,8 @@ export async function updateUser(params: Params) {
   }
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function getUserDetails() {
   try {
     const session = await getSession();

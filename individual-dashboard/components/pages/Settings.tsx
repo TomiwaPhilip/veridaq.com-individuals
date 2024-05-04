@@ -1,15 +1,9 @@
 import { getUserDetails } from "@/lib/actions/onboarding.action";
 import Settings from "../form/settings/settings";
 
-
-async function getUser() {
+export default async function SettingsPage() {
   const userDetailsfromDB = await getUserDetails();
 
-  return userDetailsfromDB;
-}
-
-export default async function SettingsPage() {
-  const userDetailsfromDB = await getUser();
   return (
     <>
       <Settings
@@ -22,6 +16,7 @@ export default async function SettingsPage() {
         image={userDetailsfromDB?.image ?? null}
         professionalDesignation={userDetailsfromDB?.professional_designation ?? null}
       />
+
     </>
   );
 }
