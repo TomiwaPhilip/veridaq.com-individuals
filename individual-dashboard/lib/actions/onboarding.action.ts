@@ -88,5 +88,3 @@ export async function getUserDetails() {
     throw new Error("Error querying DB for User details");
   }
 }
-
-export const dynamic = 'force-dynamic';
