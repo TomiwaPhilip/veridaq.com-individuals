@@ -18,7 +18,7 @@ const ModalWithStepper: React.FC<ModalWithStepperProps> = ({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg normal-border max-w-lg w-full max-h-[55vh] h-[55vh] overflow-auto mx-5 md:mx-0"
+        className="bg-white rounded-lg shadow-lg normal-border w-full max-h-[55vh] h-[55vh] overflow-auto mx-5 md:mx-0 md:w-[70%] max-h-[70%] h-[70%]"
         onClick={(e) => e.stopPropagation()}
       >
         <StepperForm id={id} docId={docId} />
