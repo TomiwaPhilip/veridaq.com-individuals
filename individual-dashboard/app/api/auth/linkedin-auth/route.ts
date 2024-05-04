@@ -10,7 +10,6 @@ import {
 
 export async function GET(req: NextRequest, res: NextResponse) {
 
-
   if (!req.nextUrl) {
     return new Response("No request query found!", { status: 401 });
   }

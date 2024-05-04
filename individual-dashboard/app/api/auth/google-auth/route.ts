@@ -14,11 +14,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return new Response("No request query found!", { status: 401 });
   }
 
-  const codde = req.nextUrl.searchParams
-  console.log(codde, "codde")
-  const urlSearchParams = new URLSearchParams(req.url.split("?")[1]);
-  const code = urlSearchParams.get("code");
-
+  const code = req.nextUrl.searchParams.get("code")
+  
   // Check if code is undefined
   if (!code) {
     return new Response("No code is provided", { status: 401 });
