@@ -7,14 +7,14 @@ export default async function SettingsPage() {
   return (
     <>
       <Settings
-        firstName={userDetailsfromDB.firstname}
-        lastName={userDetailsfromDB.lastname}
-        middleName={userDetailsfromDB.middlename}
-        streetAddress={userDetailsfromDB.street_address}
-        city={userDetailsfromDB.city}
-        country={userDetailsfromDB.country}
-        image={userDetailsfromDB.image}
-        professionalDesignation={userDetailsfromDB.professional_designation}
+        firstName={userDetailsfromDB?.firstname ?? null}
+        lastName={userDetailsfromDB?.lastname ?? null}
+        middleName={userDetailsfromDB?.middlename ?? null}
+        streetAddress={userDetailsfromDB?.street_address ?? null}
+        city={userDetailsfromDB?.city ?? null}
+        country={userDetailsfromDB?.country ?? null}
+        image={userDetailsfromDB?.image ?? null}
+        professionalDesignation={userDetailsfromDB?.professional_designation ?? null}
       />
     </>
   );
