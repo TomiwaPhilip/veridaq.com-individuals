@@ -61,8 +61,6 @@ export async function updateUser(params: Params) {
   }
 }
 
-export const dynamic = 'force-dynamic';
-
 export async function getUserDetails() {
   try {
     const session = await getSession();
@@ -90,3 +88,5 @@ export async function getUserDetails() {
     throw new Error("Error querying DB for User details");
   }
 }
+
+export const dynamic = 'force-dynamic';
