@@ -8,8 +8,6 @@ export const metadata: Metadata = {
   description: "Request, receive, and share your Veridaq",
 };
 
-export const dynamic = 'force-dynamic';
-
 interface RootLayoutProps {
   children: React.ReactNode;
 }

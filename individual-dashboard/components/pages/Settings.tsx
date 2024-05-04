@@ -4,8 +4,19 @@ import { useEffect, useState } from 'react';
 import { getUserDetails } from '@/lib/actions/onboarding.action';
 import Settings from '../form/settings/settings';
 
+interface UserDetails {
+  firstname: string;
+  lastname: string;
+  middlename: string;
+  street_address: string;
+  city: string;
+  country: string;
+  image: string;
+  professional_designation: string;
+}
+
 export default function SettingsPage() {
-  const [userDetailsfromDB, setUserDetailsfromDB] = useState(null);
+  const [userDetailsfromDB, setUserDetailsfromDB] = useState<UserDetails | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
