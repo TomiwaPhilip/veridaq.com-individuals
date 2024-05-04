@@ -72,16 +72,28 @@ export async function getUserDetails() {
     }
 
     const userDetails = await User.findById(session?.userId, {
-      firstname: 1,
-      lastname: 1,
-      middlename: 1,
-      street_address: 1,
-      city: 1,
-      country: 1,
-      image: 1,
-      professional_designation: 1,
-      _id: 0,
-    });
+    firstname: 1,
+    lastname: 1,
+    middlename: 1,
+    street_address: 1,
+    city: 1,
+    country: 1,
+    image: 1,
+    professional_designation: 1,
+    _id: 0,
+  }).lean();
+  
+  // Convert fields to strings
+  if (userDetails) {
+    userDetails.firstname = userDetails.firstname?.toString() || '';
+    userDetails.lastname = userDetails.lastname?.toString() || '';
+    userDetails.middlename = userDetails.middlename?.toString() || '';
+    userDetails.street_address = userDetails.street_address?.toString() || '';
+    userDetails.city = userDetails.city?.toString() || '';
+    userDetails.country = userDetails.country?.toString() || '';
+    userDetails.image = userDetails.image?.toString() || '';
+    userDetails.professional_designation = userDetails.professional_designation?.toString() || '';
+  }
 
     console.log(userDetails)
     
