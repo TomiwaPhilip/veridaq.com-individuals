@@ -67,7 +67,7 @@ export async function getUserDetails() {
     // Connect To Db
     connectToDB();
 
-    if(!session || session.userId) {
+    if(!session || !session.userId) {
       throw new Error ("Unable to get session")
     }
 
