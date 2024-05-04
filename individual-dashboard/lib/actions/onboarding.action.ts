@@ -71,31 +71,34 @@ export async function getUserDetails() {
       throw new Error ("Unable to get session")
     }
 
-    const userDetails = await User.findById(session?.userId, {
-    firstname: 1,
-    lastname: 1,
-    middlename: 1,
-    street_address: 1,
-    city: 1,
-    country: 1,
-    image: 1,
-    professional_designation: 1,
-    _id: 0,
-  }).lean();
+    const userDetailsArray = await User.findById(session?.userId, {
+      firstname: 1,
+      lastname: 1,
+      middlename: 1,
+      street_address: 1,
+      city: 1,
+      country: 1,
+      image: 1,
+      professional_designation: 1,
+      _id: 0,
+    }).lean();
   
-  // Convert fields to strings
-  if (userDetails) {
-    userDetails.firstname = userDetails.firstname?.toString() || '';
-    userDetails.lastname = userDetails.lastname?.toString() || '';
-    userDetails.middlename = userDetails.middlename?.toString() || '';
-    userDetails.street_address = userDetails.street_address?.toString() || '';
-    userDetails.city = userDetails.city?.toString() || '';
-    userDetails.country = userDetails.country?.toString() || '';
-    userDetails.image = userDetails.image?.toString() || '';
-    userDetails.professional_designation = userDetails.professional_designation?.toString() || '';
-  }
+    // If userDetailsArray is an array, access the first element
+    const userDetails = Array.isArray(userDetailsArray) ? userDetailsArray[0] : userDetailsArray;
 
-    console.log(userDetails)
+    // Convert fields to strings
+    if (userDetails) {
+      userDetails.firstname = userDetails.firstname?.toString() || '';
+      userDetails.lastname = userDetails.lastname?.toString() || '';
+      userDetails.middlename = userDetails.middlename?.toString() || '';
+      userDetails.street_address = userDetails.street_address?.toString() || '';
+      userDetails.city = userDetails.city?.toString() || '';
+      userDetails.country = userDetails.country?.toString() || '';
+      userDetails.image = userDetails.image?.toString() || '';
+      userDetails.professional_designation = userDetails.professional_designation?.toString() || '';
+    }
+
+    console.log(userDetails);
     
     return userDetails;
   } catch (error) {
