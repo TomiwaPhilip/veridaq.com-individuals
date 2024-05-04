@@ -1,9 +1,15 @@
 import { getUserDetails } from "@/lib/actions/onboarding.action";
 import Settings from "../form/settings/settings";
 
-export default async function SettingsPage() {
+
+async function getUser() {
   const userDetailsfromDB = await getUserDetails();
 
+  return userDetailsfromDB;
+}
+
+export default async function SettingsPage() {
+  const userDetailsfromDB = await getUser();
   return (
     <>
       <Settings
