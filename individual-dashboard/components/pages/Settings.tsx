@@ -21,7 +21,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userDetails: UserDetails = await getUserDetails();
+        const userDetails = await getUserDetails();
         setUserDetailsfromDB(userDetails);
       } catch (error) {
         console.error('Error fetching user details:', error);
