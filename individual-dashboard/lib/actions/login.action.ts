@@ -18,7 +18,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://f7d857-3000.csb.app/auth/verify?token=${token}`;
+    const url = `https://individual.veridaq.com/auth/verify?token=${token}`;
 
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email });
