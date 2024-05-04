@@ -67,7 +67,11 @@ export async function getUserDetails() {
     // Connect To Db
     connectToDB();
 
-    const userDetails = await User.findById(session.userId, {
+    if(!session) {
+      throw new Error ("Unable to get session")
+    }
+
+    const userDetails = await User.findById(session?.userId, {
       firstname: 1,
       lastname: 1,
       middlename: 1,
