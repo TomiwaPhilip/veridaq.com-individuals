@@ -82,6 +82,9 @@ export async function getUserDetails() {
       professional_designation: 1,
       _id: 0,
     });
+
+    console.log(userDetails)
+    
     return userDetails;
   } catch (error) {
     console.error("Error querying DB for User details", error);
