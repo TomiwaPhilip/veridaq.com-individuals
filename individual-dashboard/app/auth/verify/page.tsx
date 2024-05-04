@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+
 import { RiLoader4Line } from 'react-icons/ri';
 import { useSearchParams } from 'next/navigation'
 import { verifyUserToken } from '@/lib/actions/login.action';
@@ -35,19 +36,21 @@ export default function Verify() {
     };
 
     return (
-        <main className='text-white flex flex-col items-center justify-center h-screen'>
-            {loading ? (
-                <RiLoader4Line className="animate-spin text-2xl mb-4" />
-            ) : (
-                <p className='text-center text-xl font-bold p-5'>{verifyResult}</p>
-            )}
-            <span onClick={handleVerify}>
-                <NoOutlineButtonBig
-                    type='button'
-                    name='Verify Me'
-                    disabled={loading}
-                />
-            </span>
-        </main>
+        <Suspense>
+            <main className='text-white flex flex-col items-center justify-center h-screen'>
+                {loading ? (
+                    <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                ) : (
+                    <p className='text-center text-xl font-bold p-5'>{verifyResult}</p>
+                )}
+                <span onClick={handleVerify}>
+                    <NoOutlineButtonBig
+                        type='button'
+                        name='Verify Me'
+                        disabled={loading}
+                    />
+                </span>
+            </main>
+        </Suspense>
     );
 }
