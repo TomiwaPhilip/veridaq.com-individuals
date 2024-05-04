@@ -5,6 +5,7 @@ import { saveSession } from "../utils";
 
 import connectToDB from "../model/database";
 import User from "../utils/user";
+import { UserDetails } from "@/components/pages/Settings";
 
 interface Params {
   firstName: string;
@@ -67,11 +68,11 @@ export async function getUserDetails() {
     // Connect To Db
     connectToDB();
 
-    if(!session || !session.userId) {
-      throw new Error ("Unable to get session")
+    if (!session || !session.userId) {
+      throw new Error("Unable to get session");
     }
 
-    const userDetailsArray = await User.findById(session?.userId, {
+    const userDetails = await User.findById(session.userId, {
       firstname: 1,
       lastname: 1,
       middlename: 1,
@@ -81,26 +82,28 @@ export async function getUserDetails() {
       image: 1,
       professional_designation: 1,
       _id: 0,
-    }).lean();
-  
-    // If userDetailsArray is an array, access the first element
-    const userDetails = Array.isArray(userDetailsArray) ? userDetailsArray[0] : userDetailsArray;
+    });
 
-    // Convert fields to strings
-    if (userDetails) {
-      userDetails.firstname = userDetails.firstname?.toString() || '';
-      userDetails.lastname = userDetails.lastname?.toString() || '';
-      userDetails.middlename = userDetails.middlename?.toString() || '';
-      userDetails.street_address = userDetails.street_address?.toString() || '';
-      userDetails.city = userDetails.city?.toString() || '';
-      userDetails.country = userDetails.country?.toString() || '';
-      userDetails.image = userDetails.image?.toString() || '';
-      userDetails.professional_designation = userDetails.professional_designation?.toString() || '';
+    // Check if userDetails is null
+    if (!userDetails) {
+      return null;
     }
 
-    console.log(userDetails);
-    
-    return userDetails;
+    // Convert fields to strings
+    const userDetailsStringified: UserDetails = {
+      firstname: userDetails.firstname?.toString() ?? '',
+      lastname: userDetails.lastname?.toString() ?? '',
+      middlename: userDetails.middlename?.toString() ?? '',
+      street_address: userDetails.street_address?.toString() ?? '',
+      city: userDetails.city?.toString() ?? '',
+      country: userDetails.country?.toString() ?? '',
+      image: userDetails.image?.toString() ?? '',
+      professional_designation: userDetails.professional_designation?.toString() ?? '',
+    };
+
+    console.log(userDetailsStringified);
+
+    return userDetailsStringified;
   } catch (error) {
     console.error("Error querying DB for User details", error);
     throw new Error("Error querying DB for User details");

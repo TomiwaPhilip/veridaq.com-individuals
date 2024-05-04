@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getUserDetails } from '@/lib/actions/onboarding.action';
 import Settings from '../form/settings/settings';
 
-interface UserDetails {
+export interface UserDetails {
   firstname: string;
   lastname: string;
   middlename: string;
