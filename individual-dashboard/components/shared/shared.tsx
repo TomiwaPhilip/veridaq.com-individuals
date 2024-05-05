@@ -645,10 +645,10 @@ export function VeridaqDocument({
 
   return (
     <div
-      className="flex items-start gap-3 pt-4 pb-4 hover:cursor-pointer"
+      className="flex flex-col sm:flex-row items-start gap-3 pt-4 pb-4 hover:cursor-pointer"
       onClick={handleClick}
     >
-      <div className="">
+      <div className="flex-shrink-0">
         <Image
           src={"/assets/icons/veridaq_icon.svg"}
           alt="veridaq_icon"
@@ -656,11 +656,11 @@ export function VeridaqDocument({
           height={40}
         />
       </div>
-      <div className="flex-col items-start">
-        <div className="">
+      <div className="flex flex-col items-start">
+        <div className="mb-1 sm:mb-0"> {/* Added margin bottom to separate elements */}
           <p>{DocDetails}</p>
         </div>
-        <div className="">
+        <div className="text-sm"> {/* Added smaller text size for date */}
           <p>{DocDate}</p>
         </div>
       </div>
