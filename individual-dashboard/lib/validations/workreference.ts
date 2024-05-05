@@ -30,11 +30,13 @@ export const WorkReferenceValidation = z.object({
   department: z.string().min(1, {
     message: "Department must be at least 1 character.",
   }),
-  notableAchievement: z.string().optional(), // Allow empty string
+  notableAchievement: z.string().max(30, "Notable Achievement must be at most 40 characters").optional(), // Allow empty string
   jobFunction: z.string().min(1, {
     message: "Function must be at least 1 character.",
+  }).max(40, {
+    message: "Function must be at most 40 characters.",
   }),
-  personalitySummary: z.string().optional(), // Allow empty string
+  personalitySummary: z.string().max(30, "Personaliy Summary must be at most 40 characters").optional(), // Allow empty string
 });
 
 export const WorkReferenceValidation2 = z.object({
@@ -64,11 +66,13 @@ export const WorkReferenceValidation2 = z.object({
   department: z.string().min(1, {
     message: "Department must be at least 1 character.",
   }),
-  notableAchievement: z.string().optional(), // Allow empty string
+  notableAchievement: z.string().max(30, "Notable Achievement must be at most 40 characters").optional(), // Allow empty string
   jobFunction: z.string().min(1, {
     message: "Function must be at least 1 character.",
+  }).max(40, {
+    message: "Function must be at most 40 characters.",
   }),
-  personalitySummary: z.string().optional(), // Allow empty string
+  personalitySummary: z.string().max(30, "Personaliy Summary must be at most 40 characters").optional(), // Allow empty string
   orgName: z.string().min(1, {
     message: "Organization Name must be at least 1 character.",
   }),

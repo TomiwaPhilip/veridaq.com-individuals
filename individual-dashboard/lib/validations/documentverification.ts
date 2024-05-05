@@ -21,7 +21,9 @@ export const DocumentVerificationValidation = z.object({
     message: "ID Type must be at least 1 characters.",
   }),
   info: z.string().min(1, {
-    message: "Sub Type must be at least 1 character.",
+    message: "Info must be at least 1 character.",
+  }).max(40, {
+    message: "Info must be at most 40 characters.",
   }),
   image: z.string().url().min(1),
 });
@@ -44,7 +46,9 @@ export const DocumentVerificationValidation2 = z.object({
       message: "ID Type must be at least 1 characters.",
     }),
     info: z.string().min(1, {
-      message: "Sub Type must be at least 1 character.",
+      message: "Info must be at least 1 character.",
+    }).max(40, {
+      message: "Info must be at most 40 characters.",
     }),
     image: z.string().url().min(1),
     orgName: z.string().min(1, {

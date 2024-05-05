@@ -18,6 +18,6 @@ export const IndividualRequestValidation = z.object({
     message: "Personality Review must be at least 10 characters.",
   }),
   recommendationStatement: z.string().min(12, {
-    message: "Recommendation Statement must be at least 12 character.",
-  }),
+    message: "Recommendation Statement must be at least 12 characters.",
+  }).max(40, "Recoemmendation Statement must be at most 40 characters"),
 });
