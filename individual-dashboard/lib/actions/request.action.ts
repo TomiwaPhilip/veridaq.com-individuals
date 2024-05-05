@@ -1153,3 +1153,32 @@ export async function getIssuedAdminMemberReference() {
     throw new Error("Failed to fetch issued memberReferences documents");
   }
 }
+
+
+export async function getVeridaqURL(badgeID: string): Promise<string | null> {
+  console.log(badgeID)
+  try {
+    // Connect to the database
+    connectToDB();
+
+    // Define an array of collections to query
+    const collections = [
+      { collection: WorkReference, fieldName: 'badgeUrl' },
+      { collection: StudentshipStatus, fieldName: 'badgeUrl' },
+      { collection: MembershipReference, fieldName: 'badgeUrl' },
+      { collection: DocumentVerification, fieldName: 'badgeUrl' },
+      { collection: IndividualRequest, fieldName: 'badgeUrl' }
+    ];
+
+    // Iterate through the collections and query for the badgeUrl
+    for (const { collection, fieldName } of collections) {
+      const result = await collection.findOne({ badgeID: badgeID }).select(fieldName);
+      if (result) {console.log(result); return result[fieldName];}
+    }
+
+    return null; // Return null if badgeUrl is not found in any collection
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch Veridaq URL");
+  }
+}
