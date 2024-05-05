@@ -121,7 +121,7 @@ export default function Onboard() {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        Password
+                        Last Name
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Doe" {...field} />
