@@ -5,7 +5,7 @@ export const WorkReferenceValidation = z.object({
     message: "Organization ID must be at least 1 character.",
   }),
   firstName: z.string().min(1, {
-    message: "Last Name must be at least 1 character.",
+    message: "First Name must be at least 1 character.",
   }),
   lastName: z.string().min(1, {
     message: "Last Name must be at least 1 character.",

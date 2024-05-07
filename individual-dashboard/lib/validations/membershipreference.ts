@@ -5,14 +5,14 @@ export const MembershipReferenceValidation = z.object({
     message: "Organization ID must be at least 1 character.",
   }),
   firstName: z.string().min(1, {
-    message: "Last Name must be at least 1 character.",
+    message: "First Name must be at least 1 character.",
   }),
   lastName: z.string().min(1, {
     message: "Last Name must be at least 1 character.",
   }),
   middleName: z.string().optional(), // Allow empty string
   id: z.string().min(1, {
-    message: "Employee Type must be at least 1 characters.",
+    message: "Membership ID must be at least 1 characters.",
   }),
   memberSince: z.date().max(new Date(), {
     message: "Year of membership must be a valid date in the past.",
@@ -23,14 +23,14 @@ export const MembershipReferenceValidation = z.object({
 
 export const MembershipReferenceValidation2 = z.object({
   firstName: z.string().min(1, {
-    message: "Last Name must be at least 1 character.",
+    message: "First Name must be at least 1 character.",
   }),
   lastName: z.string().min(1, {
     message: "Last Name must be at least 1 character.",
   }),
   middleName: z.string().optional(), // Allow empty string
   id: z.string().min(1, {
-    message: "Employee Type must be at least 1 characters.",
+    message: "Membership must be at least 1 characters.",
   }),
   memberSince: z.date().max(new Date(), {
     message: "Year of membership must be a valid date in the past.",
