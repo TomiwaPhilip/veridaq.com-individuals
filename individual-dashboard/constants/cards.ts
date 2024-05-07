@@ -9,14 +9,14 @@ export const cardData = [
   {
     heading: "Check your Veridaq Box!",
     paragraph:
-      "Veridaq Box is for receiving mails from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
+      "Veridaq Box is for receiving request from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
     bgColor: "#AF8BA4",
     outlineColor: "#A593C5",
   },
   {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Veridaq Box is for receiving mails from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
+      "Your Veridaq Store is where you can find all the Veridaq you have received on the Veridaq Platform. You share, open or download them.",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
