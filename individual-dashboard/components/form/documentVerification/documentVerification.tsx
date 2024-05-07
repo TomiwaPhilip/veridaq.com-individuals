@@ -347,7 +347,7 @@ const DocumentVerification: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Employee Type
+                            Document Type
                           </FormLabel>
                           <Select
                             onValueChange={field.onChange}

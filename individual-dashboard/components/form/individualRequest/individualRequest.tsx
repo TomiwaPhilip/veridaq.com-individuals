@@ -168,7 +168,7 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="font-medium text-[16px]">
-                          Employee Type
+                          Request Type
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
