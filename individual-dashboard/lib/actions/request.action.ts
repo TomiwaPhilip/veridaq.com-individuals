@@ -840,15 +840,28 @@ export async function getIssuedIndividualReference() {
       issued: true,
     }).select("firstName lastName badgeUrl");
 
-    // Format the data before returning to the frontend
-    const formattedData = individualRequest.map((doc) => ({
-      heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
-      DocId: doc._id.toString(), // Convert _id to string
-      link: doc.badgeUrl,
-      textColor: "#38313A",
-      bgColor: "#F26BBA",
-      outlineColor: "#A593C5",
-    }));
+    let formattedData;
+
+    if(session.hasAccessFee === true) {
+      // Format the data before returning to the frontend
+      formattedData = individualRequest.map((doc) => ({
+        heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: doc.badgeUrl,
+        textColor: "#38313A",
+        bgColor: "#F26BBA",
+        outlineColor: "#A593C5",
+      }));
+    } else if (session.hasAccessFee === false) {
+      formattedData = individualRequest.map((doc) => ({
+        heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: "https://individual.veridaq.com/auth/AccessFeeError",
+        textColor: "#38313A",
+        bgColor: "#F26BBA",
+        outlineColor: "#A593C5",
+      }));
+    }
 
     if (formattedData) return formattedData;
     false;
@@ -951,15 +964,30 @@ export async function getIssuedWorkReference() {
       issued: true,
     }).select("firstName lastName badgeUrl");
 
-    // Format the data before returning to the frontend
-    const formattedData = workReferences.map((doc) => ({
-      heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
-      DocId: doc._id.toString(), // Convert _id to string
-      link: doc.badgeUrl,
-      textColor: "#38313A",
-      bgColor: "#F4DBE4",
-      outlineColor: "#897A8B",
-    }));
+
+    let formattedData;
+
+    if(session.hasAccessFee === true) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: doc.badgeUrl,
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    } else if (session.hasAccessFee === false) {
+        // Format the data before returning to the frontend
+        formattedData = workReferences.map((doc) => ({
+          heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+          DocId: doc._id.toString(), // Convert _id to string
+          link: "https://individual.veridaq.com/auth/AccessFeeError",
+          textColor: "#38313A",
+          bgColor: "#F4DBE4",
+          outlineColor: "#897A8B",
+        }));
+    }
 
     if (formattedData) return formattedData;
     false;
@@ -1099,15 +1127,29 @@ export async function getIssuedAdminWorkReference() {
       issued: true,
     }).select("firstName lastName badgeUrl");
 
-    // Format the data before returning to the frontend
-    const formattedData = workReferences.map((doc) => ({
-      heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
-      DocId: doc._id.toString(), // Convert _id to string
-      link: doc.badgeUrl,
-      textColor: "#38313A",
-      bgColor: "#F4DBE4",
-      outlineColor: "#897A8B",
-    }));
+    let formattedData;
+
+    if(session.hasAccessFee === true) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: doc.badgeUrl,
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    } else if (session.hasAccessFee === false) {
+        // Format the data before returning to the frontend
+        formattedData = workReferences.map((doc) => ({
+          heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+          DocId: doc._id.toString(), // Convert _id to string
+          link: "https://individual.veridaq.com/auth/AccessFeeError",
+          textColor: "#38313A",
+          bgColor: "#F4DBE4",
+          outlineColor: "#897A8B",
+        }));
+    }
 
     if (formattedData) return formattedData;
     false;

@@ -12,6 +12,7 @@ export default function PaymentPage() {
 
   const status = searchParams.get("status") as string;
   const tx_ref = searchParams.get("tx_ref") as string;
+  const isAccessFee = searchParams.get("isAccessFee") as string;
   const transaction_idString = searchParams.get("transaction_id") as string;
   const transaction_id = parseInt(transaction_idString);
   console.log(status, tx_ref, transaction_id);
@@ -25,6 +26,7 @@ export default function PaymentPage() {
           status: status,
           tx_ref: tx_ref,
           transaction_id: transaction_id,
+          isAccessFee: isAccessFee, 
         });
         if (verify) {
           setVerifyResult("Your payment has been verified and confirmed!");

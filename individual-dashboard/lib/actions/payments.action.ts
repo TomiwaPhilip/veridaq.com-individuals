@@ -37,7 +37,39 @@ export async function getPaymentLink (params: getPaymentParams) {
                 amount: params.amount,
                 currency: 'NGN',
                 tx_ref: transaction_ref,
-                redirect_url: 'https://glowing-bassoon-69vxwrq9jp4xf7gx-3000.app.github.dev/auth/payment',
+                redirect_url: 'https://individual.veridaq.com/auth/payment?isAccessFee=False',
+                customer: {
+                    email: params.email,
+                }
+            },
+        }
+    ).json()
+
+    console.log(response)
+    
+    redirect(response.data.link)
+  
+}
+
+interface getPaymentParams2 {
+    email: string,
+}
+
+export async function getPaymentLink2 (params: getPaymentParams2) {
+    console.log(params.email)
+
+    const transaction_ref = generateRandomString(16);
+
+    const response: any = await got.post('https://api.flutterwave.com/v3/payments',
+        {
+            headers: {
+                Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+            },
+            json: {
+                amount: 2400,
+                currency: 'NGN',
+                tx_ref: transaction_ref,
+                redirect_url: 'https://individual.veridaq.com/auth/payment?isAccessFee=True',
                 customer: {
                     email: params.email,
                 }
@@ -69,8 +101,8 @@ export async function convertNumberToString(num: number) {
 }
 
 export async function verifyPayment (
-    {status, tx_ref, transaction_id,}: 
-    {status: string; tx_ref: string; transaction_id: number;}) 
+    {status, tx_ref, transaction_id, isAccessFee}: 
+    {status: string; tx_ref: string; transaction_id: number; isAccessFee: string;}) 
     {
 
     console.log(status, tx_ref, transaction_id, "At the serever");
@@ -104,37 +136,60 @@ export async function verifyPayment (
             ) {
                 // Success!
 
-                // Update wallet balance in DB and Session
-                const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
-                
-                const convertedSessionBalance = convertStringToNumber(user.walletBalance as string);
-                const addedBalance = convertedSessionBalance + response.data.amount;
-                const newBalance = convertNumberToString(addedBalance);
+                if(isAccessFee === "False") {
 
-                // Update the user in the database
-                const userDetails = await User.findOneAndUpdate(
-                    { _id: userId }, 
-                    {
-                        walletBalance: newBalance,
-                    },
-                    // Upsert means both updating and inserting
-                    { upsert: true, 
-                        new: true,
-                    },
-                );
+                    // Update wallet balance in DB and Session
+                    const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
+                    
+                    const convertedSessionBalance = convertStringToNumber(user.walletBalance as string);
+                    const addedBalance = convertedSessionBalance + response.data.amount;
+                    const newBalance = convertNumberToString(addedBalance);
 
-                const paymentDetails = new VerifiedPayment({
-                    ref: tx_ref,
-                    verified: true,
-                    user: userId,
-                });
+                    // Update the user in the database
+                    const userDetails = await User.findOneAndUpdate(
+                        { _id: userId }, 
+                        {
+                            walletBalance: newBalance,
+                        },
+                        // Upsert means both updating and inserting
+                        { upsert: true, 
+                            new: true,
+                        },
+                    );
 
-                await paymentDetails.save();
+                    const paymentDetails = new VerifiedPayment({
+                        ref: tx_ref,
+                        verified: true,
+                        user: userId,
+                    });
 
-                console.log(userDetails, paymentDetails);
-                session.walletBalance = userDetails.walletBalance;
-                await session.save();
-                return true;
+                    await paymentDetails.save();
+
+                    console.log(userDetails, paymentDetails);
+                    session.walletBalance = userDetails.walletBalance;
+                    await session.save();
+                    return true;
+
+                } else if(isAccessFee === "True") {
+                    // Update Access fee  in DB and Session
+
+                    // Update the user in the database
+                    const userDetails = await User.findOneAndUpdate(
+                        { _id: userId }, 
+                        {
+                            hasAccessFee: true,
+                        },
+                        // Upsert means both updating and inserting
+                        { upsert: true, 
+                            new: true,
+                        },
+                    );
+
+                    console.log(userDetails);
+                    session.hasAccessFee = userDetails.hasAccessFee;
+                    await session.save();
+                    return true;
+                }
             }
         } else {
             return false
