@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
-import { getPaymentLink } from "@/lib/actions/payments.action";
+import { getPaymentLink, getPaymentLink2 } from "@/lib/actions/payments.action";
 
 export function useSession() {
   const [session, setSession] = useState<SessionData | null>(null);
@@ -387,9 +387,9 @@ export function Card3({
             >
               {copy}
             </button>
-            <Link href={link}>
+            <a href={link} target="_blank">
               <button className="block w-full py-2 px-4 text-left">Open</button>
-            </Link>
+            </a>
           </div>
         )}
       </div>
@@ -474,20 +474,21 @@ export function Wallet() {
             <span style={{ marginLeft: "5px" }}>Add funds</span>
           </div>
         </button>
-        {/* <button
-          type="submit"
-          className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
+        <button
+          type="button"
+          className="text-[20px] bg-[#6b4b9f] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
+          onClick={() => getPaymentLink2({ email: email })}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
-              src={"/assets/icons/minus.png"}
-              alt="minus_icon"
+              src={"/assets/icons/plus.png"}
+              alt="plus_icon"
               width={30}
               height={30}
             />
-            <span style={{ marginLeft: "5px" }}>Withdraw funds</span>
+            <span style={{ marginLeft: "5px" }}>Add Access Fee</span>
           </div>
-        </button> */}
+        </button>
       </div>
     </div>
   );

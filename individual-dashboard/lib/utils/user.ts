@@ -52,7 +52,7 @@ const UserSchema = new Schema({
     type: String,
     default: "0.00",
   },
-  hasAcessFee: {
+  hasAccessFee: {
     type: Boolean,
     default: false,
   },
