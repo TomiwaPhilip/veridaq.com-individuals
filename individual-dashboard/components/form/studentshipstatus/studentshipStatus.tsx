@@ -108,6 +108,27 @@ const StudentshipStatus: React.FC = () => {
     console.log("I was clicked", error)
   }
 
+  async function checkbalance2() {
+    const fee = 3000;
+
+    const convertedBalance = await convertStringToNumber(
+      session?.walletBalance as string,
+    );
+    if (convertedBalance === fee) {
+      return;
+    } else {
+      setFee(fee as number);
+      setError(true);
+      setIsDisabled(true);
+    }
+    // Reset error state after 10 seconds (adjust as needed)
+    setTimeout(() => {
+      setError(false);
+    }, 10000); // 10000 milliseconds = 10 seconds
+    console.log("I was clicked", error);
+  }
+
+
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -117,6 +138,7 @@ const StudentshipStatus: React.FC = () => {
   };
 
   const handleFormType = () => {
+    checkbalance2();
     setFormType("withOutOrg");
   };
 

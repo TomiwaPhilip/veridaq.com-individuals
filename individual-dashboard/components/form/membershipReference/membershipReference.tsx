@@ -84,8 +84,6 @@ const MembershipReference: React.FC = () => {
     fetchOrgs();
   }, []);
 
-  // TODO Implement restriction for admin request if no fund in wallet
-
   async function checkbalance(fee?: number) {
     console.log(fee);
     const convertedBalance = await convertStringToNumber(
@@ -105,7 +103,7 @@ const MembershipReference: React.FC = () => {
   }
 
   async function checkbalance2() {
-    const fee = 4000;
+    const fee = 3000;
 
     const convertedBalance = await convertStringToNumber(
       session?.walletBalance as string,
@@ -683,6 +681,7 @@ const MembershipReference: React.FC = () => {
                     <div className="text-right right">
                       <button
                         type="button"
+                        disabled={isDisabled}
                         className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                         onClick={handleNextStep}
                       >
