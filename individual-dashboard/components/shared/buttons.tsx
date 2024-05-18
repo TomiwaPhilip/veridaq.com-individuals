@@ -50,11 +50,7 @@ export function NoOutlineButtonBig({
       className="veridaq-gradient mt-5 text-white text-[14px] font-medium px-[5rem] py-4 rounded-md border-transparent hover:bg-transparent hover:veridaq-gradient hover:border-gray-800 md:text-[20px]"
       disabled={disabled}
     >
-      {loading ? (
-        <RiLoader4Line className="animate-spin text-2xl mb-4" />
-      ) : (
-        name
-      )}
+      {loading ? <RiLoader4Line className="animate-spin text-2xl" /> : name}
     </button>
   );
 }
@@ -79,11 +75,7 @@ export function BlackButton({
       disabled={disabled}
       onClick={onClick}
     >
-      {loading ? (
-        <RiLoader4Line className="animate-spin text-2xl mb-4" />
-      ) : (
-        name
-      )}
+      {loading ? <RiLoader4Line className="animate-spin text-2xl" /> : name}
     </button>
   );
 }
