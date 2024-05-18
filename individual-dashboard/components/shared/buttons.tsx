@@ -1,3 +1,5 @@
+import { RiLoader4Line } from "react-icons/ri";
+
 export function OutlineButtonSmall({ name }: { name: string }) {
   return (
     <button className="text-white text-sm px-4 py-2 rounded-md border-2 border-[#694C9F] hover:bg-transparent">
@@ -35,10 +37,12 @@ export function NoOutlineButtonBig({
   name,
   type,
   disabled,
+  loading,
 }: {
   name: string;
   type: "submit" | "button";
   disabled?: boolean;
+  loading?: boolean;
 }) {
   return (
     <button
@@ -46,7 +50,11 @@ export function NoOutlineButtonBig({
       className="veridaq-gradient mt-5 text-white text-[14px] font-medium px-[5rem] py-4 rounded-md border-transparent hover:bg-transparent hover:veridaq-gradient hover:border-gray-800 md:text-[20px]"
       disabled={disabled}
     >
-      {name}
+      {loading ? (
+        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+      ) : (
+        name
+      )}
     </button>
   );
 }
@@ -55,11 +63,13 @@ export function BlackButton({
   name,
   type,
   disabled,
+  loading,
   onClick,
 }: {
   name: string;
   type: "submit" | "button";
   disabled?: boolean;
+  loading?: boolean;
   onClick?: () => void;
 }) {
   return (
@@ -69,7 +79,11 @@ export function BlackButton({
       disabled={disabled}
       onClick={onClick}
     >
-      {name}
+      {loading ? (
+        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+      ) : (
+        name
+      )}
     </button>
   );
 }

@@ -842,7 +842,7 @@ export async function getIssuedIndividualReference() {
 
     let formattedData;
 
-    if(session.hasAccessFee === true) {
+    if (session.hasAccessFee === true) {
       // Format the data before returning to the frontend
       formattedData = individualRequest.map((doc) => ({
         heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
@@ -964,10 +964,9 @@ export async function getIssuedWorkReference() {
       issued: true,
     }).select("firstName lastName badgeUrl");
 
-
     let formattedData;
 
-    if(session.hasAccessFee === true) {
+    if (session.hasAccessFee === true) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
@@ -978,15 +977,15 @@ export async function getIssuedWorkReference() {
         outlineColor: "#897A8B",
       }));
     } else if (session.hasAccessFee === false) {
-        // Format the data before returning to the frontend
-        formattedData = workReferences.map((doc) => ({
-          heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
-          DocId: doc._id.toString(), // Convert _id to string
-          link: "https://individual.veridaq.com/auth/AccessFeeError",
-          textColor: "#38313A",
-          bgColor: "#F4DBE4",
-          outlineColor: "#897A8B",
-        }));
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: "https://individual.veridaq.com/auth/AccessFeeError",
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
     }
 
     if (formattedData) return formattedData;
@@ -1129,7 +1128,7 @@ export async function getIssuedAdminWorkReference() {
 
     let formattedData;
 
-    if(session.hasAccessFee === true) {
+    if (session.hasAccessFee === true) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
@@ -1140,15 +1139,15 @@ export async function getIssuedAdminWorkReference() {
         outlineColor: "#897A8B",
       }));
     } else if (session.hasAccessFee === false) {
-        // Format the data before returning to the frontend
-        formattedData = workReferences.map((doc) => ({
-          heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
-          DocId: doc._id.toString(), // Convert _id to string
-          link: "https://individual.veridaq.com/auth/AccessFeeError",
-          textColor: "#38313A",
-          bgColor: "#F4DBE4",
-          outlineColor: "#897A8B",
-        }));
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: "https://individual.veridaq.com/auth/AccessFeeError",
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
     }
 
     if (formattedData) return formattedData;
@@ -1196,26 +1195,30 @@ export async function getIssuedAdminMemberReference() {
   }
 }
 
-
 export async function getVeridaqURL(badgeID: string): Promise<string | null> {
-  console.log(badgeID)
+  console.log(badgeID);
   try {
     // Connect to the database
     connectToDB();
 
     // Define an array of collections to query
     const collections = [
-      { collection: WorkReference, fieldName: 'badgeUrl' },
-      { collection: StudentshipStatus, fieldName: 'badgeUrl' },
-      { collection: MembershipReference, fieldName: 'badgeUrl' },
-      { collection: DocumentVerification, fieldName: 'badgeUrl' },
-      { collection: IndividualRequest, fieldName: 'badgeUrl' }
+      { collection: WorkReference, fieldName: "badgeUrl" },
+      { collection: StudentshipStatus, fieldName: "badgeUrl" },
+      { collection: MembershipReference, fieldName: "badgeUrl" },
+      { collection: DocumentVerification, fieldName: "badgeUrl" },
+      { collection: IndividualRequest, fieldName: "badgeUrl" },
     ];
 
     // Iterate through the collections and query for the badgeUrl
     for (const { collection, fieldName } of collections) {
-      const result = await collection.findOne({ badgeID: badgeID }).select(fieldName);
-      if (result) {console.log(result); return result[fieldName];}
+      const result = await collection
+        .findOne({ badgeID: badgeID })
+        .select(fieldName);
+      if (result) {
+        console.log(result);
+        return result[fieldName];
+      }
     }
 
     return null; // Return null if badgeUrl is not found in any collection

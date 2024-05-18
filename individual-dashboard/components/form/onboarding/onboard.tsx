@@ -25,6 +25,7 @@ export default function Onboard() {
   const router = useRouter();
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
@@ -76,6 +77,7 @@ export default function Onboard() {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
+    setLoading(true);
     const result = await updateUser({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -86,7 +88,7 @@ export default function Onboard() {
       image: data.image,
       professionalDesignation: data.professionalDesignation,
     });
-
+    setLoading(false);
     if (result) router.push("/auth/verify");
   };
 
@@ -249,6 +251,7 @@ export default function Onboard() {
                   type="submit"
                   name="Save and Continue"
                   disabled={disable}
+                  loading={loading}
                 />
               </div>
             </form>

@@ -49,9 +49,14 @@ import {
   DocumentVerificationValidation,
   DocumentVerificationValidation2,
 } from "@/lib/validations/documentverification";
-import { SuccessMessage, ErrorMessage, StatusMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  StatusMessage,
+} from "@/components/shared/shared";
 import { useSession } from "@/components/shared/shared";
 import { convertStringToNumber } from "@/lib/actions/payments.action";
+import { BlackButton } from "@/components/shared/buttons";
 
 const DocumentVerification: React.FC = () => {
   interface Organization {
@@ -69,8 +74,9 @@ const DocumentVerification: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [fee, setFee] = useState<number | null>(null)
+  const [fee, setFee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -88,9 +94,11 @@ const DocumentVerification: React.FC = () => {
 
   async function checkbalance(fee?: number) {
     console.log(fee);
-    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    const convertedBalance = await convertStringToNumber(
+      session?.walletBalance as string,
+    );
     if (convertedBalance === fee) {
-      return
+      return;
     } else {
       setFee(fee as number);
       setError(true);
@@ -100,7 +108,7 @@ const DocumentVerification: React.FC = () => {
     setTimeout(() => {
       setError(false);
     }, 10000); // 10000 milliseconds = 10 seconds
-    console.log("I was clicked", error)
+    console.log("I was clicked", error);
   }
 
   async function checkbalance2() {
@@ -122,7 +130,6 @@ const DocumentVerification: React.FC = () => {
     }, 10000); // 10000 milliseconds = 10 seconds
     console.log("I was clicked", error);
   }
-
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -181,21 +188,23 @@ const DocumentVerification: React.FC = () => {
     fileReader.readAsDataURL(file);
   };
 
-
   const onSubmit = async (
     data: z.infer<typeof DocumentVerificationValidation>,
   ) => {
     console.log("I want to submit");
+    setLoading(true);
 
     try {
       const create = await createDocumentVerificationRequest(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -203,15 +212,18 @@ const DocumentVerification: React.FC = () => {
     data: z.infer<typeof DocumentVerificationValidation2>,
   ) => {
     console.log("I want to submit");
+    setLoading(true);
     try {
       const create = await createDocumentVerificationRequestForAdmin(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -244,9 +256,9 @@ const DocumentVerification: React.FC = () => {
                               >
                                 {field.value
                                   ? organizations.find(
-                                    (organization) =>
-                                      organization._id === field.value,
-                                  )?.name
+                                      (organization) =>
+                                        organization._id === field.value,
+                                    )?.name
                                   : "Select Organization"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -268,7 +280,9 @@ const DocumentVerification: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance(organization.studentshipStatusFee)
+                                      checkbalance(
+                                        organization.studentshipStatusFee,
+                                      );
                                     }}
                                   >
                                     {organization.name}
@@ -489,12 +503,12 @@ const DocumentVerification: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                      >
-                        Submit
-                      </button>
+                        disabled={isDisabled}
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
@@ -811,6 +825,7 @@ const DocumentVerification: React.FC = () => {
                       <button
                         type="button"
                         className="bg-[#38313A] px-7 py-5 rounded-md text-white"
+                        disabled={isDisabled}
                         onClick={handleNextStep}
                       >
                         Continue
@@ -928,12 +943,12 @@ const DocumentVerification: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                      >
-                        Submit
-                      </button>
+                        disabled={isDisabled}
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
@@ -950,7 +965,12 @@ const DocumentVerification: React.FC = () => {
           </form>
         </Form>
       )}
-      {error ? <StatusMessage message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`} type="error" /> : null}
+      {error ? (
+        <StatusMessage
+          message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`}
+          type="error"
+        />
+      ) : null}
     </main>
   );
 };

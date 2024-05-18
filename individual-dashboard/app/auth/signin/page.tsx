@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-import {
-  GoogleButton,
-  LinkedinButton,
-} from "@/components/buttons/button";
+import { GoogleButton, LinkedinButton } from "@/components/buttons/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,8 +27,7 @@ const formSchema = z.object({
 });
 
 export default function SignIn() {
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -54,8 +50,8 @@ export default function SignIn() {
     } else {
       // Handle sign-in error
       setIsLoading(false);
-      setIsEmailSent(false)
-      console.error('Sign in error:', result);
+      setIsEmailSent(false);
+      console.error("Sign in error:", result);
     }
   };
 
@@ -82,7 +78,9 @@ export default function SignIn() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium text-[20px]">Email Address</FormLabel>
+                    <FormLabel className="font-medium text-[20px]">
+                      Email Address
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="example@mail.com" {...field} />
                     </FormControl>
@@ -90,10 +88,22 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              {isEmailSent === true && <StatusMessage type="success" message="Email sent!" />}
-              {isError === true && <StatusMessage type="error" message="Error sending email. Try again!" />}
+              {isEmailSent === true && (
+                <StatusMessage type="success" message="Email sent!" />
+              )}
+              {isError === true && (
+                <StatusMessage
+                  type="error"
+                  message="Error sending email. Try again!"
+                />
+              )}
               <div className="text-center">
-                <NoOutlineButtonBig type="submit" name={isLoading ? 'Sending Email...' : 'Send Magic Link'} disabled={isLoading} />
+                <NoOutlineButtonBig
+                  type="submit"
+                  name={"Send Magic Link"}
+                  disabled={loading}
+                  loading={loading}
+                />
               </div>
             </form>
           </Form>
@@ -104,6 +114,5 @@ export default function SignIn() {
         </div>
       </div>
     </main>
-
   );
 }

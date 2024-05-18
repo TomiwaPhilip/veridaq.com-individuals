@@ -35,6 +35,7 @@ export interface SettingsProps {
 export default function Settings(params: SettingsProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -88,6 +89,7 @@ export default function Settings(params: SettingsProps) {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
+    setLoading(true);
     const result = await updateUser({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -104,6 +106,7 @@ export default function Settings(params: SettingsProps) {
       setIsError(true);
     }
     setDisable(false);
+    setLoading(false);
   };
 
   return (
@@ -257,13 +260,14 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              <div className="">
-                <BlackButton
-                  type="submit"
-                  name="Save Changes"
-                  disabled={disable}
-                />
-              </div>
+                <div className="">
+                  <BlackButton
+                    type="submit"
+                    name="Save Changes"
+                    disabled={disable}
+                    loading={loading}
+                  />
+                </div>
               </div>
             </form>
           </Form>

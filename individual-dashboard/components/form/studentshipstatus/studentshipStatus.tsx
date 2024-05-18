@@ -51,13 +51,17 @@ import {
   StudentshipStatusValidation,
   StudentshipStatusValidation2,
 } from "@/lib/validations/studentshipstatus";
-import { SuccessMessage, ErrorMessage, StatusMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  StatusMessage,
+} from "@/components/shared/shared";
 import { getOrganizations } from "@/lib/actions/request.action";
 import { useSession } from "@/components/shared/shared";
 import { convertStringToNumber } from "@/lib/actions/payments.action";
+import { BlackButton } from "@/components/shared/buttons";
 
 const StudentshipStatus: React.FC = () => {
-  
   interface Organization {
     _id: string;
     name: string;
@@ -73,8 +77,9 @@ const StudentshipStatus: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [fee, setFee] = useState<number | null>(null)
+  const [fee, setFee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -93,9 +98,11 @@ const StudentshipStatus: React.FC = () => {
 
   async function checkbalance(fee?: number) {
     console.log(fee);
-    const convertedBalance = await convertStringToNumber(session?.walletBalance as string)
+    const convertedBalance = await convertStringToNumber(
+      session?.walletBalance as string,
+    );
     if (convertedBalance === fee) {
-      return
+      return;
     } else {
       setFee(fee as number);
       setError(true);
@@ -105,7 +112,7 @@ const StudentshipStatus: React.FC = () => {
     setTimeout(() => {
       setError(false);
     }, 10000); // 10000 milliseconds = 10 seconds
-    console.log("I was clicked", error)
+    console.log("I was clicked", error);
   }
 
   async function checkbalance2() {
@@ -127,7 +134,6 @@ const StudentshipStatus: React.FC = () => {
     }, 10000); // 10000 milliseconds = 10 seconds
     console.log("I was clicked", error);
   }
-
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -190,15 +196,17 @@ const StudentshipStatus: React.FC = () => {
     data: z.infer<typeof StudentshipStatusValidation>,
   ) => {
     console.log("I want to submit");
-
+    setLoading(true);
     try {
       const create = await createStudentshipStatus(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setRequestResult(false);
       setRequestResult(false);
     }
   };
@@ -207,15 +215,18 @@ const StudentshipStatus: React.FC = () => {
     data: z.infer<typeof StudentshipStatusValidation2>,
   ) => {
     console.log("I want to submit");
+    setLoading(true);
     try {
       const create = await createStudentshipStatusForAdmin(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -248,9 +259,9 @@ const StudentshipStatus: React.FC = () => {
                               >
                                 {field.value
                                   ? organizations.find(
-                                    (organization) =>
-                                      organization._id === field.value,
-                                  )?.name
+                                      (organization) =>
+                                        organization._id === field.value,
+                                    )?.name
                                   : "Select Organization"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -272,7 +283,9 @@ const StudentshipStatus: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance(organization.studentshipStatusFee)
+                                      checkbalance(
+                                        organization.studentshipStatusFee,
+                                      );
                                     }}
                                   >
                                     {organization.name}
@@ -411,40 +424,40 @@ const StudentshipStatus: React.FC = () => {
                         </FormItem>
                       )}
                     />
-                  <FormField
-                    control={form.control}
-                    name="categoryOfStudy"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
-                          Category of Study
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a Category of Study" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Bachelors Degree">
-                              Bachelors Degree
-                            </SelectItem>
-                            <SelectItem value="Masters Degree">
-                              Masters Degree
-                            </SelectItem>
-                            <SelectItem value="Doctorate Degree">
-                              Doctorate Degree
-                            </SelectItem>
-                            <SelectItem value="Others">Others</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="categoryOfStudy"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="font-medium text-[16px]">
+                            Category of Study
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Category of Study" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Bachelors Degree">
+                                Bachelors Degree
+                              </SelectItem>
+                              <SelectItem value="Masters Degree">
+                                Masters Degree
+                              </SelectItem>
+                              <SelectItem value="Doctorate Degree">
+                                Doctorate Degree
+                              </SelectItem>
+                              <SelectItem value="Others">Others</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form.control}
                       name="studentId"
@@ -665,12 +678,12 @@ const StudentshipStatus: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                      >
-                        Submit
-                      </button>
+                        disabled={isDisabled}
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
@@ -788,40 +801,40 @@ const StudentshipStatus: React.FC = () => {
                         </FormItem>
                       )}
                     />
-                  <FormField
-                    control={form.control}
-                    name="categoryOfStudy"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
-                          Category of Study
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a Current Level" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Bachelors Degree">
-                              Bachelors Degree
-                            </SelectItem>
-                            <SelectItem value="Masters Degree">
-                              Masters Degree
-                            </SelectItem>
-                            <SelectItem value="Doctorate Degree">
-                              Doctorate Degree
-                            </SelectItem>
-                            <SelectItem value="Others">Others</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="categoryOfStudy"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="font-medium text-[16px]">
+                            Category of Study
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Current Level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Bachelors Degree">
+                                Bachelors Degree
+                              </SelectItem>
+                              <SelectItem value="Masters Degree">
+                                Masters Degree
+                              </SelectItem>
+                              <SelectItem value="Doctorate Degree">
+                                Doctorate Degree
+                              </SelectItem>
+                              <SelectItem value="Others">Others</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form2.control}
                       name="studentId"
@@ -1279,12 +1292,12 @@ const StudentshipStatus: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                      >
-                        Submit
-                      </button>
+                        disabled={isDisabled}
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1302,7 +1315,12 @@ const StudentshipStatus: React.FC = () => {
           </form>
         </Form>
       )}
-      {error ? <StatusMessage message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`} type="error" /> : null}
+      {error ? (
+        <StatusMessage
+          message={`Insufficient Wallet Balance: fund your account with N${fee} to intiate request!`}
+          type="error"
+        />
+      ) : null}
     </main>
   );
 };

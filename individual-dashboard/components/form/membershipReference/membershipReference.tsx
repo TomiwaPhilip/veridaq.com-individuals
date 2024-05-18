@@ -50,6 +50,7 @@ import {
 } from "@/components/shared/shared";
 import { useSession } from "@/components/shared/shared";
 import { convertStringToNumber } from "@/lib/actions/payments.action";
+import { BlackButton } from "@/components/shared/buttons";
 
 const MembershipReference: React.FC = () => {
   interface Organization {
@@ -67,8 +68,9 @@ const MembershipReference: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const session = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [fee, setFee] = useState<number | null>(null)
+  const [fee, setFee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -183,16 +185,18 @@ const MembershipReference: React.FC = () => {
     data: z.infer<typeof MembershipReferenceValidation>,
   ) => {
     console.log("I want to submit");
-
+    setLoading(true);
     try {
       const create = await createMembershipReference(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -200,15 +204,18 @@ const MembershipReference: React.FC = () => {
     data: z.infer<typeof MembershipReferenceValidation2>,
   ) => {
     console.log("I want to submit");
+    setLoading(true);
     try {
       const create = await createMembershipReferenceForAdmin(data);
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -241,9 +248,9 @@ const MembershipReference: React.FC = () => {
                               >
                                 {field.value
                                   ? organizations.find(
-                                    (organization) =>
-                                      organization._id === field.value,
-                                  )?.name
+                                      (organization) =>
+                                        organization._id === field.value,
+                                    )?.name
                                   : "Select Organization"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -265,7 +272,9 @@ const MembershipReference: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance(organization.studentshipStatusFee)
+                                      checkbalance(
+                                        organization.studentshipStatusFee,
+                                      );
                                     }}
                                   >
                                     {organization.name}
@@ -483,13 +492,12 @@ const MembershipReference: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                         disabled={isDisabled}
-                      >
-                        Submit
-                      </button>
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
@@ -920,12 +928,12 @@ const MembershipReference: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-right right">
-                      <button
+                      <BlackButton
+                        name="Submit"
                         type="submit"
-                        className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                      >
-                        Submit
-                      </button>
+                        disabled={isDisabled}
+                        loading={loading}
+                      />
                     </div>
                   </div>
                 </div>
