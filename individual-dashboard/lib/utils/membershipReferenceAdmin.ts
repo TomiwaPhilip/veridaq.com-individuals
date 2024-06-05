@@ -7,6 +7,7 @@ const MembershipReferenceAdminSchema = new Schema({
   middleName: String,
   id: { type: String, required: true, minlength: 1 },
   memberSince: { type: Date, required: true, max: Date.now() },
+  moreInfo: String,
   image: String,
   alumniCategory: String,
   info: { type: String, required: true, minlength: 1 },

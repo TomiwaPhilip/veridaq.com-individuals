@@ -30,6 +30,8 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -478,12 +480,17 @@ const StudentshipStatus: React.FC = () => {
                       name="info"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="info"
+                            className="font-medium text-[16px]"
+                          >
                             Additional Info
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Info" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="More Info"
+                            id="info"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -584,46 +591,32 @@ const StudentshipStatus: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="exitYear"
+                      name="currentLevel"
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Year of Exit-in-View
+                            Current Level
                           </FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant={"outline"}
-                                  className={cn(
-                                    "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
-                                    !field.value && "text-muted-foreground",
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(field.value, "PPP")
-                                  ) : (
-                                    <span>Pick a date</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() || date < new Date("1900")
-                                }
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a Current Level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Current Student">
+                                Current Student
+                              </SelectItem>
+                              <SelectItem value="100L">100L</SelectItem>
+                              <SelectItem value="200L">200L</SelectItem>
+                              <SelectItem value="300L">300L</SelectItem>
+                              <SelectItem value="400L">400L</SelectItem>
+                              <SelectItem value="500L">500L</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -851,20 +844,25 @@ const StudentshipStatus: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form2.control}
+                      control={form.control}
                       name="info"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="info"
+                            className="font-medium text-[16px]"
+                          >
                             Additional Info
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Info" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="More Info"
+                            id="info"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    />{" "}
                   </div>
                   <div className="mt-5 flex items-center justify-center">
                     {/* <div className="text-left left">

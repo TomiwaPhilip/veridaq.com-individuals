@@ -18,6 +18,7 @@ export const MembershipReferenceValidation = z.object({
     message: "Year of membership must be a valid date in the past.",
   }),
   alumniCategory: z.string().optional(),
+  info: z.string().optional(),
   image: z.string().url().optional(),
 });
 
@@ -36,6 +37,7 @@ export const MembershipReferenceValidation2 = z.object({
     message: "Year of membership must be a valid date in the past.",
   }),
   alumniCategory: z.string().optional(),
+  info: z.string().optional(),
   image: z.string().url().optional(),
   orgName: z.string().min(1, {
     message: "Organization Name must be at least 1 character.",

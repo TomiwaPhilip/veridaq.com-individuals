@@ -316,6 +316,7 @@ interface MembershipParams {
   id: string;
   memberSince: Date;
   image?: string;
+  info?: string;
   alumniCategory?: string;
 }
 
@@ -347,6 +348,7 @@ export async function createMembershipReference(params: MembershipParams) {
       id: params.id,
       memberSince: params.memberSince,
       alumniCategory: params.alumniCategory,
+      moreInfo: params.info,
       image: params.image,
       user: user._id,
     });
@@ -369,6 +371,7 @@ interface MembershipParamsAdmin {
   id: string;
   memberSince: Date;
   alumniCategory?: string;
+  info?: string;
   image?: string;
   orgName: string;
   orgAddress: string;
@@ -413,6 +416,7 @@ export async function createMembershipReferenceForAdmin(
       id: params.id,
       memberSince: params.memberSince,
       alumniCategory: params.alumniCategory,
+      moreInfo: params.info,
       image: params.image,
       orgName: params.orgName,
       orgAddress: params.orgAddress,

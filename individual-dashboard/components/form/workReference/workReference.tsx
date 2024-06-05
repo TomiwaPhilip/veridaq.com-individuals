@@ -23,6 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Command,
   CommandEmpty,
@@ -517,7 +519,7 @@ const WorkReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work End Date
+                            Work End Date (Leave blank if ongoing)
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -564,7 +566,7 @@ const WorkReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Department
+                            Current/Last Department
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="Department" {...field} />
@@ -593,12 +595,17 @@ const WorkReference: React.FC = () => {
                       name="jobFunction"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="jobFunction"
+                            className="font-medium text-[16px]"
+                          >
                             Function
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Function" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Function"
+                            id="jobFunction"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -608,12 +615,17 @@ const WorkReference: React.FC = () => {
                       name="personalitySummary"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="personalitySummary"
+                            className="font-medium text-[16px]"
+                          >
                             Personality Summary
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Good" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Good"
+                            id="personalitySummary"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -863,12 +875,12 @@ const WorkReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form2.control}
+                      control={form.control}
                       name="workEndDate"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work End Date
+                            Work End Date (Leave blank if ongoing)
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -910,12 +922,12 @@ const WorkReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form2.control}
+                      control={form.control}
                       name="department"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Department
+                            Current/Last Department
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="Department" {...field} />
@@ -940,31 +952,41 @@ const WorkReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form2.control}
+                      control={form.control}
                       name="jobFunction"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="jobFunction"
+                            className="font-medium text-[16px]"
+                          >
                             Function
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Function" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Function"
+                            id="jobFunction"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     <FormField
-                      control={form2.control}
+                      control={form.control}
                       name="personalitySummary"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="personalitySummary"
+                            className="font-medium text-[16px]"
+                          >
                             Personality Summary
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Good" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Good"
+                            id="personalitySummary"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
