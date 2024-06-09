@@ -80,11 +80,6 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
         console.log("Fetched document:", doc); // Log fetched document
         // Set default values for form fields if available
         if (doc) {
-          if (session?.email === doc?.email) {
-            setDescription(true);
-            console.log(session?.email);
-            console.log(doc?.email);
-          }
           const {
             email,
             typeOfRequest,
@@ -94,6 +89,11 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
             personalityReview,
             recommendationStatement,
           } = doc;
+          if (session?.email === email) {
+            setDescription(true);
+            console.log(session?.email);
+            console.log(email);
+          }
           form.reset({
             email,
             typeOfRequest,
