@@ -89,6 +89,8 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
             personalityReview,
             recommendationStatement,
           } = doc;
+          console.log(session?.email);
+          console.log(email);
           if (session?.email === email) {
             setDescription(true);
             console.log(session?.email);
