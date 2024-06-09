@@ -138,7 +138,6 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
           id: docId as string,
         });
       }
-
       if (create) {
         setRequestResult(create);
         handleNextStep();

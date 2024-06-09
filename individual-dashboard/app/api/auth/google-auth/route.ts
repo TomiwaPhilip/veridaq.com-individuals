@@ -9,12 +9,11 @@ import User from "@/lib/utils/user";
 import { saveSession } from "@/lib/utils";
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  
   if (!req.nextUrl) {
     return new Response("No request query found!", { status: 401 });
   }
 
-  const code = req.nextUrl.searchParams.get("code")
+  const code = req.nextUrl.searchParams.get("code");
 
   // Check if code is undefined
   if (!code) {
@@ -50,7 +49,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           lastName: existingUser.lastname,
           image: existingUser.image, // Initialize image as an empty string
           walletBalance: existingUser.walletBalance,
-          prosfesssionalDesignation: existingUser.professional_designation,
+          prosfessionalDesignation: existingUser.professional_designation,
           hasAccessFee: existingUser.hasAccessFee,
           isOnboarded: existingUser.onboarded,
           isVerified: existingUser.verified,
@@ -109,7 +108,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           lastName: newUser.lastName,
           image: newUser.image,
           walletBalance: newUser.walletBalance,
-          prosfesssionalDesignation: newUser.professional_designation,
+          prosfessionalDesignation: newUser.professional_designation,
           hasAccessFee: newUser.hasAccessFee,
           isOnboarded: newUser.onboarded,
           isVerified: newUser.verified,
