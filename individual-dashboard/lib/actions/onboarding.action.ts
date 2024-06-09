@@ -14,7 +14,7 @@ interface Params {
   streetAddress: string;
   city: string;
   country: string;
-  image: string;
+  image: string | undefined;
   professionalDesignation: string;
 }
 
@@ -91,14 +91,15 @@ export async function getUserDetails() {
 
     // Convert fields to strings
     const userDetailsStringified: UserDetails = {
-      firstname: userDetails.firstname?.toString() ?? '',
-      lastname: userDetails.lastname?.toString() ?? '',
-      middlename: userDetails.middlename?.toString() ?? '',
-      street_address: userDetails.street_address?.toString() ?? '',
-      city: userDetails.city?.toString() ?? '',
-      country: userDetails.country?.toString() ?? '',
-      image: userDetails.image?.toString() ?? '',
-      professional_designation: userDetails.professional_designation?.toString() ?? '',
+      firstname: userDetails.firstname?.toString() ?? "",
+      lastname: userDetails.lastname?.toString() ?? "",
+      middlename: userDetails.middlename?.toString() ?? "",
+      street_address: userDetails.street_address?.toString() ?? "",
+      city: userDetails.city?.toString() ?? "",
+      country: userDetails.country?.toString() ?? "",
+      image: userDetails.image?.toString() ?? "",
+      professional_designation:
+        userDetails.professional_designation?.toString() ?? "",
     };
 
     console.log(userDetailsStringified);

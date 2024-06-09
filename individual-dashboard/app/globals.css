@@ -77,6 +77,8 @@
   }
 }
 
+
+
 body {
   font-family: "Montserrat";
   overflow-x: hidden;
@@ -186,3 +188,4 @@ bgColor {
 .chat-box:hover::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.4); /* Color of the scrollbar handle on hover */
 }
+

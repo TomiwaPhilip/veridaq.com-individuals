@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/form/form";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/form/input";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,20 +25,11 @@ import { OnboardingValidation } from "@/lib/validations/onboarding";
 export default function Onboard() {
   const router = useRouter();
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      streetAddress: "",
-      city: "",
-      country: "",
-      image: "",
-    },
   });
 
   const handleImage = async (
@@ -45,6 +37,8 @@ export default function Onboard() {
     fieldChange: (value: string) => void,
   ) => {
     e.preventDefault();
+
+    setLoading(true);
 
     const fileReader = new FileReader();
     if (!inputFileRef.current?.files) {
@@ -64,8 +58,11 @@ export default function Onboard() {
 
           // Update the form data with the new blob URL
           fieldChange(newBlob.url);
+          setLoading(false);
           setDisable(false);
         } catch (error) {
+          setLoading(false);
+          setDisable(false);
           console.error("Error uploading file:", error);
         }
       }
@@ -232,13 +229,19 @@ export default function Onboard() {
                           />
                         )}
                       </FormLabel>
+                      <label
+                        htmlFor="image"
+                        className="text-white cursor-pointer text-[20px] font-medium"
+                      >
+                        Upload Profile Picture
+                      </label>
                       <FormControl className="flex-1 text-base-semibold text-gray-200">
                         <Input
                           type="file"
                           accept="image/*"
                           ref={inputFileRef}
                           placeholder="Upload Profile Photo"
-                          className="account-form_image-input"
+                          className="hidden"
                           onChange={(e) => handleImage(e, field.onChange)}
                         />
                       </FormControl>

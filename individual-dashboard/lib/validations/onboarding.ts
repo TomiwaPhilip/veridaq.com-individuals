@@ -22,5 +22,5 @@ export const OnboardingValidation = z.object({
   country: z.string().min(1, {
     message: "Country must be at least 1 characters.",
   }),
-  image: z.string().url().min(1),
+  image: z.string().url().optional(),
 });

@@ -490,17 +490,23 @@ const MembershipReference: React.FC = () => {
                                 alt="image"
                                 width={96}
                                 height={96}
-                                className="object-contain"
+                                className="rounded-full aspect-square object-cover"
                               />
                             )}
                           </FormLabel>
+                          <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Passport Image
+                          </label>
                           <FormControl className="flex-1 text-base-semibold text-gray-200">
                             <Input
                               type="file"
                               accept="image/*"
                               ref={inputFileRef}
                               placeholder="Upload Profile Photo"
-                              className="account-form_image-input"
+                              className="hidden"
                               onChange={(e) => handleImage(e, field.onChange)}
                             />
                           </FormControl>
@@ -719,13 +725,19 @@ const MembershipReference: React.FC = () => {
                               />
                             )}
                           </FormLabel>
+                          <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Passport Image
+                          </label>
                           <FormControl className="flex-1 text-base-semibold text-gray-200">
                             <Input
                               type="file"
                               accept="image/*"
                               ref={inputFileRef}
                               placeholder="Upload Profile Photo"
-                              className="rounded-full aspect-square object-cover"
+                              className="hidden"
                               onChange={(e) => handleImage(e, field.onChange)}
                             />
                           </FormControl>

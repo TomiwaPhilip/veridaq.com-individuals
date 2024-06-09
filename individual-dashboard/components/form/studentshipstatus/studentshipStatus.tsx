@@ -397,6 +397,9 @@ const StudentshipStatus: React.FC = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
+                              <SelectItem value="Current Level">
+                                Current Level
+                              </SelectItem>
                               <SelectItem value="100L">100L</SelectItem>
                               <SelectItem value="200L">200L</SelectItem>
                               <SelectItem value="300L">300L</SelectItem>
@@ -646,13 +649,19 @@ const StudentshipStatus: React.FC = () => {
                               />
                             )}
                           </FormLabel>
+                          <label
+                            htmlFor="imageInput"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Passport Image
+                          </label>
                           <FormControl className="flex-1 text-base-semibold text-gray-200">
                             <Input
                               type="file"
                               accept="image/*"
                               ref={inputFileRef}
                               placeholder="Upload Profile Photo"
-                              className="account-form_image-input"
+                              className="hidden"
                               onChange={(e) => handleImage(e, field.onChange)}
                             />
                           </FormControl>
@@ -765,6 +774,9 @@ const StudentshipStatus: React.FC = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
+                              <SelectItem value="Current Level">
+                                Current Level
+                              </SelectItem>
                               <SelectItem value="100L">100L</SelectItem>
                               <SelectItem value="200L">200L</SelectItem>
                               <SelectItem value="300L">300L</SelectItem>
@@ -1023,13 +1035,19 @@ const StudentshipStatus: React.FC = () => {
                               />
                             )}
                           </FormLabel>
+                          <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Passport Image
+                          </label>
                           <FormControl className="flex-1 text-base-semibold text-gray-200">
                             <Input
                               type="file"
                               accept="image/*"
                               ref={inputFileRef}
                               placeholder="Upload Profile Photo"
-                              className="account-form_image-input"
+                              className="hidden"
                               onChange={(e) => handleImage(e, field.onChange)}
                             />
                           </FormControl>

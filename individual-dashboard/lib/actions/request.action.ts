@@ -698,7 +698,7 @@ export async function getOrganizations(): Promise<Organization[]> {
     connectToDB();
 
     const organizations = await Organization.find(
-      {},
+      { onboarded: true },
       "name _id studentStatusFee docVerificationFee membershipRefFee",
     );
     console.log(organizations, "This is the organization from server");

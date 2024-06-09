@@ -16,7 +16,7 @@ export const cardData = [
   {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Your Veridaq Store is where you can find all the Veridaq you have received on the Veridaq Platform. You share, open or download them.",
+      "Your Veridaq Store is where you can find all the Veridaq you have received on the Veridaq (Verifiable References) are stored here. Platform. You can also share, download and when permitted, request updates and control access on received Veridaq from here..",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
@@ -29,14 +29,20 @@ export const cardData = [
   },
 ];
 
-
 export const cardData2 = [
   {
-    heading: "Work Reference Veridaq",
+    heading: "Work Reference",
     textColor: "#38313A",
     bgColor: "#F4DBE4",
     outlineColor: "#897A8B",
     id: "1",
+  },
+  {
+    heading: "Individual Reference/ Recommendation",
+    textColor: "#38313A",
+    bgColor: "#D6B9C3",
+    outlineColor: "#F69DD1",
+    id: "5",
   },
   {
     heading: "Studentship Status Reference",
@@ -47,7 +53,7 @@ export const cardData2 = [
   },
   {
     heading: "Membership Reference",
-    textColor: "#FFFFFF",    
+    textColor: "#FFFFFF",
     bgColor: "#38313A",
     outlineColor: "#C3B8D8",
     id: "3",
@@ -59,15 +65,7 @@ export const cardData2 = [
     outlineColor: "#F4DBE4",
     id: "4",
   },
-  {
-    heading: "Individual Reference/ Recommendation",
-    textColor: "#38313A",
-    bgColor: "#D6B9C3",
-    outlineColor: "#F69DD1",
-    id: "5",
-  },
 ];
-
 
 export const cardData3 = [
   {
@@ -77,6 +75,12 @@ export const cardData3 = [
     outlineColor: "#897A8B",
   },
   {
+    heading: "Individual Reference/Recommendation Veridaq",
+    textColor: "#38313A",
+    bgColor: "#D6B9C3",
+    outlineColor: "#F69DD1",
+  },
+  {
     heading: "Studentship Status Veridaq",
     textColor: "#38313A",
     bgColor: "#F26BBA",
@@ -84,7 +88,7 @@ export const cardData3 = [
   },
   {
     heading: "Membership Reference Veridaq",
-    textColor: "#FFFFFF",    
+    textColor: "#FFFFFF",
     bgColor: "#38313A",
     outlineColor: "#C3B8D8",
   },
@@ -93,11 +97,5 @@ export const cardData3 = [
     textColor: "#38313A",
     bgColor: "#AF8BA4",
     outlineColor: "#F4DBE4",
-  },
-  {
-    heading: "Individual Reference/Recommendation Veridaq",
-    textColor: "#38313A",
-    bgColor: "#D6B9C3",
-    outlineColor: "#F69DD1",
   },
 ];

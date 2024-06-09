@@ -4,11 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/form/form";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -33,10 +36,15 @@ import { z } from "zod";
 
 import {
   createIndividualRequest,
+  generateIndividualRequest,
   getIndividualReferenceById,
 } from "@/lib/actions/request.action";
 import { IndividualRequestValidation } from "@/lib/validations/individualrequest";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 import { BlackButton } from "@/components/shared/buttons";
 
 interface IndividualRequestProps {
@@ -47,6 +55,8 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState(false);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -70,6 +80,9 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
         console.log("Fetched document:", doc); // Log fetched document
         // Set default values for form fields if available
         if (doc) {
+          if (session?.email === doc?.email) {
+            setDescription(true);
+          }
           const {
             email,
             typeOfRequest,
@@ -104,16 +117,31 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
     console.log("I want to submit");
     setLoading(true);
     try {
-      const create = await createIndividualRequest({
-        email: data.email,
-        typeOfRequest: data.typeOfRequest,
-        addresseeFullName: data.addresseeFullName,
-        relationship: data.relationship,
-        yearsOfRelationship: data.yearsOfRelationship,
-        personalityReview: data.personalityReview,
-        recommendationStatement: data.recommendationStatement,
-        id: docId as string,
-      });
+      let create: boolean;
+      if (!docId) {
+        create = await createIndividualRequest({
+          email: data.email,
+          typeOfRequest: data.typeOfRequest,
+          addresseeFullName: data.addresseeFullName,
+          relationship: data.relationship,
+          yearsOfRelationship: data.yearsOfRelationship,
+          personalityReview: data.personalityReview,
+          recommendationStatement: data.recommendationStatement,
+          id: docId as string,
+        });
+      } else {
+        create = await generateIndividualRequest({
+          email: data.email,
+          typeOfRequest: data.typeOfRequest,
+          addresseeFullName: data.addresseeFullName,
+          relationship: data.relationship,
+          yearsOfRelationship: data.yearsOfRelationship,
+          personalityReview: data.personalityReview,
+          recommendationStatement: data.recommendationStatement,
+          id: docId as string,
+        });
+      }
+
       setRequestResult(create);
       if (create) {
         handleNextStep();
@@ -139,11 +167,18 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[16px]">
-                        Issuer Email
+                        Issuer Email Address on Veridaq
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Start typing" {...field} />
                       </FormControl>
+                      {description && (
+                        <FormDescription className="text-red-500 font-semibold">
+                          Please review this form properly before issuing the
+                          Veridaq. Any misinformation may lead to serious legal
+                          complications.
+                        </FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -272,12 +307,17 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                     name="personalityReview"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
+                        <Label
+                          htmlFor="personalityReview"
+                          className="font-medium text-[16px]"
+                        >
                           Personality Review
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="I am..." {...field} />
-                        </FormControl>
+                        </Label>
+                        <Textarea
+                          placeholder="Personality Review"
+                          id="personalityReview"
+                          className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                        />
                         <FormMessage />
                       </FormItem>
                     )}
@@ -287,11 +327,19 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                     name="recommendationStatement"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
-                          Recommendation
-                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="Statement" {...field} />
+                          <Label
+                            htmlFor="recommendationStatement"
+                            className="font-medium text-[16px]"
+                          >
+                            Recommendation
+                          </Label>
+                          <Textarea
+                            placeholder="Recommendation"
+                            id="recommendationStatement"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

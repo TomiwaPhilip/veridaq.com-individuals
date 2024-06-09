@@ -142,7 +142,7 @@ const WorkReference: React.FC = () => {
   };
 
   const handleFormType = () => {
-    checkbalance2();
+    // checkbalance2();
     setFormType("withOutOrg");
   };
 
@@ -259,9 +259,9 @@ const WorkReference: React.FC = () => {
                                     key={organization._id}
                                     onSelect={() => {
                                       form.setValue("orgId", organization._id);
-                                      checkbalance(
-                                        organization.studentshipStatusFee,
-                                      );
+                                      // checkbalance(
+                                      //   organization.studentshipStatusFee,
+                                      // );
                                     }}
                                   >
                                     {organization.name}
@@ -580,12 +580,17 @@ const WorkReference: React.FC = () => {
                       name="notableAchievement"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="notableAchievement"
+                            className="font-medium text-[16px]"
+                          >
                             Notable Achievement
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Permanent" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Notable Achievement"
+                            id="notableAchievement"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -941,12 +946,17 @@ const WorkReference: React.FC = () => {
                       name="notableAchievement"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel className="font-medium text-[16px]">
+                          <Label
+                            htmlFor="notableAchievement"
+                            className="font-medium text-[16px]"
+                          >
                             Notable Achievement
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Permanent" {...field} />
-                          </FormControl>
+                          </Label>
+                          <Textarea
+                            placeholder="Notable Achievement"
+                            id="notableAchievement"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
