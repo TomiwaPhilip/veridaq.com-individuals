@@ -784,6 +784,8 @@ export async function getIndividualReference() {
       issued: false,
     }).select("addresseeFullName dateRequested");
 
+    console.log(individualReferences);
+
     // Format the data before returning to the frontend
     const formattedData = individualReferences.map((doc) => ({
       DocDetails: `Individual Reference Request from ${doc.addresseeFullName}`,
