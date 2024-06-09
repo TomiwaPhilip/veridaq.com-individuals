@@ -604,23 +604,28 @@ export async function createIndividualRequest(params: IndividualParams) {
 
     // Find the user in the User collection by email
     const user2 = await User.findOne({ email: params.email });
+    console.log(user2);
 
-    // Create a new IndividualRequest document
-    const individualRequest = new IndividualRequest({
-      issuerUser: user2._id,
-      email: params.email,
-      typeOfRequest: params.typeOfRequest,
-      addresseeFullName: params.addresseeFullName,
-      relationship: params.relationship,
-      yearsOfRelationship: params.yearsOfRelationship,
-      personalityReview: params.personalityReview,
-      recommendationStatement: params.recommendationStatement,
-      user: session?.userId,
-    });
+    if (user2) {
+      // Create a new IndividualRequest document
+      const individualRequest = new IndividualRequest({
+        issuerUser: user2._id,
+        email: params.email,
+        typeOfRequest: params.typeOfRequest,
+        addresseeFullName: params.addresseeFullName,
+        relationship: params.relationship,
+        yearsOfRelationship: params.yearsOfRelationship,
+        personalityReview: params.personalityReview,
+        recommendationStatement: params.recommendationStatement,
+        user: session?.userId,
+      });
 
-    // Save the IndividualRequest document to the database
-    await individualRequest.save();
-    return true;
+      // Save the IndividualRequest document to the database
+      await individualRequest.save();
+      return true;
+    } else {
+      return false;
+    }
   } catch (error: any) {
     throw new Error(`Failed to save Individual Request: ${error.message}`);
   }
@@ -775,7 +780,7 @@ export async function getIndividualReference() {
 
     // Query the WorkReference collection based on orgId
     const individualReferences = await IndividualRequest.find({
-      userId,
+      issuerUser: userId,
       issued: false,
     }).select("addresseeFullName dateRequested");
 

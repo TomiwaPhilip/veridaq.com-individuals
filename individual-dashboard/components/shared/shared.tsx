@@ -137,40 +137,73 @@ export default function BottomBar() {
       <div className="flex items-center justify-between">
         {/* Icon Links */}
         <div className="text-center flex items-center justify-between w-full px-2 py-2">
-          <Link href={"/"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
+            }`}
+          >
             <img
               src={"/assets/icons/home.svg"}
               alt="Home"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-request"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-request" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-request"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-request"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/send.svg"}
               alt="send"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-box"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-box" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-box"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-box"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/message.svg"}
               alt="message"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-store"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-store" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-store"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-store"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/security.svg"}
               alt="store"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/settings"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/settings" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/settings"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/settings"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/settings.svg"}
               alt="settings"
@@ -613,14 +646,14 @@ export function SuccessMessage() {
 
 export function ErrorMessage() {
   return (
-    <div className="">
+    <div className="flex flex-col items-center justify-center">
       <Image
-        src={"/assets/images/checkmark.png"}
+        src={"/assets/images/error.png"}
         alt="checkmark"
         width={400}
         height={400}
       />
-      <p className="text-[24px] font-semibold">
+      <p className="text-[24px] font-semibold text-lg p-3 text-center">
         Your Veridaq Request is UnSuccessful! Please try again later
       </p>
     </div>
@@ -658,10 +691,14 @@ export function VeridaqDocument({
         />
       </div>
       <div className="flex flex-col items-start">
-        <div className="mb-1 sm:mb-0"> {/* Added margin bottom to separate elements */}
+        <div className="mb-1 sm:mb-0">
+          {" "}
+          {/* Added margin bottom to separate elements */}
           <p>{DocDetails}</p>
         </div>
-        <div className="text-sm"> {/* Added smaller text size for date */}
+        <div className="text-sm">
+          {" "}
+          {/* Added smaller text size for date */}
           <p>{DocDate}</p>
         </div>
       </div>
@@ -690,8 +727,9 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
 
   return (
     <div
-      className={`fixed top-5 right-5 p-3 rounded-md text-white ${type === "error" ? "bg-red-500" : "bg-green-500"
-        } ${isVisible ? "opacity-100" : "opacity-0"}`}
+      className={`fixed top-5 right-5 p-3 rounded-md text-white ${
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
     </div>

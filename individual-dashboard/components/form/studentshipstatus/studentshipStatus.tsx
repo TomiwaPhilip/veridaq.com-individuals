@@ -483,17 +483,15 @@ const StudentshipStatus: React.FC = () => {
                       name="info"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="info"
-                            className="font-medium text-[16px]"
-                          >
-                            Additional Info
-                          </Label>
-                          <Textarea
-                            placeholder="More Info"
-                            id="info"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Additional Information</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Any Additional Information"
+                              id="info"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -860,21 +858,19 @@ const StudentshipStatus: React.FC = () => {
                       name="info"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="info"
-                            className="font-medium text-[16px]"
-                          >
-                            Additional Info
-                          </Label>
-                          <Textarea
-                            placeholder="More Info"
-                            id="info"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Additional Information</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Any Additional Information"
+                              id="info"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
-                    />{" "}
+                    />
                   </div>
                   <div className="mt-5 flex items-center justify-center">
                     {/* <div className="text-left left">

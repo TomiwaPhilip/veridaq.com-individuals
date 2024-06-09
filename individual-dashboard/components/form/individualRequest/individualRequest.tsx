@@ -142,8 +142,12 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
         });
       }
 
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
@@ -307,17 +311,15 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                     name="personalityReview"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <Label
-                          htmlFor="personalityReview"
-                          className="font-medium text-[16px]"
-                        >
-                          Personality Review
-                        </Label>
-                        <Textarea
-                          placeholder="Personality Review"
-                          id="personalityReview"
-                          className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                        />
+                        <FormLabel>Personality Review</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Personality Review"
+                            id="personalityReview"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -327,13 +329,8 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
                     name="recommendationStatement"
                     render={({ field }) => (
                       <FormItem className="w-full">
+                        <FormLabel>Recommendation</FormLabel>
                         <FormControl>
-                          <Label
-                            htmlFor="recommendationStatement"
-                            className="font-medium text-[16px]"
-                          >
-                            Recommendation
-                          </Label>
                           <Textarea
                             placeholder="Recommendation"
                             id="recommendationStatement"

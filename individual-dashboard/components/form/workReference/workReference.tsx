@@ -580,17 +580,15 @@ const WorkReference: React.FC = () => {
                       name="notableAchievement"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="notableAchievement"
-                            className="font-medium text-[16px]"
-                          >
-                            Notable Achievement
-                          </Label>
-                          <Textarea
-                            placeholder="Notable Achievement"
-                            id="notableAchievement"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Notable Achievement</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Notable Achievement"
+                              id="notableAchievement"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -600,17 +598,15 @@ const WorkReference: React.FC = () => {
                       name="jobFunction"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="jobFunction"
-                            className="font-medium text-[16px]"
-                          >
-                            Function
-                          </Label>
-                          <Textarea
-                            placeholder="Function"
-                            id="jobFunction"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Job Function</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Job Function"
+                              id="jobFunction"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -620,17 +616,15 @@ const WorkReference: React.FC = () => {
                       name="personalitySummary"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="personalitySummary"
-                            className="font-medium text-[16px]"
-                          >
-                            Personality Summary
-                          </Label>
-                          <Textarea
-                            placeholder="Good"
-                            id="personalitySummary"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Personality Summary</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Personality Summary"
+                              id="personalitySummary"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -946,57 +940,51 @@ const WorkReference: React.FC = () => {
                       name="notableAchievement"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="notableAchievement"
-                            className="font-medium text-[16px]"
-                          >
-                            Notable Achievement
-                          </Label>
-                          <Textarea
-                            placeholder="Notable Achievement"
-                            id="notableAchievement"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Notable Achievement</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Notable Achievement"
+                              id="notableAchievement"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={form2.control}
                       name="jobFunction"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="jobFunction"
-                            className="font-medium text-[16px]"
-                          >
-                            Function
-                          </Label>
-                          <Textarea
-                            placeholder="Function"
-                            id="jobFunction"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Job Function</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Job Function"
+                              id="jobFunction"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={form2.control}
                       name="personalitySummary"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <Label
-                            htmlFor="personalitySummary"
-                            className="font-medium text-[16px]"
-                          >
-                            Personality Summary
-                          </Label>
-                          <Textarea
-                            placeholder="Good"
-                            id="personalitySummary"
-                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                          />
+                          <FormLabel>Personality Summary</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Personality Summary"
+                              id="personalitySummary"
+                              className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}

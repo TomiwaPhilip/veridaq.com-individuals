@@ -15,8 +15,9 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
-import { signIn } from "@/lib/actions/login.action";
+import Link from "next/link";
 
+import { signIn } from "@/lib/actions/login.action";
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 import { StatusMessage } from "@/components/shared/shared";
 
@@ -109,7 +110,12 @@ export default function SignIn() {
           </Form>
           <p className="text-center pt-10 text-sm">
             By signing in you agree with our{" "}
-            <span className="text-[#4285F4]">terms and conditions. </span>{" "}
+            <Link
+              href="https://www.veridaq.com/terms-condition"
+              className="text-[#4285F4]"
+            >
+              terms and conditions.{" "}
+            </Link>{" "}
           </p>
         </div>
       </div>
