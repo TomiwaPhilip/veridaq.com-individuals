@@ -665,7 +665,7 @@ export async function generateIndividualRequest(params: IndividualParams) {
       badgeID: badgeID,
     };
     const url =
-      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/individual-reference";
+      "https://generator-abfcaoddhq-bq.a.run.app/individual-reference";
     const docName = "individualReference.pdf";
 
     result = await getDocAndUpload(data, url, docName);

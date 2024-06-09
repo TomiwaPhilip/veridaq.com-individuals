@@ -82,6 +82,8 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
         if (doc) {
           if (session?.email === doc?.email) {
             setDescription(true);
+            console.log(session?.email);
+            console.log(doc?.email);
           }
           const {
             email,
