@@ -684,7 +684,7 @@ export function VeridaqDocument({
     >
       <div className="flex-shrink-0">
         <Image
-          src={"/assets/icons/veridaq-logo.svg"}
+          src={"/assets/images/veridaq-logo.png"}
           alt="veridaq_icon"
           width={40}
           height={40}
