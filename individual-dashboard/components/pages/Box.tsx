@@ -79,7 +79,7 @@ export default function Box() {
                             DocDetails={doc.DocDetails}
                             DocDate={doc.DocDate}
                             docId={doc.DocId}
-                            id="1"
+                            id="5"
                             onClick={handleOpenModal}
                           />
                         ))}
