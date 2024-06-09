@@ -201,15 +201,19 @@ const StudentshipStatus: React.FC = () => {
     setLoading(true);
     try {
       const create = await createStudentshipStatus(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
-      setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -220,8 +224,12 @@ const StudentshipStatus: React.FC = () => {
     setLoading(true);
     try {
       const create = await createStudentshipStatusForAdmin(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }

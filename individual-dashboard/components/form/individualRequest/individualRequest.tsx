@@ -98,13 +98,6 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
             personalityReview,
             recommendationStatement,
           });
-          console.log(session?.email);
-          console.log(email);
-          if (session?.email === email) {
-            setDescription(true);
-            console.log(session?.email);
-            console.log(email);
-          }
         }
       } catch (error) {
         console.error("Error fetching organizations:", error);

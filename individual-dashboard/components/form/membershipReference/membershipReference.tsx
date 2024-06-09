@@ -190,8 +190,12 @@ const MembershipReference: React.FC = () => {
     setLoading(true);
     try {
       const create = await createMembershipReference(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
@@ -209,8 +213,12 @@ const MembershipReference: React.FC = () => {
     setLoading(true);
     try {
       const create = await createMembershipReferenceForAdmin(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }

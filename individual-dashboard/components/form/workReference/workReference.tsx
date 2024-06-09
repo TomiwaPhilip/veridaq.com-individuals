@@ -177,8 +177,12 @@ const WorkReference: React.FC = () => {
         jobFunction: data.jobFunction,
         personalitySummary: data.personalitySummary,
       });
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
@@ -194,8 +198,12 @@ const WorkReference: React.FC = () => {
     setLoading(true);
     try {
       const create = await createWorkReferenceRequestForAdmin(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }

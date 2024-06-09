@@ -197,8 +197,12 @@ const DocumentVerification: React.FC = () => {
 
     try {
       const create = await createDocumentVerificationRequest(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
@@ -216,8 +220,12 @@ const DocumentVerification: React.FC = () => {
     setLoading(true);
     try {
       const create = await createDocumentVerificationRequestForAdmin(data);
-      setRequestResult(create);
       if (create) {
+        setRequestResult(create);
+        handleNextStep();
+        setLoading(false);
+      } else {
+        setRequestResult(create);
         handleNextStep();
         setLoading(false);
       }
