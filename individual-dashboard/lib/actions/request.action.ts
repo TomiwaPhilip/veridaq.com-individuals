@@ -817,7 +817,7 @@ export async function getIndividualReferenceById(docId: string) {
     const stringifiedIndividualReference = {
       ...individualReference.toJSON(),
       _id: individualReference._id.toString(), // Convert _id to string
-      issuerUser: individualReference.orgId.toString(), // Convert orgId to string
+      issuerUser: individualReference.issuerUser.toString(), // Convert orgId to string
       user: individualReference.user.toString(), // Convert user ID to string
     };
 
