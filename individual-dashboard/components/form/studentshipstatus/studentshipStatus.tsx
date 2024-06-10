@@ -118,7 +118,7 @@ const StudentshipStatus: React.FC = () => {
   }
 
   async function checkbalance2() {
-    const fee = 3000;
+    const fee = 2000;
 
     const convertedBalance = await convertStringToNumber(
       session?.walletBalance as string,
