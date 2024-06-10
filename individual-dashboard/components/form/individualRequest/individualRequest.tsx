@@ -71,9 +71,9 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
 
   console.log(form.formState.errors);
 
-  if(docId) {
-    setDescription(true);
-  }
+  // if(docId) {
+  //   setDescription(true);
+  // }
 
   useEffect(() => {
     const fetchIndividualReferenceDoc = async () => {
