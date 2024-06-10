@@ -56,7 +56,6 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState(false);
-  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -71,6 +70,10 @@ const IndividualRequest: React.FC<IndividualRequestProps> = ({ docId }) => {
   });
 
   console.log(form.formState.errors);
+
+  if(docId) {
+    setDescription(true);
+  }
 
   useEffect(() => {
     const fetchIndividualReferenceDoc = async () => {
