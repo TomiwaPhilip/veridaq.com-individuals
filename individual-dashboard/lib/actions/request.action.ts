@@ -849,14 +849,15 @@ export async function getIssuedIndividualReference() {
     const individualRequest = await IndividualRequest.find({
       user: userId,
       issued: true,
-    }).select("firstName lastName badgeUrl");
+    }).select("addresseeFullName badgeUrl");
 
+    console.log(individualRequest);
     let formattedData;
 
     if (session.hasAccessFee === true) {
       // Format the data before returning to the frontend
       formattedData = individualRequest.map((doc) => ({
-        heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
+        heading: `Individual Reference to ${doc.addresseeFullName}`,
         DocId: doc._id.toString(), // Convert _id to string
         link: doc.badgeUrl,
         textColor: "#38313A",
@@ -865,7 +866,7 @@ export async function getIssuedIndividualReference() {
       }));
     } else if (session.hasAccessFee === false) {
       formattedData = individualRequest.map((doc) => ({
-        heading: `Individual Reference to ${doc.firstName} ${doc.lastName}`,
+        heading: `Individual Reference to ${doc.addresseeFullName}`,
         DocId: doc._id.toString(), // Convert _id to string
         link: "https://individual.veridaq.com/auth/AccessFeeError",
         textColor: "#38313A",

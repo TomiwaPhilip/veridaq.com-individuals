@@ -106,6 +106,7 @@ export default function Store() {
         <>
           {workReferenceDoc.length > 0 ||
           memberReferenceDoc.length > 0 ||
+          individualReferenceDoc.length > 0 ||
           docVerificationDoc.length > 0 ||
           studentStatusDoc.length > 0 ||
           adminWorkReferenceDoc.length > 0 ||
