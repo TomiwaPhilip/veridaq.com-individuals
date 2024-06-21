@@ -882,7 +882,7 @@ const WorkReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={form2.control}
                       name="workEndDate"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
@@ -929,7 +929,7 @@ const WorkReference: React.FC = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={form2.control}
                       name="department"
                       render={({ field }) => (
                         <FormItem className="w-full">
