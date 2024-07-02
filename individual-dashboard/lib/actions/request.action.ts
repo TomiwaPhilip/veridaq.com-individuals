@@ -854,7 +854,7 @@ export async function getIssuedIndividualReference() {
     console.log(individualRequest);
     let formattedData;
 
-    if (session.hasAccessFee === true) {
+    if (session.hasAccessFee === true || session.isVerified === true) {
       // Format the data before returning to the frontend
       formattedData = individualRequest.map((doc) => ({
         heading: `Individual Reference to ${doc.addresseeFullName}`,
@@ -864,7 +864,7 @@ export async function getIssuedIndividualReference() {
         bgColor: "#F26BBA",
         outlineColor: "#A593C5",
       }));
-    } else if (session.hasAccessFee === false) {
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
       formattedData = individualRequest.map((doc) => ({
         heading: `Individual Reference to ${doc.addresseeFullName}`,
         DocId: doc._id.toString(), // Convert _id to string
@@ -978,7 +978,7 @@ export async function getIssuedWorkReference() {
 
     let formattedData;
 
-    if (session.hasAccessFee === true) {
+    if (session.hasAccessFee === true || session.isVerified === true) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
@@ -988,7 +988,7 @@ export async function getIssuedWorkReference() {
         bgColor: "#F4DBE4",
         outlineColor: "#897A8B",
       }));
-    } else if (session.hasAccessFee === false) {
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
