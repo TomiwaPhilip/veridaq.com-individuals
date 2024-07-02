@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getUserDetails } from '@/lib/actions/onboarding.action';
 import Settings from '../form/settings/settings';
+import { useSession } from '../shared/shared';
 
 export interface UserDetails {
   firstname: string;
@@ -17,6 +18,8 @@ export interface UserDetails {
 
 export default function SettingsPage() {
   const [userDetailsfromDB, setUserDetailsfromDB] = useState<UserDetails | null>(null);
+  const session = useSession();
+  const isVerified = session?.isVerified;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +47,11 @@ export default function SettingsPage() {
           image={userDetailsfromDB.image ?? null}
           professionalDesignation={userDetailsfromDB.professional_designation ?? null}
         />
+      )}
+      {isVerified ? (
+        <p className='text-[20px] text-gradient pt-10 font-bold'>Verification Status: You are a Verified Veridaq User!</p>
+      ) : (
+        <p className='text-[20px] text-gradient pt-10 font-bold'>Verification Status: You are not Verified yet.</p>
       )}
     </>
   );

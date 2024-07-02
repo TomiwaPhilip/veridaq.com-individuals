@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
-import { getPaymentLink, getPaymentLink2 } from "@/lib/actions/payments.action";
+import { getPaymentLink } from "@/lib/actions/payments.action";
 
 export function useSession() {
   const [session, setSession] = useState<SessionData | null>(null);
@@ -140,9 +140,8 @@ export default function BottomBar() {
           <Link
             href={"/"}
             passHref
-            className={`cursor-pointer px-3 py-4 ${
-              pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}
+            className={`cursor-pointer px-3 py-4 ${pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
+              }`}
           >
             <img
               src={"/assets/icons/home.svg"}
@@ -153,11 +152,10 @@ export default function BottomBar() {
           <Link
             href={"/veridaq-request"}
             passHref
-            className={`cursor-pointer px-3 py-4 ${
-              pathname === "/veridaq-request"
-                ? "border-2 border-[#EA098D] rounded-md"
-                : ""
-            }`}
+            className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-request"
+              ? "border-2 border-[#EA098D] rounded-md"
+              : ""
+              }`}
           >
             <img
               src={"/assets/icons/send.svg"}
@@ -168,11 +166,10 @@ export default function BottomBar() {
           <Link
             href={"/veridaq-box"}
             passHref
-            className={`cursor-pointer px-3 py-4 ${
-              pathname === "/veridaq-box"
-                ? "border-2 border-[#EA098D] rounded-md"
-                : ""
-            }`}
+            className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-box"
+              ? "border-2 border-[#EA098D] rounded-md"
+              : ""
+              }`}
           >
             <img
               src={"/assets/icons/message.svg"}
@@ -183,11 +180,10 @@ export default function BottomBar() {
           <Link
             href={"/veridaq-store"}
             passHref
-            className={`cursor-pointer px-3 py-4 ${
-              pathname === "/veridaq-store"
-                ? "border-2 border-[#EA098D] rounded-md"
-                : ""
-            }`}
+            className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-store"
+              ? "border-2 border-[#EA098D] rounded-md"
+              : ""
+              }`}
           >
             <img
               src={"/assets/icons/security.svg"}
@@ -198,11 +194,10 @@ export default function BottomBar() {
           <Link
             href={"/settings"}
             passHref
-            className={`cursor-pointer px-3 py-4 ${
-              pathname === "/settings"
-                ? "border-2 border-[#EA098D] rounded-md"
-                : ""
-            }`}
+            className={`cursor-pointer px-3 py-4 ${pathname === "/settings"
+              ? "border-2 border-[#EA098D] rounded-md"
+              : ""
+              }`}
           >
             <img
               src={"/assets/icons/settings.svg"}
@@ -220,6 +215,7 @@ const handleSignOut = async () => {
   await signOut();
 };
 
+
 export function Header() {
   const pathname = usePathname();
   const session = useSession();
@@ -228,7 +224,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between text-[23px] w-full md:text-[32px] gap-10">
       {pathname === "/" && (
-        <p className="font-semibold text-gradient mr-auto]">
+        <p className="font-semibold text-gradient mr-auto">
           {`Welcome to Veridaq, ${name}`}
         </p>
       )}
@@ -252,27 +248,51 @@ export function Header() {
           Configure your Veridaq Account, here.
         </p>
       )}
-      <div className="text-right">
+      <div className="relative text-right">
         {session?.image ? (
-          <Image
-            alt="user"
-            src={session.image as string}
-            className="rounded-full aspect-square object-cover normal-border"
-            width={50}
-            height={50}
-            onClick={handleSignOut}
-            style={{ cursor: "pointer" }}
-          />
+          <div className="relative inline-block">
+            <Image
+              alt="user"
+              src={session.image as string}
+              className="rounded-full aspect-square object-cover normal-border"
+              width={50}
+              height={50}
+              onClick={handleSignOut}
+              style={{ cursor: "pointer" }}
+            />
+            {session?.isVerified && (
+              <div className="absolute top-0 right-0 w-6 h-6 bg-white rounded-full flex items-center justify-center border-2 border-white">
+                <Image
+                  alt="verified"
+                  src="/assets/images/veridaq_check.png"
+                  width={24}
+                  height={24}
+                />
+              </div>
+            )}
+          </div>
         ) : (
-          <Image
-            alt="fallback"
-            src="/assets/images/user.png"
-            className="rounded-full aspect-square object-cover normal-border"
-            width={50}
-            height={50}
-            onClick={handleSignOut}
-            style={{ cursor: "pointer" }}
-          />
+          <div className="relative inline-block">
+            <Image
+              alt="fallback"
+              src="/assets/images/user.png"
+              className="rounded-full aspect-square object-cover normal-border"
+              width={50}
+              height={50}
+              onClick={handleSignOut}
+              style={{ cursor: "pointer" }}
+            />
+            {session?.isVerified && (
+              <div className="absolute top-0 right-0 w-6 h-6 bg-white rounded-full flex items-center justify-center border-2 border-white">
+                <Image
+                  alt="verified"
+                  src="/assets/images/veridaq_check.png"
+                  width={24}
+                  height={24}
+                />
+              </div>
+            )}
+          </div>
         )}
       </div>
     </header>
@@ -484,6 +504,7 @@ export function Wallet() {
   const session = useSession();
   const email = session?.email as string;
   const balance = session?.walletBalance as string;
+  const isVerified = session?.isVerified as boolean;
 
   return (
     <div className="flex flex-col py-5 items-center justify-center gap-1 lg:flex-row md:py-0">
@@ -492,25 +513,37 @@ export function Wallet() {
         <p className="text-[32px] text-white font-bold">{`N${balance}`}</p>
       </div>
       <div className="flex-col justify-center items-center text-center text-white">
-        <button
-          type="button"
-          className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink(false, 5000 )}
-        >
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
+        {isVerified ? (
+          <div className="flex items-center justify-center text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px]">
             <Image
-              src={"/assets/icons/plus.png"}
-              alt="plus_icon"
+              src={"/assets/icons/check.svg"}
+              alt="check_icon"
               width={30}
               height={30}
             />
-            <span style={{ marginLeft: "5px" }}>Get Verified</span>
+            <span style={{ marginLeft: "5px" }}>Account Verified</span>
           </div>
-        </button>
+        ) : (
+          <button
+            type="button"
+            className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
+            onClick={() => getPaymentLink(false, 5000)}
+          >
+            <div style={{ display: "inline-flex", alignItems: "center" }}>
+              <Image
+                src={"/assets/icons/plus.png"}
+                alt="plus_icon"
+                width={30}
+                height={30}
+              />
+              <span style={{ marginLeft: "5px" }}>Get Verified</span>
+            </div>
+          </button>
+        )}
         <button
           type="button"
           className="text-[20px] bg-[#6b4b9f] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink(true, 3000 )}
+          onClick={() => getPaymentLink(true, 3000)}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
@@ -727,9 +760,8 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
 
   return (
     <div
-      className={`fixed top-5 right-5 p-3 rounded-md text-white ${
-        type === "error" ? "bg-red-500" : "bg-green-500"
-      } ${isVisible ? "opacity-100" : "opacity-0"}`}
+      className={`fixed top-5 right-5 p-3 rounded-md text-white ${type === "error" ? "bg-red-500" : "bg-green-500"
+        } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
     </div>

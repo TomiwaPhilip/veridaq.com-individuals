@@ -24,3 +24,10 @@ export const OnboardingValidation = z.object({
   }),
   image: z.string().url().optional(),
 });
+
+
+export const VerificationValidation = z.object({
+  nin: z.string().min(1, {
+    message: "NIN must be at least 1 character.",
+  })
+})

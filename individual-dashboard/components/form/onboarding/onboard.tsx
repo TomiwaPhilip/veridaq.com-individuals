@@ -86,7 +86,7 @@ export default function Onboard() {
       professionalDesignation: data.professionalDesignation,
     });
     setLoading(false);
-    if (result) router.push("/auth/verify");
+    if (result) router.push("/");
   };
 
   return (

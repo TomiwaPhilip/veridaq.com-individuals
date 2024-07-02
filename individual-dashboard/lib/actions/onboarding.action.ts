@@ -62,6 +62,40 @@ export async function updateUser(params: Params) {
   }
 }
 
+export async function updateVerification() {
+  try {
+    console.log("At the server");
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const userid = session.userId;
+
+    // Connect to the database
+    connectToDB();
+
+    // Update the user in the database
+    await User.findOneAndUpdate(
+      { _id: userid },
+      {
+        verified: true,
+      },
+      // Upsert means both updating and inserting
+      { upsert: true },
+    );
+
+    session.isVerified = true;
+    await session.save();
+
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+
 export async function getUserDetails() {
   try {
     const session = await getSession();
