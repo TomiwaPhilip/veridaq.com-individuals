@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import {
   Form,
   FormControl,
@@ -60,6 +60,8 @@ import {
 import { getOrganizations } from "@/lib/actions/request.action";
 import { convertStringToNumber } from "@/lib/actions/payments.action";
 import { BlackButton } from "@/components/shared/buttons";
+import Image from "next/image";
+import { upload } from "@vercel/blob/client";
 
 const WorkReference: React.FC = () => {
   interface Organization {
@@ -79,6 +81,7 @@ const WorkReference: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [fee, setFee] = useState<number | null>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -157,6 +160,39 @@ const WorkReference: React.FC = () => {
   console.log(form.formState.errors);
   console.log(form2.formState.errors);
 
+  const handleImage = async (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void,
+  ) => {
+    e.preventDefault();
+
+    const fileReader = new FileReader();
+    if (!inputFileRef.current?.files) {
+      throw new Error("No file selected");
+    }
+
+    const file = inputFileRef.current.files[0];
+
+    fileReader.onload = async (e) => {
+      const fileData = e.target?.result;
+      if (typeof fileData === "string") {
+        try {
+          const newBlob = await upload(file.name, file, {
+            access: "public",
+            handleUploadUrl: "/api/avatar/upload",
+          });
+
+          // Update the form data with the new blob URL
+          fieldChange(newBlob.url);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    fileReader.readAsDataURL(file);
+  };
+
   const onSubmit = async (data: z.infer<typeof WorkReferenceValidation>) => {
     console.log("I want to submit");
     setLoading(true);
@@ -170,6 +206,7 @@ const WorkReference: React.FC = () => {
         subType: data.subType,
         staffId: data.staffId,
         designation: data.designation,
+        image: data.image,
         workStartDate: data.workStartDate,
         workEndDate: data.workEndDate,
         department: data.department,
@@ -243,9 +280,9 @@ const WorkReference: React.FC = () => {
                               >
                                 {field.value
                                   ? organizations.find(
-                                      (organization) =>
-                                        organization._id === field.value,
-                                    )?.name
+                                    (organization) =>
+                                      organization._id === field.value,
+                                  )?.name
                                   : "Select Organization"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -442,6 +479,50 @@ const WorkReference: React.FC = () => {
                             <Input placeholder="Snr." {...field} />
                           </FormControl>
                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center gap-4">
+                          <FormLabel className="account-form_image-label">
+                            {field.value ? (
+                              <Image
+                                src={field.value}
+                                alt="image"
+                                width={96}
+                                height={96}
+                                priority
+                                className="rounded-full aspect-square object-cover"
+                              />
+                            ) : (
+                              <Image
+                                src="/assets/icons/avatar.png"
+                                alt="image"
+                                width={96}
+                                height={96}
+                                className="rounded-full aspect-square object-cover"
+                              />
+                            )}
+                          </FormLabel>
+                          <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Any Supporting Documents (Optional)
+                          </label>
+                          <FormControl className="flex-1 text-base-semibold text-gray-200">
+                            <Input
+                              type="file"
+                              accept="image/*,application/pdf"
+                              ref={inputFileRef}
+                              placeholder="Upload Profile Photo or PDF"
+                              className="hidden"
+                              onChange={(e) => handleImage(e, field.onChange)}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -806,6 +887,50 @@ const WorkReference: React.FC = () => {
                             <Input placeholder="Snr." {...field} />
                           </FormControl>
                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form2.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center gap-4">
+                          <FormLabel className="account-form_image-label">
+                            {field.value ? (
+                              <Image
+                                src={field.value}
+                                alt="image"
+                                width={96}
+                                height={96}
+                                priority
+                                className="rounded-full aspect-square object-cover"
+                              />
+                            ) : (
+                              <Image
+                                src="/assets/icons/avatar.png"
+                                alt="image"
+                                width={96}
+                                height={96}
+                                className="rounded-full aspect-square object-cover"
+                              />
+                            )}
+                          </FormLabel>
+                          <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Any Supporting Documents (Optional)
+                          </label>
+                          <FormControl className="flex-1 text-base-semibold text-gray-200">
+                            <Input
+                              type="file"
+                              accept="image/*,application/pdf"
+                              ref={inputFileRef}
+                              placeholder="Upload Profile Photo or PDF"
+                              className="hidden"
+                              onChange={(e) => handleImage(e, field.onChange)}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />

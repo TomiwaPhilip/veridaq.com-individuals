@@ -36,7 +36,8 @@ export const WorkReferenceValidation = z.object({
   }).max(40, {
     message: "Function must be at most 40 characters.",
   }),
-  personalitySummary: z.string().max(30, "Personaliy Summary must be at most 40 characters").optional(), // Allow empty string
+  personalitySummary: z.string().max(30, "Personality Summary must be at most 40 characters").optional(), // Allow empty 
+  image: z.string().url().optional(),
 });
 
 export const WorkReferenceValidation2 = z.object({
@@ -73,6 +74,7 @@ export const WorkReferenceValidation2 = z.object({
     message: "Function must be at most 40 characters.",
   }),
   personalitySummary: z.string().max(30, "Personaliy Summary must be at most 40 characters").optional(), // Allow empty string
+  image: z.string().url().optional(),
   orgName: z.string().min(1, {
     message: "Organization Name must be at least 1 character.",
   }),
