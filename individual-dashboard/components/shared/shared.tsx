@@ -495,7 +495,7 @@ export function Wallet() {
         <button
           type="button"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink({ email: email, amount: 10000 })}
+          onClick={() => getPaymentLink(false, 5000 )}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
@@ -504,13 +504,13 @@ export function Wallet() {
               width={30}
               height={30}
             />
-            <span style={{ marginLeft: "5px" }}>Add funds</span>
+            <span style={{ marginLeft: "5px" }}>Get Verified</span>
           </div>
         </button>
         <button
           type="button"
           className="text-[20px] bg-[#6b4b9f] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink2({ email: email })}
+          onClick={() => getPaymentLink(true, 3000 )}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
