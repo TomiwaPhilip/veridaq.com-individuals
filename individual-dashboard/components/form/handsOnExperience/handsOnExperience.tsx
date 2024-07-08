@@ -459,7 +459,7 @@ const HandsOnReference: React.FC = () => {
                             Project/Program Title
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Devlopment Internship" {...field} />
+                            <Input placeholder="Development Internship" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

@@ -97,9 +97,7 @@ export const HandsOnReferenceValidation2 = z.object({
   contactAddress: z.string().min(1, {
     message: "Contact Person Address must be at least 1 character.",
   }),
-  contactPostalCode: z.string().min(1, {
-    message: "Contact Person Postal Code must be at least 1 character.",
-  }),
+  contactPostalCode: z.string().optional(),
   contactCountry: z.string().min(1, {
     message: "Contact Person Country must be at least 1 character.",
   }),

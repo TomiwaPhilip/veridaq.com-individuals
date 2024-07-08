@@ -127,7 +127,7 @@ interface Params2 {
   orgPhone: string;
   contactName: string;
   contactAddress: string;
-  contactPostalCode: string;
+  contactPostalCode?: string;
   contactCountry: string;
   contactEmail: string;
   contactPhone: string;
@@ -269,7 +269,7 @@ interface HandsOnReferenceAdmin {
   orgPhone: string;
   contactName: string;
   contactAddress: string;
-  contactPostalCode: string;
+  contactPostalCode?: string;
   contactCountry: string;
   contactEmail: string;
   contactPhone: string;
