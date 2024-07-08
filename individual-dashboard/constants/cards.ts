@@ -38,6 +38,13 @@ export const cardData2 = [
     id: "1",
   },
   {
+    heading: "Hands-on Experience Reference",
+    textColor: "#38313A",
+    bgColor: "#F26BBA",
+    outlineColor: "#A593C5",
+    id: "6",
+  },
+  {
     heading: "Individual Reference/ Recommendation",
     textColor: "#38313A",
     bgColor: "#D6B9C3",

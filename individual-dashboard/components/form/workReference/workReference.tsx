@@ -418,7 +418,7 @@ const WorkReference: React.FC = () => {
                             <SelectContent>
                               <SelectItem value="Regular">Regular</SelectItem>
                               <SelectItem value="Non-Regular">
-                                Non-Regular e.g. Adhoc
+                                Non-Regular e.g. Adhoc, Freelancer
                               </SelectItem>
                             </SelectContent>
                           </Select>
