@@ -14,10 +14,10 @@ export const IndividualRequestValidation = z.object({
   yearsOfRelationship: z.date().max(new Date(), {
     message: "Years of Relationship must be a valid date in the past.",
 }),
-  personalityReview: z.string().min(10, {
-    message: "Personality Review must be at least 10 characters.",
+  personalityReview: z.string().max(84, {
+    message: "Personality Review must be at most 90 characters.",
   }),
-  recommendationStatement: z.string().min(12, {
-    message: "Recommendation Statement must be at least 12 characters.",
-  }).max(40, "Recommendation Statement must be at most 40 characters"),
+  recommendationStatement: z.string().min(40, {
+    message: "Recommendation Statement must be at least 40 characters.",
+  }).max(294, "Recommendation Statement must be at most 300 characters"),
 });
