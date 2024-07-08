@@ -20,6 +20,8 @@ import {
   getCurrentDateTime,
 } from "../utils";
 import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
+import HandsOnReference from "../utils/handsOnReference";
+import HandsOnReferenceAdmin from "../utils/handsOnReferenceAdmin";
 
 interface Params {
   orgId: string;
@@ -30,6 +32,7 @@ interface Params {
   subType: string;
   staffId: string;
   designation: string;
+  image: string | undefined;
   workStartDate: Date;
   workEndDate: Date | undefined; // Nullable workEndDate field
   department: string;
@@ -47,6 +50,7 @@ export async function createWorkReferenceRequest({
   subType,
   staffId,
   designation,
+  image,
   workStartDate,
   workEndDate,
   department,
@@ -81,6 +85,7 @@ export async function createWorkReferenceRequest({
       subType,
       staffId,
       designation,
+      image,
       workStartDate,
       workEndDate,
       department,
@@ -107,6 +112,7 @@ interface Params2 {
   subType: string;
   staffId: string;
   designation: string;
+  image?: string;
   workStartDate: Date;
   workEndDate?: Date; // Nullable workEndDate field
   department: string;
@@ -115,13 +121,13 @@ interface Params2 {
   personalitySummary?: string; // Optional personalitySummary field
   orgName: string;
   orgAddress: string;
-  orgPostalCode: string;
+  orgPostalCode?: string;
   orgCountry: string;
   orgEmail: string;
   orgPhone: string;
   contactName: string;
   contactAddress: string;
-  contactPostalCode: string;
+  contactPostalCode?: string;
   contactCountry: string;
   contactEmail: string;
   contactPhone: string;
@@ -158,6 +164,149 @@ export async function createWorkReferenceRequestForAdmin(params: Params2) {
     throw new Error(`Failed to save WorkReference request: ${error.message}`);
   }
 }
+
+interface HandsOnReferenceParams {
+  orgId: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string; // Optional middleName field
+  roleType: string;
+  subType: string;
+  identifier: string;
+  projectTitle: string;
+  image?: string;
+  workStartDate: Date;
+  workEndDate?: Date; // Nullable workEndDate field
+  role: string;
+  notableAchievement?: string; // Optional notableAchievement field
+  roleResponsibilities: string; // Renamed from 'function' to 'jobFunction'
+  personalitySummary?: string; // Optional personalitySummary field
+}
+
+export async function createHandsOnReferenceRequest({
+  orgId,
+  firstName,
+  lastName,
+  middleName,
+  roleType,
+  subType,
+  identifier,
+  projectTitle,
+  image,
+  workStartDate,
+  workEndDate,
+  role,
+  notableAchievement,
+  roleResponsibilities, // Changed from 'function' to 'jobFunction'
+  personalitySummary,
+}: HandsOnReferenceParams) {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await findUserByEmail();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new WorkReference document
+    const handsOnReference = new HandsOnReference({
+      orgId,
+      firstName,
+      lastName,
+      middleName,
+      roleType,
+      subType,
+      identifier,
+      projectTitle,
+      image,
+      workStartDate,
+      workEndDate,
+      role,
+      notableAchievement,
+      roleResponsibilities, // Changed from 'function' to 'jobFunction'
+      personalitySummary,
+      user: user._id,
+      dateRequested: new Date(),
+    });
+
+    // Save the WorkReference document to the database
+    await handsOnReference.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save WorkReference request: ${error.message}`);
+  }
+}
+
+interface HandsOnReferenceAdmin {
+  firstName: string;
+  lastName: string;
+  middleName?: string; // Optional middleName field
+  roleType: string;
+  subType: string;
+  identifier: string;
+  projectTitle: string;
+  image?: string;
+  workStartDate: Date;
+  workEndDate?: Date; // Nullable workEndDate field
+  role: string;
+  notableAchievement?: string; // Optional notableAchievement field
+  roleResponsibilities: string; // Renamed from 'function' to 'jobFunction'
+  personalitySummary?: string; // Optional personalitySummary field
+  orgName: string;
+  orgAddress: string;
+  orgPostalCode?: string;
+  orgCountry: string;
+  orgEmail: string;
+  orgPhone: string;
+  contactName: string;
+  contactAddress: string;
+  contactPostalCode?: string;
+  contactCountry: string;
+  contactEmail: string;
+  contactPhone: string;
+}
+
+export async function createHandsOnReferenceRequestForAdmin(params: HandsOnReferenceAdmin) {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    // Find the user in the User collection by email
+    const user = await findUserByEmail();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Create a new WorkReference document
+    const workReference = new HandsOnReferenceAdmin({
+      ...params,
+      user: user._id,
+    });
+
+    // Save the WorkReference document to the database
+    await workReference.save();
+    return true;
+  } catch (error: any) {
+    throw new Error(`Failed to save HandsOnReference request: ${error.message}`);
+  }
+}
+
 
 interface StudentshipParams {
   orgId: string;
@@ -854,7 +1003,7 @@ export async function getIssuedIndividualReference() {
     console.log(individualRequest);
     let formattedData;
 
-    if (session.hasAccessFee === true) {
+    if (session.hasAccessFee === true || session.isVerified === true) {
       // Format the data before returning to the frontend
       formattedData = individualRequest.map((doc) => ({
         heading: `Individual Reference to ${doc.addresseeFullName}`,
@@ -864,7 +1013,7 @@ export async function getIssuedIndividualReference() {
         bgColor: "#F26BBA",
         outlineColor: "#A593C5",
       }));
-    } else if (session.hasAccessFee === false) {
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
       formattedData = individualRequest.map((doc) => ({
         heading: `Individual Reference to ${doc.addresseeFullName}`,
         DocId: doc._id.toString(), // Convert _id to string
@@ -978,7 +1127,7 @@ export async function getIssuedWorkReference() {
 
     let formattedData;
 
-    if (session.hasAccessFee === true) {
+    if (session.hasAccessFee === true || session.isVerified === true) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
@@ -988,10 +1137,113 @@ export async function getIssuedWorkReference() {
         bgColor: "#F4DBE4",
         outlineColor: "#897A8B",
       }));
-    } else if (session.hasAccessFee === false) {
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
       // Format the data before returning to the frontend
       formattedData = workReferences.map((doc) => ({
         heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: "https://individual.veridaq.com/auth/AccessFeeError",
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    }
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+export async function getIssuedHandsOnReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await HandsOnReference.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    let formattedData;
+
+    if (session.hasAccessFee === true || session.isVerified === true) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Hands-On Experience Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: doc.badgeUrl,
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Hands-On Experience Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: "https://individual.veridaq.com/auth/AccessFeeError",
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    }
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+
+export async function getIssuedHandsOnReferenceAdmin() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const userId = session.userId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await HandsOnReferenceAdmin.find({
+      user: userId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    let formattedData;
+
+    if (session.hasAccessFee === true || session.isVerified === true) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Hands-On Experience Reference to ${doc.firstName} ${doc.lastName}`,
+        DocId: doc._id.toString(), // Convert _id to string
+        link: doc.badgeUrl,
+        textColor: "#38313A",
+        bgColor: "#F4DBE4",
+        outlineColor: "#897A8B",
+      }));
+    } else if (session.hasAccessFee === false && session.isVerified === false) {
+      // Format the data before returning to the frontend
+      formattedData = workReferences.map((doc) => ({
+        heading: `Hands-On Experience Reference to ${doc.firstName} ${doc.lastName}`,
         DocId: doc._id.toString(), // Convert _id to string
         link: "https://individual.veridaq.com/auth/AccessFeeError",
         textColor: "#38313A",
@@ -1216,10 +1468,13 @@ export async function getVeridaqURL(badgeID: string): Promise<string | null> {
     // Define an array of collections to query
     const collections = [
       { collection: WorkReference, fieldName: "badgeUrl" },
+      { collection: WorkReferenceAdmin, fieldName: "badgeUrl" },
       { collection: StudentshipStatus, fieldName: "badgeUrl" },
       { collection: MembershipReference, fieldName: "badgeUrl" },
       { collection: DocumentVerification, fieldName: "badgeUrl" },
       { collection: IndividualRequest, fieldName: "badgeUrl" },
+      { collection: HandsOnReference, fieldName: "badgeUrl" },
+      { collection: HandsOnReferenceAdmin, fieldName: "badgeUrl" },
     ];
 
     // Iterate through the collections and query for the badgeUrl

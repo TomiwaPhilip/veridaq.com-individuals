@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const WorkReferenceSchema = new Schema({
+const HandsOnReferenceSchema = new Schema({
   orgId: {
     type: Schema.Types.ObjectId,
     ref: "Organization",
@@ -15,7 +15,7 @@ const WorkReferenceSchema = new Schema({
     required: [true, "Last Name is required"],
   },
   middleName: String,
-  employeeType: {
+  roleType: {
     type: String,
     required: [true, "Employee Type is required"],
   },
@@ -23,13 +23,13 @@ const WorkReferenceSchema = new Schema({
     type: String,
     required: [true, "Sub Type is required"],
   },
-  staffId: {
+  identifier: {
     type: String,
-    required: [true, "Staff ID is required"],
+    required: [true, "Identifier is required"],
   },
-  designation: {
+  projectTitle: {
     type: String,
-    required: [true, "Designation is required"],
+    required: [true, "Project Title is required"],
   },
   image: {
     type: String,
@@ -42,14 +42,14 @@ const WorkReferenceSchema = new Schema({
     type: Date,
     default: null,
   },
-  department: {
+  role: {
     type: String,
     required: [true, "Department is required"],
   },
   notableAchievement: String,
-  jobFunction: {
+  roleResponsibilities: {
     type: String,
-    required: [true, "Function is required"],
+    required: [true, "Role Responsilities is required"],
   },
   personalitySummary: String,
   user: {
@@ -80,7 +80,7 @@ const WorkReferenceSchema = new Schema({
 });
 
 // Create and export the Mongoose model based on the schema
-const WorkReference =
-  models.WorkReference || model("WorkReference", WorkReferenceSchema);
+const HandsOnReference =
+  models.HandsOnReference || model("HandsOnReference", HandsOnReferenceSchema);
 
-export default WorkReference;
+export default HandsOnReference;

@@ -44,13 +44,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
+    createHandsOnReferenceRequest,
+    createHandsOnReferenceRequestForAdmin,
   createWorkReferenceRequest,
   createWorkReferenceRequestForAdmin,
 } from "@/lib/actions/request.action";
-import {
-  WorkReferenceValidation,
-  WorkReferenceValidation2,
-} from "@/lib/validations/workreference";
+import { HandsOnReferenceValidation, HandsOnReferenceValidation2 } from "@/lib/validations/handsOnExperience";
 import {
   SuccessMessage,
   ErrorMessage,
@@ -63,7 +62,7 @@ import { BlackButton } from "@/components/shared/buttons";
 import Image from "next/image";
 import { upload } from "@vercel/blob/client";
 
-const WorkReference: React.FC = () => {
+const HandsOnReference: React.FC = () => {
   interface Organization {
     _id: string;
     name: string;
@@ -149,12 +148,12 @@ const WorkReference: React.FC = () => {
     setFormType("withOutOrg");
   };
 
-  const form = useForm<z.infer<typeof WorkReferenceValidation>>({
-    resolver: zodResolver(WorkReferenceValidation),
+  const form = useForm<z.infer<typeof HandsOnReferenceValidation>>({
+    resolver: zodResolver(HandsOnReferenceValidation),
   });
 
-  const form2 = useForm<z.infer<typeof WorkReferenceValidation2>>({
-    resolver: zodResolver(WorkReferenceValidation2),
+  const form2 = useForm<z.infer<typeof HandsOnReferenceValidation2>>({
+    resolver: zodResolver(HandsOnReferenceValidation2),
   });
 
   console.log(form.formState.errors);
@@ -193,27 +192,11 @@ const WorkReference: React.FC = () => {
     fileReader.readAsDataURL(file);
   };
 
-  const onSubmit = async (data: z.infer<typeof WorkReferenceValidation>) => {
+  const onSubmit = async (data: z.infer<typeof HandsOnReferenceValidation>) => {
     console.log("I want to submit");
     setLoading(true);
     try {
-      const create = await createWorkReferenceRequest({
-        orgId: data.orgId,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        middleName: data.middleName,
-        employeeType: data.employeeType,
-        subType: data.subType,
-        staffId: data.staffId,
-        designation: data.designation,
-        image: data.image,
-        workStartDate: data.workStartDate,
-        workEndDate: data.workEndDate,
-        department: data.department,
-        notableAchievement: data.notableAchievement,
-        jobFunction: data.jobFunction,
-        personalitySummary: data.personalitySummary,
-      });
+      const create = await createHandsOnReferenceRequest(data);
       if (create) {
         setRequestResult(create);
         handleNextStep();
@@ -230,11 +213,11 @@ const WorkReference: React.FC = () => {
     }
   };
 
-  const onSubmit2 = async (data: z.infer<typeof WorkReferenceValidation2>) => {
+  const onSubmit2 = async (data: z.infer<typeof HandsOnReferenceValidation2>) => {
     console.log("I want to submit");
     setLoading(true);
     try {
-      const create = await createWorkReferenceRequestForAdmin(data);
+      const create = await createHandsOnReferenceRequestForAdmin(data);
       if (create) {
         setRequestResult(create);
         handleNextStep();
@@ -400,11 +383,11 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="employeeType"
+                      name="roleType"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Employee Type
+                            Role Type
                           </FormLabel>
                           <Select
                             onValueChange={field.onChange}
@@ -412,13 +395,13 @@ const WorkReference: React.FC = () => {
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select a Employee Type" />
+                                <SelectValue placeholder="Select a Role Type" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Regular">Regular</SelectItem>
-                              <SelectItem value="Non-Regular">
-                                Non-Regular e.g. Adhoc, Freelancer
+                              <SelectItem value="Trainee">Trainee</SelectItem>
+                              <SelectItem value="Team Member">
+                                Team Member
                               </SelectItem>
                             </SelectContent>
                           </Select>
@@ -444,8 +427,8 @@ const WorkReference: React.FC = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Current">Current</SelectItem>
-                              <SelectItem value="Former">Former</SelectItem>
+                              <SelectItem value="Ongoing">Ongoing</SelectItem>
+                              <SelectItem value="Completed">Completed</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -454,11 +437,11 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="staffId"
+                      name="identifier"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Staff ID
+                            Identifier No.
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="D11234" {...field} />
@@ -469,14 +452,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="designation"
+                      name="projectTitle"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Designation
+                            Project/Program Title
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Snr." {...field} />
+                            <Input placeholder="Development Internship" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -651,14 +634,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="department"
+                      name="role"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Current/Last Department
+                            Role
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Department" {...field} />
+                            <Input placeholder="Junior Developer" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -684,14 +667,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="jobFunction"
+                      name="roleResponsibilities"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Job Function</FormLabel>
+                          <FormLabel>Role Responsibilities</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Job Function"
-                              id="jobFunction"
+                              placeholder="Role Responsibilities"
+                              id="roleResponsibilities"
                               className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
                               {...field}
                             />
@@ -808,11 +791,11 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form2.control}
-                      name="employeeType"
+                      name="roleType"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Employee Type
+                            Role Type
                           </FormLabel>
                           <Select
                             onValueChange={field.onChange}
@@ -820,13 +803,13 @@ const WorkReference: React.FC = () => {
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select a Employee Type" />
+                                <SelectValue placeholder="Select a Role Type" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Regular">Regular</SelectItem>
-                              <SelectItem value="Non-Regular">
-                                Non-Regular e.g. Adhoc
+                              <SelectItem value="Trainee">Trainee</SelectItem>
+                              <SelectItem value="Team Member">
+                                Team Member
                               </SelectItem>
                             </SelectContent>
                           </Select>
@@ -852,8 +835,8 @@ const WorkReference: React.FC = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Current">Current</SelectItem>
-                              <SelectItem value="Former">Former</SelectItem>
+                              <SelectItem value="Ongoing">Ongoing</SelectItem>
+                              <SelectItem value="Completed">Completed</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -862,11 +845,11 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form2.control}
-                      name="staffId"
+                      name="identifier"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Staff ID
+                            Identifier No.
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="D11256" {...field} />
@@ -877,14 +860,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form2.control}
-                      name="designation"
+                      name="projectTitle"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Designation
+                            Project/Program Title
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Snr." {...field} />
+                            <Input placeholder="Development Internship" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1055,14 +1038,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form2.control}
-                      name="department"
+                      name="role"
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel className="font-medium text-[16px]">
-                            Current/Last Department
+                            Role
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="Department" {...field} />
+                            <Input placeholder="Junior Developer" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1088,14 +1071,14 @@ const WorkReference: React.FC = () => {
                     />
                     <FormField
                       control={form2.control}
-                      name="jobFunction"
+                      name="roleResponsibilities"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Job Function</FormLabel>
+                          <FormLabel>Role Responsibilities</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Job Function"
-                              id="jobFunction"
+                              placeholder="Role Responsibilities"
+                              id="roleResponsibilities"
                               className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
                               {...field}
                             />
@@ -1409,4 +1392,4 @@ const WorkReference: React.FC = () => {
   );
 };
 
-export default WorkReference;
+export default HandsOnReference;

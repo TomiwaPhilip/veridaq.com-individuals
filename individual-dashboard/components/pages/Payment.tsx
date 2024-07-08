@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { verifyPayment } from "@/lib/actions/payments.action";
 import { RiLoader4Line } from "react-icons/ri";
@@ -9,13 +9,25 @@ export default function PaymentPage() {
   const searchParams = useSearchParams();
   const [verifyResult, setVerifyResult] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to false initially
+  const router = useRouter();
 
-  const status = searchParams.get("status") as string;
-  const tx_ref = searchParams.get("tx_ref") as string;
+  // const status = searchParams.get("status") as string;
   const isAccessFee = searchParams.get("isAccessFee") as string;
-  const transaction_idString = searchParams.get("transaction_id") as string;
-  const transaction_id = parseInt(transaction_idString);
-  console.log(status, tx_ref, transaction_id);
+  console.log("access Fee:", isAccessFee);
+
+  function extractParts(queryString: string) {
+    const parts = queryString.split('?');
+    if (parts.length !== 2) {
+        throw new Error('Invalid query string format');
+    }
+
+    const firstPart = parts[0]; // "True" or "False"
+    const secondPart = parts[1].split('=')[1]; // The value after "=reference"
+
+    return { firstPart, secondPart };
+}
+
+const {firstPart, secondPart} = extractParts(isAccessFee)
 
   useEffect(() => {
     async function checkPayment() {
@@ -23,19 +35,19 @@ export default function PaymentPage() {
 
       try {
         const verify = await verifyPayment({
-          status: status,
-          tx_ref: tx_ref,
-          transaction_id: transaction_id,
-          isAccessFee: isAccessFee, 
+          tx_ref: secondPart,
+          isAccessFee: firstPart, 
         });
-        if (verify) {
-          setVerifyResult("Your payment has been verified and confirmed!");
+        if (verify?.message) {
+          setVerifyResult(verify.message);
           setLoading(false);
-          window.location.href = "/";
-        } else {
-          setVerifyResult("Your payment was not successful. Please try again.");
+          if(verify.isAccessFee ===  false) {
+            console.log("IsAccessFee at console:", verify.isAccessFee)
+            router.replace('/auth/verify');
+          } else {window.location.href = "/";}
+        } else if(verify?.error) {
+          setVerifyResult(verify.error);
           setLoading(false);
-          window.location.href = "/";
         }
       } catch (error) {
         console.error(error);

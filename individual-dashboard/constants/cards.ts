@@ -2,7 +2,7 @@ export const cardData = [
   {
     heading: "Make a Veridaq Request!",
     paragraph:
-      "Click on the Veridaq Request button to initiate requests for Work History, Membership or Studentship Status, and Documents verification.",
+      "Click on the Veridaq Request button to initiate requests for Work History and Individual Reference",
     bgColor: "#A593C5",
     outlineColor: "#A294A4",
   },
@@ -38,33 +38,40 @@ export const cardData2 = [
     id: "1",
   },
   {
+    heading: "Hands-on Experience Reference",
+    textColor: "#38313A",
+    bgColor: "#F26BBA",
+    outlineColor: "#A593C5",
+    id: "6",
+  },
+  {
     heading: "Individual Reference/ Recommendation",
     textColor: "#38313A",
     bgColor: "#D6B9C3",
     outlineColor: "#F69DD1",
     id: "5",
   },
-  {
-    heading: "Studentship Status Reference",
-    textColor: "#38313A",
-    bgColor: "#F26BBA",
-    outlineColor: "#A593C5",
-    id: "2",
-  },
-  {
-    heading: "Membership Reference",
-    textColor: "#FFFFFF",
-    bgColor: "#38313A",
-    outlineColor: "#C3B8D8",
-    id: "3",
-  },
-  {
-    heading: "Document Verification Reference",
-    textColor: "#38313A",
-    bgColor: "#AF8BA4",
-    outlineColor: "#F4DBE4",
-    id: "4",
-  },
+  // {
+  //   heading: "Studentship Status Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#F26BBA",
+  //   outlineColor: "#A593C5",
+  //   id: "2",
+  // },
+  // {
+  //   heading: "Membership Reference",
+  //   textColor: "#FFFFFF",
+  //   bgColor: "#38313A",
+  //   outlineColor: "#C3B8D8",
+  //   id: "3",
+  // },
+  // {
+  //   heading: "Document Verification Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#AF8BA4",
+  //   outlineColor: "#F4DBE4",
+  //   id: "4",
+  // },
 ];
 
 export const cardData3 = [
@@ -80,22 +87,22 @@ export const cardData3 = [
     bgColor: "#D6B9C3",
     outlineColor: "#F69DD1",
   },
-  {
-    heading: "Studentship Status Veridaq",
-    textColor: "#38313A",
-    bgColor: "#F26BBA",
-    outlineColor: "#A593C5",
-  },
-  {
-    heading: "Membership Reference Veridaq",
-    textColor: "#FFFFFF",
-    bgColor: "#38313A",
-    outlineColor: "#C3B8D8",
-  },
-  {
-    heading: "Document Verification Veridaq",
-    textColor: "#38313A",
-    bgColor: "#AF8BA4",
-    outlineColor: "#F4DBE4",
-  },
+  // {
+  //   heading: "Studentship Status Veridaq",
+  //   textColor: "#38313A",
+  //   bgColor: "#F26BBA",
+  //   outlineColor: "#A593C5",
+  // },
+  // {
+  //   heading: "Membership Reference Veridaq",
+  //   textColor: "#FFFFFF",
+  //   bgColor: "#38313A",
+  //   outlineColor: "#C3B8D8",
+  // },
+  // {
+  //   heading: "Document Verification Veridaq",
+  //   textColor: "#38313A",
+  //   bgColor: "#AF8BA4",
+  //   outlineColor: "#F4DBE4",
+  // },
 ];

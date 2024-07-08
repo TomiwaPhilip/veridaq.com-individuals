@@ -13,75 +13,55 @@ function generateRandomString(length: any) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return result;
-  }
-
-interface getPaymentParams {
-    email: string,
-    amount: number,
 }
 
-export async function getPaymentLink (params: getPaymentParams) {
-    console.log(params.email, params.amount)
+
+export async function getPaymentLink(type: boolean, amount: number) {
+    // console.log(params.email, params.amount)
+
+    const session = await getSession();
+
+    if (!session) {
+        throw new Error("User is not authenticated!");
+    }
+    let isAccessFee = 'False';
+
+    if (type === true) isAccessFee = 'True';
+
+    const customerName = `${session.firstName} ${session.lastName}`
 
     const transaction_ref = generateRandomString(16);
 
-    const response: any = await got.post('https://api.flutterwave.com/v3/payments',
+    const response: any = await got.post('https://sandboxapi.fincra.com/checkout/payments',
         {
             headers: {
-                Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+                'api-key': `${process.env.FINCRA_SECRET_KEY}`,
+                'x-pub-key': `${process.env.FINCRA_PUBLIC_KEY}`,
             },
             json: {
-                amount: params.amount,
-                currency: 'NGN',
-                tx_ref: transaction_ref,
-                redirect_url: 'https://individual.veridaq.com/auth/payment?isAccessFee=False',
-                customer: {
-                    email: params.email,
-                }
-            },
+                "amount": amount,
+                "currency": "NGN",
+                "customer": {
+                    "name": customerName,
+                    "email": session.email,
+                },
+                "paymentMethods": ["card", "bank_transfer"],
+                "feeBearer": "customer",
+                "reference": transaction_ref,
+                "redirectUrl": `https://stunning-space-parakeet-v9r7vxj9r69hw4xj-3000.app.github.dev/auth/payment?isAccessFee=${isAccessFee}`
+            }
         }
     ).json()
 
     console.log(response)
-    
+
     redirect(response.data.link)
-  
+
 }
 
-interface getPaymentParams2 {
-    email: string,
-}
-
-export async function getPaymentLink2 (params: getPaymentParams2) {
-    console.log(params.email)
-
-    const transaction_ref = generateRandomString(16);
-
-    const response: any = await got.post('https://api.flutterwave.com/v3/payments',
-        {
-            headers: {
-                Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
-            },
-            json: {
-                amount: 2400,
-                currency: 'NGN',
-                tx_ref: transaction_ref,
-                redirect_url: 'https://individual.veridaq.com/auth/payment?isAccessFee=True',
-                customer: {
-                    email: params.email,
-                }
-            },
-        }
-    ).json()
-
-    console.log(response)
-    
-    redirect(response.data.link)
-  
-}
 
 // Function to convert string to number
 export async function convertStringToNumber(str: string) {
@@ -100,103 +80,79 @@ export async function convertNumberToString(num: number) {
     return str;
 }
 
-export async function verifyPayment (
-    {status, tx_ref, transaction_id, isAccessFee}: 
-    {status: string; tx_ref: string; transaction_id: number; isAccessFee: string;}) 
-    {
 
-    console.log(status, tx_ref, transaction_id, "At the serever");
-    const flw = new Flutterwave(
-      process.env.FLW_PUBLIC_KEY,
-      process.env.FLW_SECRET_KEY,
-    );
- 
+export async function verifyPayment({ tx_ref, isAccessFee }: { tx_ref: string; isAccessFee: string; }) {
+    console.log(tx_ref, "At the server");
 
     try {
         // Connect to the database
-        connectToDB();
+        await connectToDB();
 
         const session = await getSession();
         const userId = session.userId;
 
+        // Check if payment is already verified
         const paymentDetails = await VerifiedPayment.findOne({ ref: tx_ref }, { verified: 1, _id: 0 });
         console.log(paymentDetails);
-        if (paymentDetails) {
-            if(paymentDetails.verified) return false
+        if (paymentDetails && paymentDetails.verified) {
+            return {error: "Error: Payment verification outdate!"};
         }
-        
-        if (status === "successful" || status === "completed") {
-            console.log(status, tx_ref, transaction_id, "At the server");
-            const response = await flw.Transaction.verify({ id: transaction_id });
-            console.log(response);
-        
-            if (
-            response.data.status === "successful" ||
-            response.data.status === "completed"
-            ) {
-                // Success!
 
-                if(isAccessFee === "False") {
+        // Fetch payment details from Fincra
+        const response: any = await got.get(`https://sandboxapi.fincra.com/checkout/payments/merchant-reference/${tx_ref}`, {
+            headers: {
+                'api-key': `${process.env.FINCRA_SECRET_KEY}`,
+                'x-pub-key': `${process.env.FINCRA_PUBLIC_KEY}`,
+                'x-business-id': `${process.env.FINCRA_BUSINESS_ID}`
+            },
+            responseType: 'json',
+        });
 
-                    // Update wallet balance in DB and Session
-                    const user = await User.findOne({ _id: userId }, { walletBalance: 1, _id: 0 });
-                    
-                    const convertedSessionBalance = convertStringToNumber(user.walletBalance as string);
-                    const addedBalance = convertedSessionBalance + response.data.amount;
-                    const newBalance = convertNumberToString(addedBalance);
+        console.log(response.body);
 
-                    // Update the user in the database
-                    const userDetails = await User.findOneAndUpdate(
-                        { _id: userId }, 
-                        {
-                            walletBalance: newBalance,
-                        },
-                        // Upsert means both updating and inserting
-                        { upsert: true, 
-                            new: true,
-                        },
-                    );
+        if (response.body.status === true && response.body.data.status === 'success') {
+            if (isAccessFee === "False") {
+                // Update wallet balance in DB and session
+                const user = await User.findById(userId).select('walletBalance verified');
+                if (!user) throw new Error('User not found');
 
-                    const paymentDetails = new VerifiedPayment({
-                        ref: tx_ref,
-                        verified: true,
-                        user: userId,
-                    });
+                const convertedSessionBalance = await convertStringToNumber(user.walletBalance as string);
+                const addedBalance = convertedSessionBalance + response.body.data.amount;
+                const newBalance = await convertNumberToString(addedBalance);
 
-                    await paymentDetails.save();
+                user.walletBalance = newBalance;
+                user.verified = true; // Update verified field
+                await user.save();
 
-                    console.log(userDetails, paymentDetails);
-                    session.walletBalance = userDetails.walletBalance;
-                    await session.save();
-                    return true;
+                const newPaymentDetails = new VerifiedPayment({
+                    ref: tx_ref,
+                    verified: true,
+                    user: userId,
+                });
+                await newPaymentDetails.save();
 
-                } else if(isAccessFee === "True") {
-                    // Update Access fee  in DB and Session
+                console.log(user, newPaymentDetails);
+                session.isVerified = true;
+                await session.save();
+                return {message: "Payment Successful!", isAccessFee: false};
 
-                    // Update the user in the database
-                    const userDetails = await User.findOneAndUpdate(
-                        { _id: userId }, 
-                        {
-                            hasAccessFee: true,
-                        },
-                        // Upsert means both updating and inserting
-                        { upsert: true, 
-                            new: true,
-                        },
-                    );
+            } else if (isAccessFee === "True") {
+                // Update Access fee in DB and session
+                const user = await User.findByIdAndUpdate(userId, { hasAccessFee: true }, { new: true, upsert: true });
+                if (!user) throw new Error('User not found');
 
-                    console.log(userDetails);
-                    session.hasAccessFee = userDetails.hasAccessFee;
-                    await session.save();
-                    return true;
-                }
+                console.log(user);
+                session.hasAccessFee = user.hasAccessFee;
+                await session.save();
+                return {message: "Payment Successful", isAccessFee: true};
             }
         } else {
-            return false
+            return {error: "Unable to verify payments. Try reloading this page!"};
         }
-    } catch(error) {
+    } catch (error) {
         console.error("Error Verifying Payments", error);
-        return false;
+        return {error: "Unable to verify payments. Try reloading this page!"};
     }
 }
+
 
