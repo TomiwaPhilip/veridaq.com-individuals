@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
-import { GoogleButton, LinkedinButton } from "@/components/buttons/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { GoogleButton, LinkedinButton } from "@/components/buttons/button"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 import {
   Form,
   FormControl,
@@ -13,48 +13,48 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/form/form";
-import { Input } from "@/components/form/input";
-import Link from "next/link";
+} from "@/components/form/form"
+import { Input } from "@/components/form/input"
+import Link from "next/link"
 
-import { signIn } from "@/lib/actions/login.action";
-import { NoOutlineButtonBig } from "@/components/shared/buttons";
-import { StatusMessage } from "@/components/shared/shared";
+import { signIn } from "@/lib/actions/login.action"
+import { NoOutlineButtonBig } from "@/components/shared/buttons"
+import { StatusMessage } from "@/components/shared/shared"
 
 const formSchema = z.object({
   email: z.string().min(5, {
     message: "Email must be at least 5 characters.",
   }),
-});
+})
 
 export default function SignIn() {
-  const [loading, setIsLoading] = useState(false);
-  const [isEmailSent, setIsEmailSent] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [loading, setIsLoading] = useState(false)
+  const [isEmailSent, setIsEmailSent] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    setIsEmailSent(false);
-    setIsError(false);
-    const result = await signIn(data.email);
+    setIsLoading(true)
+    setIsEmailSent(false)
+    setIsError(false)
+    const result = await signIn(data.email)
     if (result) {
       // Handle successful sign-in
-      setIsLoading(false);
-      setIsEmailSent(true);
+      setIsLoading(false)
+      setIsEmailSent(true)
     } else {
       // Handle sign-in error
-      setIsLoading(false);
-      setIsEmailSent(false);
-      console.error("Sign in error:", result);
+      setIsLoading(false)
+      setIsEmailSent(false)
+      console.error("Sign in error:", result)
     }
-  };
+  }
 
   return (
     <main className="text-white flex items-center justify-center min-h-screen">
@@ -120,5 +120,5 @@ export default function SignIn() {
         </div>
       </div>
     </main>
-  );
+  )
 }
