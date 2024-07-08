@@ -6,14 +6,10 @@ import { RiLoader4Line } from "react-icons/ri";
 
 import {
   getIssuedIndividualReference,
-  getIssuedDocVerification,
-  getIssuedMemberReference,
-  getIssuedStudentshipStatus,
   getIssuedWorkReference,
-  getIssuedAdminDocVerification,
-  getIssuedAdminMemberReference,
-  getIssuedAdminStudentshipStatus,
   getIssuedAdminWorkReference,
+  getIssuedHandsOnReference,
+  getIssuedHandsOnReferenceAdmin,
 } from "@/lib/actions/request.action";
 import { SearchBar, Card3 } from "@/components/shared/shared";
 
@@ -40,21 +36,21 @@ export default function Store() {
     Documents[]
   >([]);
   const [workReferenceDoc, setWorkReferenceDoc] = useState<Documents[]>([]);
-  const [memberReferenceDoc, setMemberReferenceDoc] = useState<Documents[]>([]);
-  const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
-  const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
+  const [handsOnReferenceDoc, setHandsOnReferenceDoc] = useState<Documents[]>([]);
+  // const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
+  // const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const [adminWorkReferenceDoc, setAdminWorkReferenceDoc] = useState<
     Documents[]
   >([]);
-  const [adminMemberReferenceDoc, setAdminMemberReferenceDoc] = useState<
+  const [adminHandsOnReferenceDoc, setAdminHandsOnReferenceDoc] = useState<
     Documents[]
   >([]);
-  const [adminDocVerificationDoc, setAdminDocVerificationDoc] = useState<
-    Documents[]
-  >([]);
-  const [adminStudentStatusDoc, setAdminStudentStatusDoc] = useState<
-    Documents[]
-  >([]);
+  // const [adminDocVerificationDoc, setAdminDocVerificationDoc] = useState<
+  //   Documents[]
+  // >([]);
+  // const [adminStudentStatusDoc, setAdminStudentStatusDoc] = useState<
+  //   Documents[]
+  // >([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -67,26 +63,26 @@ export default function Store() {
         const doc1 = await getIssuedWorkReference();
         if (doc1) setWorkReferenceDoc(doc1);
 
-        const doc2 = await getIssuedMemberReference();
-        if (doc2) setMemberReferenceDoc(doc2);
+        const doc2 = await getIssuedHandsOnReference();
+        if (doc2) setHandsOnReferenceDoc(doc2);
 
-        const doc3 = await getIssuedDocVerification();
-        if (doc3) setDocVerificationDoc(doc3);
+        // const doc3 = await getIssuedDocVerification();
+        // if (doc3) setDocVerificationDoc(doc3);
 
-        const doc4 = await getIssuedStudentshipStatus();
-        if (doc4) setStudentStatusDoc(doc4);
+        // const doc4 = await getIssuedStudentshipStatus();
+        // if (doc4) setStudentStatusDoc(doc4);
 
         const doc5 = await getIssuedAdminWorkReference();
         if (doc5) setAdminWorkReferenceDoc(doc5);
 
-        const doc6 = await getIssuedAdminMemberReference();
-        if (doc6) setAdminMemberReferenceDoc(doc6);
+        const doc6 = await getIssuedHandsOnReferenceAdmin();
+        if (doc6) setAdminHandsOnReferenceDoc(doc6);
 
-        const doc7 = await getIssuedAdminDocVerification();
-        if (doc7) setAdminDocVerificationDoc(doc7);
+        // const doc7 = await getIssuedAdminDocVerification();
+        // if (doc7) setAdminDocVerificationDoc(doc7);
 
-        const doc8 = await getIssuedAdminStudentshipStatus();
-        if (doc8) setAdminStudentStatusDoc(doc8);
+        // const doc8 = await getIssuedAdminStudentshipStatus();
+        // if (doc8) setAdminStudentStatusDoc(doc8);
 
         setIsLoading(false);
       } catch (error) {
@@ -105,14 +101,10 @@ export default function Store() {
       {!isLoading ? (
         <>
           {workReferenceDoc.length > 0 ||
-          memberReferenceDoc.length > 0 ||
+          handsOnReferenceDoc.length > 0 ||
           individualReferenceDoc.length > 0 ||
-          docVerificationDoc.length > 0 ||
-          studentStatusDoc.length > 0 ||
           adminWorkReferenceDoc.length > 0 ||
-          adminMemberReferenceDoc.length > 0 ||
-          adminDocVerificationDoc.length > 0 ||
-          adminStudentStatusDoc.length > 0 ? (
+          adminHandsOnReferenceDoc.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
               {/* Render cards for each type of document */}
               {workReferenceDoc.map((doc: Documents) => (
@@ -135,7 +127,7 @@ export default function Store() {
                   link={doc.link}
                 />
               ))}
-              {memberReferenceDoc.map((doc: Documents) => (
+              {handsOnReferenceDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -145,7 +137,7 @@ export default function Store() {
                   link={doc.link}
                 />
               ))}
-              {docVerificationDoc.map((doc: Documents) => (
+              {/* {docVerificationDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -154,8 +146,8 @@ export default function Store() {
                   outlineColor={doc.outlineColor}
                   link={doc.link}
                 />
-              ))}
-              {studentStatusDoc.map((doc: Documents) => (
+              ))} */}
+              {/* {studentStatusDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -164,7 +156,7 @@ export default function Store() {
                   outlineColor={doc.outlineColor}
                   link={doc.link}
                 />
-              ))}
+              ))} */}
               {adminWorkReferenceDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
@@ -175,7 +167,7 @@ export default function Store() {
                   link={doc.link}
                 />
               ))}
-              {adminMemberReferenceDoc.map((doc: Documents) => (
+              {adminHandsOnReferenceDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -185,7 +177,7 @@ export default function Store() {
                   link={doc.link}
                 />
               ))}
-              {adminDocVerificationDoc.map((doc: Documents) => (
+              {/* {adminDocVerificationDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -194,8 +186,8 @@ export default function Store() {
                   outlineColor={doc.outlineColor}
                   link={doc.link}
                 />
-              ))}
-              {adminStudentStatusDoc.map((doc: Documents) => (
+              ))} */}
+              {/* {adminStudentStatusDoc.map((doc: Documents) => (
                 <Card3
                   key={doc.DocId} // Ensure each Card component has a unique key
                   heading={doc.heading}
@@ -204,7 +196,7 @@ export default function Store() {
                   outlineColor={doc.outlineColor}
                   link={doc.link}
                 />
-              ))}
+              ))} */}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full mt-[3rem]">
