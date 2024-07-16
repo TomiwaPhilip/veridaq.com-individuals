@@ -2,21 +2,21 @@ export const cardData = [
   {
     heading: "Make a Veridaq Request!",
     paragraph:
-      "Click on the Veridaq Request button to initiate requests for Work History and Individual Reference",
+      "Click on the Veridaq Request button to initiate your Verifiable Reference request.",
     bgColor: "#A593C5",
     outlineColor: "#A294A4",
   },
   {
     heading: "Check your Veridaq Box!",
     paragraph:
-      "Veridaq Box is for receiving request from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
+      "Check your Veridaq inbox for interactions with other Veridaq users. Here, you get notified of your Verifiable Reference requests and issuances. Also, you get to issue Individual Reference/Recommendation from here to others individuals.",
     bgColor: "#AF8BA4",
     outlineColor: "#A593C5",
   },
   {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Your Veridaq Store is where you can find all the Veridaq you have received on the Veridaq (Verifiable References) are stored here. Platform. You can also share, download and when permitted, request updates and control access on received Veridaq from here..",
+      "Your Veridaq Store is where your received Verifiable References can be accessed and managed ( i.e store, download, share, request updates and control access).",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
@@ -27,7 +27,7 @@ export const cardData = [
     bgColor: "#D6B9C3",
     outlineColor: "#F69DD1",
   },
-];
+]
 
 export const cardData2 = [
   {
@@ -72,7 +72,7 @@ export const cardData2 = [
   //   outlineColor: "#F4DBE4",
   //   id: "4",
   // },
-];
+]
 
 export const cardData3 = [
   {
@@ -105,4 +105,4 @@ export const cardData3 = [
   //   bgColor: "#AF8BA4",
   //   outlineColor: "#F4DBE4",
   // },
-];
+]
