@@ -1,6 +1,7 @@
-import Image from "next/image";
-import { Wallet, Card } from "../shared/shared";
-import { cardData } from "@/constants/cards";
+import Image from "next/image"
+import { Wallet, Card } from "../shared/shared"
+import { cardData } from "@/constants/cards"
+import { BaseFramerAnimation } from "../shared/Animations"
 import { Feedback } from "../shared/feedback";
 
 export default function HomePage() {
@@ -15,6 +16,10 @@ export default function HomePage() {
         </div>
         <Wallet />
       </div>
+      <BaseFramerAnimation
+        initialY={0}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-10 justify-center mt-[40px]"
+      >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 justify-center mt-[40px]">
         {cardData.map((card, index) => (
           <Card
@@ -27,6 +32,7 @@ export default function HomePage() {
         ))}
       </div>
       <Feedback />
+      </BaseFramerAnimation>
     </main>
-  );
+  )
 }
