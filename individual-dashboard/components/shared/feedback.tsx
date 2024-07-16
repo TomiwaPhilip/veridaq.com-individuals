@@ -22,13 +22,17 @@ export const Feedback = () => {
 
   const handleSubmit = async () => {
     try {
-      setLoading(true);
-      console.log("Feedback Data:", feedbackData);
-      const response = await createUserFeedback(feedbackData);
-      if (response.message) setFeedbackMessage(response.message);
-      setLoading(false);
-      // Optionally, clear the textarea after successful submission
-      setFeedbackData({ message: "" });
+      if (feedbackData.message) {
+        setLoading(true);
+        console.log("Feedback Data:", feedbackData);
+        const response = await createUserFeedback(feedbackData);
+        if (response.message) setFeedbackMessage(response.message);
+        setLoading(false);
+        // Optionally, clear the textarea after successful submission
+        setFeedbackData({ message: "" });
+      } else {
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Failed to submit feedback:", error);
       setFeedbackMessage(
