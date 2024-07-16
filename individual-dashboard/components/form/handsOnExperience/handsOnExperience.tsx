@@ -46,8 +46,6 @@ import { z } from "zod";
 import {
     createHandsOnReferenceRequest,
     createHandsOnReferenceRequestForAdmin,
-  createWorkReferenceRequest,
-  createWorkReferenceRequestForAdmin,
 } from "@/lib/actions/request.action";
 import { HandsOnReferenceValidation, HandsOnReferenceValidation2 } from "@/lib/validations/handsOnExperience";
 import {
@@ -544,7 +542,7 @@ const HandsOnReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work Start Date
+                            Start Date
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -591,7 +589,7 @@ const HandsOnReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work End Date (Leave blank if ongoing)
+                            End Date (Leave blank if ongoing)
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -948,7 +946,7 @@ const HandsOnReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work Start Date
+                            Start Date
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -995,7 +993,7 @@ const HandsOnReference: React.FC = () => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="font-medium text-[16px]">
-                            Work End Date (Leave blank if ongoing)
+                            End Date (Leave blank if ongoing)
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>

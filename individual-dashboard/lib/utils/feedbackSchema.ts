@@ -1,8 +1,9 @@
 import { Schema, model, models } from "mongoose";
 
-const FeedBackSchema = new Schema({
+const FeedbackSchema = new Schema({
   message: {
     type: String,
+    required: true, // Added required for message, as it makes sense for feedback
   },
   user: {
     type: Schema.Types.ObjectId,
@@ -15,6 +16,6 @@ const FeedBackSchema = new Schema({
   },
 });
 
-const FeedBack = models.Feedback || model("FeedBack", FeedBackSchema);
+const Feedback = models.Feedback || model("Feedback", FeedbackSchema);
 
-export default FeedBack;
+export default Feedback;
