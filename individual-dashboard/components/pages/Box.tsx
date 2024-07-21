@@ -12,6 +12,7 @@ import {
 } from "@/components/shared/shared"
 import { getIndividualReference } from "@/lib/actions/request.action"
 import { BaseFramerAnimation } from "../shared/Animations"
+import InfiniteScroll from "react-infinite-scroll-component"
 
 export default function Box() {
   interface Documents {
@@ -28,11 +29,29 @@ export default function Box() {
   const session = useSession()
   const [isLoading, setIsLoading] = useState(true)
 
+  const [individualReferencesState, setindividualReferencesState] = useState<
+    Documents[]
+  >([])
+  const [hasMore, setHasMore] = useState(true)
+
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      setindividualReferencesState(
+        individualReferenceDoc.slice(0, individualReferencesState.length + 1)
+      )
+    })
+    if (individualReferencesState.length === individualReferenceDoc.length)
+      setHasMore(false)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const doc1 = await getIndividualReference()
-        if (doc1) setIndividualReferenceDoc(doc1)
+        if (doc1) {
+          setIndividualReferenceDoc(doc1)
+          setindividualReferencesState(doc1.slice(0, 10))
+        }
         console.log(individualReferenceDoc)
 
         setIsLoading(false)
@@ -66,7 +85,19 @@ export default function Box() {
           <div className="">
             <div className="p-7 bg-[#C3B8D8] rounded-lg h-full">
               <div className="">
-                <SearchBar2 />
+                <SearchBar2
+                  onChange={(e) => {
+                    const value = e.target.value
+
+                    // Individual Reference Search
+                    const newIndividualRefData = individualReferenceDoc.filter(
+                      (indiRef) => {
+                        return indiRef.DocDetails.includes(value)
+                      }
+                    )
+                    setindividualReferencesState(newIndividualRefData)
+                  }}
+                />
               </div>
               <div className="mt-10 overflow-auto">
                 {!isLoading ? (
@@ -75,16 +106,28 @@ export default function Box() {
                       {individualReferenceDoc &&
                       individualReferenceDoc.length > 0 ? (
                         <>
-                          {individualReferenceDoc.map((doc: Documents) => (
-                            <VeridaqDocument
-                              key={doc.DocId}
-                              DocDetails={doc.DocDetails}
-                              DocDate={doc.DocDate}
-                              docId={doc.DocId}
-                              id="5"
-                              onClick={handleOpenModal}
-                            />
-                          ))}
+                          <InfiniteScroll
+                            dataLength={individualReferencesState.length}
+                            next={fetchMoreData}
+                            hasMore={hasMore}
+                            loader={
+                              <div className="flex items-center justify-center h-full">
+                                <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                                <p>Loading...</p>
+                              </div>
+                            }
+                          >
+                            {individualReferencesState.map((doc: Documents) => (
+                              <VeridaqDocument
+                                key={doc.DocId}
+                                DocDetails={doc.DocDetails}
+                                DocDate={doc.DocDate}
+                                docId={doc.DocId}
+                                id="5"
+                                onClick={handleOpenModal}
+                              />
+                            ))}
+                          </InfiniteScroll>
                         </>
                       ) : (
                         <div className="flex flex-col items-center justify-center h-full">

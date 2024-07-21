@@ -14,6 +14,12 @@ import {
 import { SearchBar, Card3 } from "@/components/shared/shared"
 import { BaseFramerAnimation } from "../shared/Animations"
 
+type allDocsKey =
+  | "individualReferenceDoc"
+  | "adminHandsOnReferenceDoc"
+  | "adminWorkReferenceDoc"
+  | "workReferenceDoc"
+  | "handsOnReferenceDoc"
 export default function Store() {
   interface Documents {
     heading: string
@@ -54,20 +60,38 @@ export default function Store() {
   // const [adminStudentStatusDoc, setAdminStudentStatusDoc] = useState<
   //   Documents[]
   // >([]);
+
+  const [allDocs, setAllDocs] = useState<Record<allDocsKey, Documents[]>>({
+    individualReferenceDoc,
+    adminHandsOnReferenceDoc,
+    adminWorkReferenceDoc,
+    workReferenceDoc,
+    handsOnReferenceDoc,
+  })
+
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const doc = await getIssuedIndividualReference()
-        if (doc) setIndividualReferenceDoc(doc)
+        if (doc) {
+          setIndividualReferenceDoc(doc)
+          setAllDocs((prev) => ({ ...prev, individualReferenceDoc: doc }))
+        }
         console.log(individualReferenceDoc)
 
         const doc1 = await getIssuedWorkReference()
-        if (doc1) setWorkReferenceDoc(doc1)
+        if (doc1) {
+          setWorkReferenceDoc(doc1)
+          setAllDocs((prev) => ({ ...prev, workReferenceDoc: doc1 }))
+        }
 
         const doc2 = await getIssuedHandsOnReference()
-        if (doc2) setHandsOnReferenceDoc(doc2)
+        if (doc2) {
+          setHandsOnReferenceDoc(doc2)
+          setAllDocs((prev) => ({ ...prev, handsOnReferenceDoc: doc2 }))
+        }
 
         // const doc3 = await getIssuedDocVerification();
         // if (doc3) setDocVerificationDoc(doc3);
@@ -76,10 +100,16 @@ export default function Store() {
         // if (doc4) setStudentStatusDoc(doc4);
 
         const doc5 = await getIssuedAdminWorkReference()
-        if (doc5) setAdminWorkReferenceDoc(doc5)
+        if (doc5) {
+          setAdminWorkReferenceDoc(doc5)
+          setAllDocs((prev) => ({ ...prev, adminWorkReferenceDoc: doc5 }))
+        }
 
         const doc6 = await getIssuedHandsOnReferenceAdmin()
-        if (doc6) setAdminHandsOnReferenceDoc(doc6)
+        if (doc6) {
+          setAdminHandsOnReferenceDoc(doc6)
+          setAllDocs((prev) => ({ ...prev, adminHandsOnReferenceDoc: doc6 }))
+        }
 
         // const doc7 = await getIssuedAdminDocVerification();
         // if (doc7) setAdminDocVerificationDoc(doc7);
@@ -99,7 +129,50 @@ export default function Store() {
   return (
     <main className="mt-[60px]">
       <div className="">
-        <SearchBar />
+        <SearchBar
+          onChange={(e) => {
+            const value = e.target.value
+
+            // Work Reference Search
+            const newWorkRefData = allDocs.workReferenceDoc.filter(
+              (workRef) => {
+                return workRef.heading.includes(value)
+              }
+            )
+            setWorkReferenceDoc(newWorkRefData)
+
+            // Hands On Reference search
+            const newhandsOnRefData = allDocs.handsOnReferenceDoc.filter(
+              (handsOnRef) => {
+                return handsOnRef.heading.includes(value)
+              }
+            )
+            setHandsOnReferenceDoc(newhandsOnRefData)
+
+            // admin Hands On Reference Search
+            const newAdminHandsOnRefData =
+              allDocs.adminHandsOnReferenceDoc.filter((adminHandsOnRef) => {
+                return adminHandsOnRef.heading.includes(value)
+              })
+            setAdminHandsOnReferenceDoc(newAdminHandsOnRefData)
+
+            // admin Work Reference Search
+            const newAdminWorkRefData = allDocs.adminWorkReferenceDoc.filter(
+              (adminWorkRef) => {
+                return adminWorkRef.heading.includes(value)
+              }
+            )
+            setAdminWorkReferenceDoc(newAdminWorkRefData)
+
+            // individual Reference Search
+            const newIndividualRefData = allDocs.individualReferenceDoc.filter(
+              (IndiviRef) => {
+                return IndiviRef.heading.includes(value)
+              }
+            )
+            setIndividualReferenceDoc(newIndividualRefData)
+          }}
+        />
       </div>
       {!isLoading ? (
         <BaseFramerAnimation>
