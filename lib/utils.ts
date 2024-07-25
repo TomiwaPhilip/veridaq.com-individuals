@@ -97,26 +97,40 @@ export function verifyToken(
 }
 
 export function concatenateDates(startDate: Date, endDate?: Date): string {
-  // Format start date
-  const formattedStartDate = startDate.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  // Add one more day to start date
+  const adjustedStartDate = new Date(startDate);
+  adjustedStartDate.setDate(startDate.getDate() + 1);
 
   if (endDate) {
-    // Format end date
-    const formattedEndDate = endDate.toLocaleDateString("en-GB", {
+    // Add one more day to end date
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(endDate.getDate() + 1);
+
+    // Format adjusted start date
+    const formattedStartDate = adjustedStartDate.toLocaleDateString("en-GB", {
       day: "2-digit",
-      month: "2-digit",
+      month: "numeric",
+      year: "numeric",
+    });
+
+    // Format adjusted end date
+    const formattedEndDate = adjustedEndDate.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "numeric",
       year: "numeric",
     });
 
     // Concatenate formatted dates with "--" in between
     return `${formattedStartDate} -- ${formattedEndDate}`;
   } else {
-    // Construct "Till Date" string using the year from the start date
+    // Format adjusted start date
+    const formattedStartDate = adjustedStartDate.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "numeric",
+      year: "numeric",
+    });
 
+    // Construct "Till Date" string
     return `${formattedStartDate} -- Till Date`;
   }
 }
