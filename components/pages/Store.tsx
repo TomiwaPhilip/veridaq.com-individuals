@@ -131,12 +131,12 @@ export default function Store() {
       <div className="">
         <SearchBar
           onChange={(e) => {
-            const value = e.target.value
+            const value = e.target.value.toLowerCase()
 
             // Work Reference Search
             const newWorkRefData = allDocs.workReferenceDoc.filter(
               (workRef) => {
-                return workRef.heading.includes(value)
+                return workRef.heading.toLowerCase().includes(value)
               }
             )
             setWorkReferenceDoc(newWorkRefData)
@@ -144,7 +144,7 @@ export default function Store() {
             // Hands On Reference search
             const newhandsOnRefData = allDocs.handsOnReferenceDoc.filter(
               (handsOnRef) => {
-                return handsOnRef.heading.includes(value)
+                return handsOnRef.heading.toLowerCase().includes(value)
               }
             )
             setHandsOnReferenceDoc(newhandsOnRefData)
@@ -152,14 +152,14 @@ export default function Store() {
             // admin Hands On Reference Search
             const newAdminHandsOnRefData =
               allDocs.adminHandsOnReferenceDoc.filter((adminHandsOnRef) => {
-                return adminHandsOnRef.heading.includes(value)
+                return adminHandsOnRef.heading.toLowerCase().includes(value)
               })
             setAdminHandsOnReferenceDoc(newAdminHandsOnRefData)
 
             // admin Work Reference Search
             const newAdminWorkRefData = allDocs.adminWorkReferenceDoc.filter(
               (adminWorkRef) => {
-                return adminWorkRef.heading.includes(value)
+                return adminWorkRef.heading.toLowerCase().includes(value)
               }
             )
             setAdminWorkReferenceDoc(newAdminWorkRefData)
@@ -167,7 +167,7 @@ export default function Store() {
             // individual Reference Search
             const newIndividualRefData = allDocs.individualReferenceDoc.filter(
               (IndiviRef) => {
-                return IndiviRef.heading.includes(value)
+                return IndiviRef.heading.toLowerCase().includes(value)
               }
             )
             setIndividualReferenceDoc(newIndividualRefData)

@@ -87,12 +87,12 @@ export default function Box() {
               <div className="">
                 <SearchBar2
                   onChange={(e) => {
-                    const value = e.target.value
+                    const value = e.target.value.toLowerCase()
 
                     // Individual Reference Search
                     const newIndividualRefData = individualReferenceDoc.filter(
                       (indiRef) => {
-                        return indiRef.DocDetails.includes(value)
+                        return indiRef.DocDetails.toLowerCase().includes(value)
                       }
                     )
                     setindividualReferencesState(newIndividualRefData)
