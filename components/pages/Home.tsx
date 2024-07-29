@@ -1,7 +1,7 @@
 import { Wallet, Card } from "../shared/shared"
 import { cardData } from "@/constants/cards"
 import { BaseFramerAnimation } from "../shared/Animations"
-import { Feedback } from "../shared/feedback";
+import { WhatsAppButton } from "../shared/feedback";
 
 export default function HomePage() {
   return (
@@ -28,7 +28,7 @@ export default function HomePage() {
             outlineColor={card.outlineColor}
           />
         ))}
-      <Feedback />
+      
       </BaseFramerAnimation>
     </main>
   )

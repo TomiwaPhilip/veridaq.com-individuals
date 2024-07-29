@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "../globals.css";
 
 import BottomBar, { Nav, Header } from "@/components/shared/shared";
+import { WhatsAppButton } from "@/components/shared/feedback";
 
 export const metadata: Metadata = {
   applicationName: "Individual Veridaq.com Dashboard",
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <Header/>
             {children}
           </div>
+          <WhatsAppButton />
           <BottomBar />
         </main>
       </body>
